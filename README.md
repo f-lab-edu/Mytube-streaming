@@ -4,7 +4,7 @@
 유튜브 기반 동영상 스트리밍 서비스
 <br/><br/><br/><br/><br/><br/><br/><br/><br/>
 ### ERD
-<img src="https://file.notion.so/f/f/99fb3c06-3305-4c58-8425-71decee7dca3/5532f6cd-eba5-47db-b63d-e06d22b94294/Untitled.png?id=2dbeac8b-f33d-4aaf-8dc8-8b8c04f0efe2&table=block&spaceId=99fb3c06-3305-4c58-8425-71decee7dca3&expirationTimestamp=1713434400000&signature=yifC1QOkWU47H04HpQwPdZKA7JrY5fuu4Os7ChPVcis&downloadName=Untitled.png" width="80%" height="80%"></img>
+<img src="https://file.notion.so/f/f/99fb3c06-3305-4c58-8425-71decee7dca3/5532f6cd-eba5-47db-b63d-e06d22b94294/Untitled.png?id=eff043f3-5e09-465f-b16a-b6cef1cab8db&table=block&spaceId=99fb3c06-3305-4c58-8425-71decee7dca3&expirationTimestamp=1713520800000&signature=ioFnKYnSlG4SHdepseXey1HVSqoaNzIjPWeR5UrjY9Q&downloadName=Untitled.png" width="80%" height="80%"></img>
 <br/><br/><br/><br/><br/><br/><br/><br/><br/>
 ### 프로토타입
 |메인화면|라이브 예약|
