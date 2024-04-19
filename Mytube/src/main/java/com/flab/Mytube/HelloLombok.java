@@ -1,18 +1,17 @@
 package com.flab.Mytube;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
+@RequiredArgsConstructor
 public class HelloLombok {
-    private String hello;
-    private int lombok;
+    private final String hello;
+    private final int lombok;
 
     public static void main(String[] args){
-        HelloLombok helloLombok = new HelloLombok();
-        helloLombok.setHello("heelloo");
-        helloLombok.setLombok(5);
+        HelloLombok helloLombok = new HelloLombok("hello", 5);
 
         System.out.println(helloLombok.getHello());
         System.out.println(helloLombok.getLombok());
