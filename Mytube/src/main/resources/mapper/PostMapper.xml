@@ -6,7 +6,7 @@
 <mapper namespace="com.flab.Mytube.notices.repository.PostRepository">
     <insert id="save">
         INSERT INTO POST(USER_NAME, TITLE, POST_CONTENT)
-        VALUES(#{post.userName}, #{post.titlae}, #{post.postContent});
+        VALUES(#{post.userName}, #{post.title}, #{post.postContent});
     </insert>
 
     <select id="findAll" resultType="map">

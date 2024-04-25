@@ -7,7 +7,7 @@
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
 <!--    &lt;!&ndash;mappers>-->
-<!--&lt;!&ndash;        <mapper resource="mybatis/mapper/UserCommentMapper.xml"/>&ndash;&gt;-->
+<!--        <mapper resource="mybatis/mapper/UserCommentMapper.xml"/>-->
 <!--        <mapper resource="mapper/PostMapper.xml"/>-->
 <!--    </mappers&ndash;&gt;-->
 </configuration>
