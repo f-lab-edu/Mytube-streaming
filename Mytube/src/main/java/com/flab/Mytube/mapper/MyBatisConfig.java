@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
@@ -39,17 +38,6 @@ public class MyBatisConfig {
     public DataSourceTransactionManager transactionManager(){
         return new DataSourceTransactionManager(dataSource);
     }
-
-//    @Bean
-//    public SqlSessionTemplate sqlSession() throws Exception{
-//        return new SqlSessionTemplate(sqlSessionFactory());
-//    }
-
-//    @Bean
-//    public UserMapper userMapper() throws Exception {
-//        SqlSessionTemplate sqlSessionTemplate = new SqlSessionTemplate(sqlSessionFactory());
-//        return sqlSessionTemplate.getMapper(UserMapper.class);
-//    }
 
     @Bean
     public SqlSessionTemplate sqlSession() throws Exception {
