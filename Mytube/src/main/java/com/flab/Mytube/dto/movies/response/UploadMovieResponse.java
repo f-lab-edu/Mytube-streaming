@@ -5,10 +5,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigInteger;
+
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UploadMovieResponse {
-    private int movieId;
+    private int code;
+    private BigInteger movieId;
+    private String message;
 }

@@ -49,8 +49,10 @@ public class DatabaseConfig {
         sqlSessionFactoryBean.setDataSource(dataSource);
 //        sqlSessionFactoryBean.setTypeAliasesPackage("board.board.dto");
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:mapper/**/*.xml"));
-        sqlSessionFactoryBean.setConfigLocation(resolver.getResource("classpath:mybatis-config.xml"));
+        sqlSessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:Mybatis-config.xml"));
+        sqlSessionFactoryBean.setMapperLocations(resolveMapperLocations());
+//        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:mapper/**/*.xml"));
+//        sqlSessionFactoryBean.setConfigLocation(resolver.getResource("classpath:mybatis-config.xml"));
         return sqlSessionFactoryBean.getObject();
     }
 

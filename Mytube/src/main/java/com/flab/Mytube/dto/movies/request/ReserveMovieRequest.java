@@ -15,5 +15,4 @@ public class ReserveMovieRequest {
     private int movieId;
     private String title;
     private String content;
-    private TIMESTAMP reservedTime;
 }

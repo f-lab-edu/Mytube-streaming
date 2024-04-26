@@ -5,8 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
 @NoArgsConstructor
 public class ReserveMovieResponse {
+    private int code;
     private String liveId;
+    private String message;
 }
