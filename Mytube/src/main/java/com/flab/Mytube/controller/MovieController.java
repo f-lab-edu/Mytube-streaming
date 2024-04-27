@@ -1,13 +1,12 @@
 package com.flab.Mytube.controller;
 
-import com.flab.Mytube.dto.movie.InsertMovieRequest;
+import com.flab.Mytube.dto.movie.request.InsertMovieRequest;
+import com.flab.Mytube.dto.movie.request.InsertPostRequest;
+import com.flab.Mytube.dto.movie.request.JoinChatRequest;
 import com.flab.Mytube.service.MovieService;
+import com.flab.Mytube.service.StreamingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 
@@ -16,11 +15,13 @@ import java.math.BigInteger;
 @RequestMapping("/api/v1/movies")
 public class MovieController {
     private final MovieService movieService;
+    private final StreamingService streamingService;
 
     @PostMapping("")
-    public void reserve(){
+    public BigInteger reserve(@RequestBody InsertPostRequest.Param param){
         // 관련 dto 생성하여 매개변수로 전달
         // live 예약하기
+        return streamingService.reserveMovie(param).getID();
     }
     @PostMapping("/upload")
     public BigInteger upload(@RequestBody InsertMovieRequest.Param param){
@@ -29,8 +30,9 @@ public class MovieController {
     }
 
     @PostMapping("/{movie_id}/chat")
-    public void joinChat(){
+    public BigInteger joinChat(@RequestBody JoinChatRequest param, @PathVariable("movie_id") BigInteger movie_id){
         //라이브 채팅 참여
+        return streamingService.joinChat(param, movie_id).getID();
     }
 
     @PostMapping("/{movie_id}/store")

@@ -7,4 +7,18 @@
         VALUES
         (#{param.streamer_id}, #{param.subject}, #{param.url})
     </insert>
+
+    <insert id="addPost" useGeneratedKeys="true" keyProperty="param.ID">
+        INSERT INTO
+        LiveStreaming (USER_ID, MOVIE_ID, URL, TITLE, CONTENTS, RESERVED_TIME)
+        VALUES
+        (#{param.streamer_id},#{param.movie_id}, #{param.title}, #{param.reserved_time})
+    </insert>
+
+    <insert id="joinChat" useGeneratedKeys="true" keyProperty="param.ID">
+        INSERT INTO
+        LiveStreaming (USER_ID, MOVIE_ID, CONTENTS)
+        VALUES
+        (#{param.userId},#{param.movie_id}, #{param.chatContents})
+    </insert>
 </mapper>
