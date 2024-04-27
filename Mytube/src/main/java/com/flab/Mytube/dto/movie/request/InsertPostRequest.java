@@ -2,9 +2,9 @@ package com.flab.Mytube.dto.movie.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import oracle.sql.TIMESTAMP;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 
 public class InsertPostRequest {
     private InsertPostRequest(){throw new IllegalStateException();}
@@ -16,6 +16,6 @@ public class InsertPostRequest {
         int movie_id;
         String title;
         String content;
-        TIMESTAMP reserved_time;
+        LocalDateTime reserved_time;
     }
 }
