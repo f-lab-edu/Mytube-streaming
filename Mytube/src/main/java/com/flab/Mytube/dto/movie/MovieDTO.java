@@ -1,10 +1,7 @@
 package com.flab.Mytube.dto.movie;
 
 import com.flab.Mytube.dto.TimeDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @Builder
@@ -12,7 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MovieDTO extends TimeDTO {
     private long id;
-    private long userId;
-    private String subject;
-    private String url;
+    @NonNull
+    private long userId; // 동영상 게시자
+    @NonNull
+    private String subject; // 영상 제목
+    @NonNull
+    private String url; // 영상 저장된 위치
 }

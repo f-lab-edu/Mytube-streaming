@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.flab.Mytube.dto.TimeDTO;
-import com.sun.istack.NotNull;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -16,26 +15,25 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LiveStreamingDTO extends TimeDTO {
-    @NotNull
     private long id;
-    @NotNull
-    private long userId;
-    @NotNull
-    private long movieId;
-    @NotNull
-    private String title;
+    @NonNull
+    private long userId; // 라이브 방송 호스트 id
+    @NonNull
+    private long movieId; //방송하는 영상 Id
+    @NonNull
+    private String title; //방송 제목
 
-    private String contents;
-    private int userCount;
-    private int thumbsUp;
+    private String contents; // 방송 내용
+    private int userCount; // 시청자 수
+    private int thumbsUp; // 좋아요 받은 수
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
-    private LocalDateTime reservedTime;
+    private LocalDateTime reservedTime; //방송 예약 시간
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt; // 방송 수정 시간(방제, 컨텐츠 등 ...)
     public void setCreatedAtToNow() {
         updatedAt = LocalDateTime.now();
     }
