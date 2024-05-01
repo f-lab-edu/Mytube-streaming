@@ -1,9 +1,9 @@
 package com.flab.Mytube.service;
 
-import com.flab.Mytube.dto.movie.request.InsertPostRequest;
-import com.flab.Mytube.dto.movie.request.JoinChatRequest;
-import com.flab.Mytube.dto.movie.response.InsertPostResponse;
-import com.flab.Mytube.dto.movie.response.JoinChatResponse;
+import com.flab.Mytube.movie.request.InsertPostRequest;
+import com.flab.Mytube.movie.request.JoinChatRequest;
+import com.flab.Mytube.movie.response.InsertPostResponse;
+import com.flab.Mytube.movie.response.JoinChatResponse;
 import com.flab.Mytube.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

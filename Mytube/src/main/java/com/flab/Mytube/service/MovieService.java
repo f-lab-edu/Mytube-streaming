@@ -1,13 +1,11 @@
 package com.flab.Mytube.service;
 
-import com.flab.Mytube.dto.movie.request.InsertMovieRequest;
-import com.flab.Mytube.dto.movie.response.InsertMovieResponse;
+import com.flab.Mytube.movie.request.InsertMovieRequest;
+import com.flab.Mytube.movie.response.InsertMovieResponse;
 import com.flab.Mytube.mapper.MovieMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigInteger;
 
 @Service
 @RequiredArgsConstructor

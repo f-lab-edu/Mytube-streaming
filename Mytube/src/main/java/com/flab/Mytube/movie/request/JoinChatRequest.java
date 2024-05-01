@@ -1,4 +1,4 @@
-package com.flab.Mytube.dto.movie.request;
+package com.flab.Mytube.movie.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

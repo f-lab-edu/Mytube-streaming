@@ -1,7 +1,7 @@
 package com.flab.Mytube.mapper;
 
-import com.flab.Mytube.dto.movie.request.InsertPostRequest;
-import com.flab.Mytube.dto.movie.request.JoinChatRequest;
+import com.flab.Mytube.movie.request.InsertPostRequest;
+import com.flab.Mytube.movie.request.JoinChatRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;

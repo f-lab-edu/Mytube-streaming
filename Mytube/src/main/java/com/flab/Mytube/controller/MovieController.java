@@ -1,8 +1,8 @@
 package com.flab.Mytube.controller;
 
-import com.flab.Mytube.dto.movie.request.InsertMovieRequest;
-import com.flab.Mytube.dto.movie.request.InsertPostRequest;
-import com.flab.Mytube.dto.movie.request.JoinChatRequest;
+import com.flab.Mytube.movie.request.InsertMovieRequest;
+import com.flab.Mytube.movie.request.InsertPostRequest;
+import com.flab.Mytube.movie.request.JoinChatRequest;
 import com.flab.Mytube.service.MovieService;
 import com.flab.Mytube.service.StreamingService;
 import lombok.RequiredArgsConstructor;
