@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.flab.Mytube.dto.TimeDTO;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LiveStreamingDTO {
+public class LiveStreamingDTO extends TimeDTO {
     @NotNull
     private long id;
     @NotNull
@@ -34,17 +35,8 @@ public class LiveStreamingDTO {
     private LocalDateTime reservedTime;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime createdAt;
-
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime updatedAt;
-
-
     public void setCreatedAtToNow() {
-        createdAt = LocalDateTime.now();
-    }
-
-    public void setUpdatedAtToNow() {
         updatedAt = LocalDateTime.now();
     }
 }
