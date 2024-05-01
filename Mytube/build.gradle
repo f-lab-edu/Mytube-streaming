@@ -42,6 +42,9 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '6.1.0.jre7'
+
+	implementation 'org.springframework.boot:spring-boot-starter-validation:3.2.1'
+
 }
 
 tasks.named('test') {
