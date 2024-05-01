@@ -5,16 +5,11 @@ import lombok.Setter;
 
 import java.math.BigInteger;
 
+@Getter
+@Setter
 public class InsertMovieRequest {
-    private InsertMovieRequest(){
-        throw new IllegalStateException();
-    }
-
-    @Getter
-    @Setter
-    public static class Param{
-        BigInteger streamer_id;
-        String subject;
-        String url;
-    }
+    long ID;
+    BigInteger streamer_id;
+    String subject;
+    String url;
 }

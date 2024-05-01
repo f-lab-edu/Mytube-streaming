@@ -10,5 +10,5 @@ import java.math.BigInteger;
 @Component
 @Mapper
 public interface MovieMapper {
-    BigInteger addMovie(@Param("param")InsertMovieRequest.Param param);
+    long addMovie(@Param("param")InsertMovieRequest param);
 }

@@ -24,7 +24,7 @@ public class MovieController {
         return streamingService.reserveMovie(param).getID();
     }
     @PostMapping("/upload")
-    public BigInteger upload(@RequestBody InsertMovieRequest.Param param){
+    public long upload(@RequestBody InsertMovieRequest param){
         // 동영상 업로드
         return movieService.insertMovie(param).getID();
     }
