@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.flab.Mytube.mapper.MovieMapper">
-    <insert id="addMovie" useGeneratedKeys="true" keyProperty="param.ID">
+    <insert id="addMovie" useGeneratedKeys="true" keyProperty="ID" parameterType="com.flab.Mytube.dto.movie.request.InsertMovieRequest">
         INSERT INTO
         movie (USER_ID, SUBJECT, URL)
         VALUES
         (#{param.streamer_id}, #{param.subject}, #{param.url})
+    </insert>
+
+    <insert id="addPost" useGeneratedKeys="true" keyProperty="param.ID">
+        INSERT INTO
+        LiveStreaming (USER_ID, MOVIE_ID, URL, TITLE, CONTENTS, RESERVED_TIME)
+        VALUES
+        (#{param.streamer_id},#{param.movie_id}, #{param.title}, #{param.reserved_time})
+    </insert>
+
+    <insert id="joinChat" useGeneratedKeys="true" keyProperty="param.ID">
+        INSERT INTO
+        LiveStreaming (USER_ID, MOVIE_ID, CONTENTS)
+        VALUES
+        (#{param.userId},#{param.movie_id}, #{param.chatContents})
     </insert>
 </mapper>
