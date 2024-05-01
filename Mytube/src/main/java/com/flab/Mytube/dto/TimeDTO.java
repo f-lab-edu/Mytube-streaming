@@ -9,7 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TimeDTO {

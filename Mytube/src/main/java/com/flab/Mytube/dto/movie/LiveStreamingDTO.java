@@ -26,8 +26,8 @@ public class LiveStreamingDTO extends TimeDTO {
     private String title;
 
     private String contents;
-    private int userCount = 0;
-    private int thumbsUp = 0;
+    private int userCount;
+    private int thumbsUp;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonSerialize(using = LocalDateSerializer.class)
