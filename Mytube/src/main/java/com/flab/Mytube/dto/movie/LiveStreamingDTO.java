@@ -11,13 +11,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class LiveStreamingDTO extends TimeDTO {
     private long id;
     @NonNull
-    private long userId; // 라이브 방송 호스트 id
+    private long streamerId; // 라이브 방송 호스트 id
     @NonNull
     private long movieId; //방송하는 영상 Id
     @NonNull
@@ -27,7 +28,7 @@ public class LiveStreamingDTO extends TimeDTO {
     private int userCount; // 시청자 수
     private int thumbsUp; // 좋아요 받은 수
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDateTime reservedTime; //방송 예약 시간
@@ -36,5 +37,8 @@ public class LiveStreamingDTO extends TimeDTO {
     private LocalDateTime updatedAt; // 방송 수정 시간(방제, 컨텐츠 등 ...)
     public void setCreatedAtToNow() {
         updatedAt = LocalDateTime.now();
+    }
+    public void setId(long id) {
+        this.id = id;
     }
 }

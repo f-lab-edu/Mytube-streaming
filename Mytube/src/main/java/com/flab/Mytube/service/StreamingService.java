@@ -1,8 +1,9 @@
 package com.flab.Mytube.service;
 
-import com.flab.Mytube.dto.movie.request.InsertPostRequest;
+import com.flab.Mytube.dto.movie.LiveStreamingDTO;
+import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
 import com.flab.Mytube.dto.movie.request.JoinChatRequest;
-import com.flab.Mytube.dto.movie.response.InsertPostResponse;
+import com.flab.Mytube.dto.movie.response.ReserveShowResponse;
 import com.flab.Mytube.dto.movie.response.JoinChatResponse;
 import com.flab.Mytube.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,21 @@ public class StreamingService {
     private final PostMapper postMapper;
 
     @Transactional
-    public InsertPostResponse reserveMovie(InsertPostRequest.Param param){
-        BigInteger resultID = postMapper.addPost(param);
-        return new InsertPostResponse(resultID, 201, "Success");
+    public ReserveShowResponse reserveMovie(ReserveShowRequest request){
+        LiveStreamingDTO liveStreaming = LiveStreamingDTO.builder()
+                .movieId(request.getMovieId())
+                .streamerId(request.getStreamerId())
+                .title(request.getTitle())
+                .contents(request.getContents())
+                .reservedTime(request.getReserved_time())
+                .build();
+        postMapper.reserveShow(liveStreaming);
+//        long resultId =liveStreaming.getId();
+//        liveStreaming.setId(12);
+//        long resultId =liveStreaming.getId();
+
+//        System.out.println(" >>> "+liveStreaming.getUserCount());
+        return new ReserveShowResponse( 201, "Success");
     }
 
     @Transactional
