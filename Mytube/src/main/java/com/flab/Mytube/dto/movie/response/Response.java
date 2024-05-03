@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public abstract class Response {
+public class Response {
     private int code;
     private String message;
 }
