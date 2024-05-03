@@ -25,13 +25,6 @@
         VALUES
         (#{request.streamerId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedTime})
     </insert>
-
-    <select id="findByStartingStreamingId" resultType="com.flab.Mytube.dto.movie.response.StartingShowResponse">
-        SELECT id, title, contents, user_count, thumbs_up
-        FROM live_streaming
-        WHERE id = #{id}
-    </select>
-
     <select id="selectShow" parameterType="com.flab.Mytube.dto.movie.LiveStreamingDTO" resultType="com.flab.Mytube.dto.movie.LiveStreamingDTO">
         select
         id, title, contents

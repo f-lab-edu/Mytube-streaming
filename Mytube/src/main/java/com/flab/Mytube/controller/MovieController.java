@@ -3,8 +3,7 @@ package com.flab.Mytube.controller;
 import com.flab.Mytube.dto.movie.request.InsertMovieRequest;
 import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
 import com.flab.Mytube.dto.movie.request.JoinChatRequest;
-import com.flab.Mytube.dto.movie.response.Response;
-import com.flab.Mytube.dto.movie.response.StartingShowResponse;
+import com.flab.Mytube.dto.movie.response.ReserveShowResponse;
 import com.flab.Mytube.service.MovieService;
 import com.flab.Mytube.service.StreamingService;
 import lombok.RequiredArgsConstructor;
@@ -24,19 +23,12 @@ public class MovieController {
     public HttpStatus reserve(@RequestBody ReserveShowRequest request){
         // 관련 dto 생성하여 매개변수로 전달
         // live 예약하기
-        Response resultNode = streamingService.reserveMovie(request);
+        ReserveShowResponse resultNode = streamingService.reserveMovie(request);
         if(resultNode.getCode()==201){
             return HttpStatus.CREATED;
         }
         return HttpStatus.BAD_REQUEST;
     }
-    @GetMapping("/{streaming_id}/start")
-    public String startLive( @PathVariable("streaming_id") long streamingId){
-
-        StartingShowResponse resultNode = streamingService.startShow(streamingId);
-        return resultNode.toString();
-    }
-
     @PostMapping("/upload")
     public long upload(@RequestBody InsertMovieRequest param){
         // 동영상 업로드
