@@ -21,13 +21,8 @@ public class StreamingService {
     private final PostMapper postMapper;
 
     @Transactional // 동영상 업로드
-    public Response insertMovie(UploadMovieRequest param){
-        MovieDTO movie = MovieDTO.builder()
-                .subject(param.getSubject())
-                .url(param.getUrl())
-                .streamerId(param.getStreamerId())
-                .build();
-        postMapper.addMovie(movie);
+    public Response insertMovie(UploadMovieRequest request){
+        postMapper.addMovie(request.uploadMovie());
         return new Response( 201, "Success");
     }
 

@@ -15,8 +15,8 @@ import java.math.BigInteger;
 public interface PostMapper {
     long addMovie(@Param("request") MovieDTO movie);
     long reserveShow(@Param("request") LiveStreamingDTO liveStreaming);
-    long selectShow(@Param("request") LiveStreamingDTO liveStreaming);
     StartingShowResponse findByStartingStreamingId(@Param("id") long id);
     //    -----
+    long selectShow(@Param("request") LiveStreamingDTO liveStreaming);
     BigInteger joinChat(JoinChatRequest param);
 }
