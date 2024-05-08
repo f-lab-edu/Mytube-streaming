@@ -11,7 +11,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,8 +36,5 @@ public class LiveStreamingDTO extends TimeDTO {
     private LocalDateTime updatedAt; // 방송 수정 시간(방제, 컨텐츠 등 ...)
     public void setCreatedAtToNow() {
         updatedAt = LocalDateTime.now();
-    }
-    public void setId(long id) {
-        this.id = id;
     }
 }
