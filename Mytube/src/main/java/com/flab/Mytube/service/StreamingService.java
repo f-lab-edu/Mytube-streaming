@@ -1,7 +1,5 @@
 package com.flab.Mytube.service;
 
-import com.flab.Mytube.dto.movie.LiveStreamingDTO;
-import com.flab.Mytube.dto.movie.MovieDTO;
 import com.flab.Mytube.dto.movie.request.UploadMovieRequest;
 import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
 import com.flab.Mytube.dto.movie.request.JoinChatRequest;

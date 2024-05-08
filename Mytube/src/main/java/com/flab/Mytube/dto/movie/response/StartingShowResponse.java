@@ -14,6 +14,7 @@ public class StartingShowResponse {
     private int userCount;
     private int thumbsUp;
 
+    @Builder
     public StartingShowResponse(LiveStreamingDTO streaming){
         this.id=streaming.getId();
         this.title = streaming.getTitle();

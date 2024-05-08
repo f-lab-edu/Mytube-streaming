@@ -5,7 +5,6 @@ import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
 import com.flab.Mytube.dto.movie.request.JoinChatRequest;
 import com.flab.Mytube.dto.movie.response.Response;
 import com.flab.Mytube.dto.movie.response.StartingShowResponse;
-//import com.flab.Mytube.service.MovieService;
 import com.flab.Mytube.service.StreamingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
