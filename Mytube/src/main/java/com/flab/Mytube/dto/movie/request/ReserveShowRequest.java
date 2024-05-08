@@ -1,7 +1,6 @@
 package com.flab.Mytube.dto.movie.request;
 
 import com.flab.Mytube.dto.movie.LiveStreamingDTO;
-import com.flab.Mytube.dto.movie.MovieDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +15,8 @@ public class ReserveShowRequest {
     private long movieId;
     private String title;
     private String contents;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH")
-    LocalDateTime reserved_time;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    LocalDateTime reservedTime;
 
     @Builder
     public ReserveShowRequest(long streamerId, long movieId, String title, String contents, LocalDateTime dateTime){
@@ -25,7 +24,7 @@ public class ReserveShowRequest {
         this.movieId=movieId;
         this.title=title;
         this.contents=contents;
-        this.reserved_time=dateTime;
+        this.reservedTime =dateTime;
     }
 
     public LiveStreamingDTO makeReservation(){
@@ -33,6 +32,8 @@ public class ReserveShowRequest {
                 .streamerId(streamerId)
                 .movieId(movieId)
                 .title(title)
-                .contents(contents).build();
+                .contents(contents)
+                .reservedTime(reservedTime)
+                .build();
     }
 }

@@ -3,13 +3,11 @@ package com.flab.Mytube.dto.movie.request;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigInteger;
-
 @Getter
 @Setter
-public class InsertMovieRequest {
+public class UploadMovieRequest {
     long id;
-    BigInteger streamer_id;
+    long streamerId;
     String subject;
     String url;
 }

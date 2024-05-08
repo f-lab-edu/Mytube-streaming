@@ -1,9 +1,10 @@
 package com.flab.Mytube.service;
 
 import com.flab.Mytube.dto.movie.LiveStreamingDTO;
+import com.flab.Mytube.dto.movie.MovieDTO;
+import com.flab.Mytube.dto.movie.request.UploadMovieRequest;
 import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
 import com.flab.Mytube.dto.movie.request.JoinChatRequest;
-import com.flab.Mytube.dto.movie.request.StartShowRequest;
 import com.flab.Mytube.dto.movie.response.Response;
 import com.flab.Mytube.dto.movie.response.JoinChatResponse;
 import com.flab.Mytube.dto.movie.response.StartingShowResponse;
@@ -19,29 +20,35 @@ import java.math.BigInteger;
 public class StreamingService {
     private final PostMapper postMapper;
 
-    @Transactional
-    public Response reserveMovie(ReserveShowRequest request){
-        LiveStreamingDTO liveStreaming = LiveStreamingDTO.builder()
-                .movieId(request.getMovieId())
-                .streamerId(request.getStreamerId())
-                .title(request.getTitle())
-                .contents(request.getContents())
-                .reservedTime(request.getReserved_time())
+    @Transactional // 동영상 업로드
+    public Response insertMovie(UploadMovieRequest param){
+        MovieDTO movie = MovieDTO.builder()
+                .subject(param.getSubject())
+                .url(param.getUrl())
+                .streamerId(param.getStreamerId())
                 .build();
-        postMapper.reserveShow(liveStreaming);
+        postMapper.addMovie(movie);
         return new Response( 201, "Success");
     }
 
-    @Transactional
+    @Transactional // 방송 예약하기
+    public Response reserveMovie(ReserveShowRequest request){
+        postMapper.reserveShow(request.makeReservation());
+        return new Response( 201, "Success");
+    }
+
+    @Transactional // 방송 시작하기
     public StartingShowResponse startShow(long streamingId){
 // Id 를 활용해 테이블을 찾아오는 매퍼 호출
 //        return mapper.method(streamingId);
-
         StartingShowResponse response = postMapper.findByStartingStreamingId(streamingId);
         return response;
     }
 
-    @Transactional
+
+    // ----------
+
+    @Transactional // 채팅 참여하기
     public JoinChatResponse joinChat(JoinChatRequest param, BigInteger movie_id){
         param.setMovie_id(movie_id);
         BigInteger contentsID= postMapper.joinChat(param);

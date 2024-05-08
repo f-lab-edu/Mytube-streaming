@@ -1,6 +1,7 @@
 package com.flab.Mytube.mapper;
 
 import com.flab.Mytube.dto.movie.LiveStreamingDTO;
+import com.flab.Mytube.dto.movie.MovieDTO;
 import com.flab.Mytube.dto.movie.request.JoinChatRequest;
 import com.flab.Mytube.dto.movie.response.StartingShowResponse;
 import org.apache.ibatis.annotations.Mapper;
@@ -12,8 +13,10 @@ import java.math.BigInteger;
 @Component
 @Mapper
 public interface PostMapper {
+    long addMovie(@Param("request") MovieDTO movie);
     long reserveShow(@Param("request") LiveStreamingDTO liveStreaming);
     long selectShow(@Param("request") LiveStreamingDTO liveStreaming);
-    BigInteger joinChat(JoinChatRequest param);
     StartingShowResponse findByStartingStreamingId(@Param("id") long id);
+    //    -----
+    BigInteger joinChat(JoinChatRequest param);
 }
