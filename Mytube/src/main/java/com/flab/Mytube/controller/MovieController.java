@@ -2,15 +2,12 @@ package com.flab.Mytube.controller;
 
 import com.flab.Mytube.dto.movie.request.UploadMovieRequest;
 import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
-import com.flab.Mytube.dto.movie.request.JoinChatRequest;
 import com.flab.Mytube.dto.movie.response.Response;
 import com.flab.Mytube.dto.movie.response.StartingShowResponse;
 import com.flab.Mytube.service.StreamingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigInteger;
 
 @RequiredArgsConstructor
 @RestController
@@ -42,25 +39,9 @@ public class MovieController {
     }
 
     // 라이브 시작 요청
-    @GetMapping("/{streaming_id}/start")
-    public String startLive( @PathVariable("streaming_id") long streamingId){
-
+    @GetMapping("/{streamingId}/start")
+    public String startLive( @PathVariable("streamingId") long streamingId){
         StartingShowResponse resultNode = streamingService.startShow(streamingId);
         return resultNode.toString();
     }
-//    -----------------------
-    @PostMapping("/{movie_id}/chat")
-    public BigInteger joinChat(@RequestBody JoinChatRequest param, @PathVariable("movie_id") BigInteger movie_id){
-        //라이브 채팅 참여
-        return streamingService.joinChat(param, movie_id).getId();
-    }
-
-    @PostMapping("/{movie_id}/store")
-    public void storeMovie(){
-        //라이브 저장하기
-    }
-
-
-
-
 }
