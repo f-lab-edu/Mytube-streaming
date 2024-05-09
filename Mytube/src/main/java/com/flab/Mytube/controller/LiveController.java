@@ -17,7 +17,14 @@ public class LiveController {
     }
 
     @PatchMapping("/{liveId}/end")
-    public void storeMovie(){
-        //라이브 종료
+    public void endLive(@PathVariable("liveId") long liveId){
+        //라이브 종료/(저장까지?)
+        liveService.endLive(liveId);
+    }
+
+    @PutMapping("/{liveId/prefer")
+    public void preferLive(@PathVariable("liveId") long liveId, @RequestBody long userId){
+        //라이브 좋아요~
+        liveService.prefer(liveId, userId);
     }
 }
