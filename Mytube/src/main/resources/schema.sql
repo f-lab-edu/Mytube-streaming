@@ -33,3 +33,11 @@ create table live_streaming(
     foreign key(user_id) references user(id),
     foreign key (movie_id) references movie(id)
 );
+
+ CREATE TABLE streamingLike(
+	id int(50) not null auto_increment primary key,
+    user_id int(50) not null,
+    streaming_id int(50) not null,
+    foreign key(user_id) references user(id),
+    foreign key(streaming_id) references live_streaming(id)
+);
