@@ -15,6 +15,7 @@ public class LiveService {
 
     }
     public void endLive(long id){
+        // 데이터가 있는지 먼저 확인?
 
     }
 
