@@ -9,7 +9,7 @@
         FROM liveStreaming WHERE userId = #{request.streamerId} ;
     </select>
 
-    <select id="getLiveList" resultType="com.flab.Mytube.dao.LiveListDAO">
+    <select id="getLiveList" resultType="com.flab.Mytube.dao.LivePageDAO">
         SELECT id, title, contents, userCount, thumbsUp, reservedAt, updatedAt, deletedAt
         FROM liveStreaming WHERE userId = #{request.streamerId} and deletedAt is NULL;
     </select>
