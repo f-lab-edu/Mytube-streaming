@@ -9,11 +9,7 @@ public class ReadService {
         //    조회하는 코드에서 이 부분에 값이 있다면 불러오지 못하게 처리할 것
     public void delete(long streamerId, long movieId){ //dto 로 만들기
 //        ----- id= liveDelete
-//        ALTER INTO // 수정
-//        live_streaming (deletedAt) // 시간
-//        VALUES
-//        { timeStamp 같은 거 알아보기 }
-//        where == streamerId, == movieId
+//        UPDATE liveStreaming set deletedAt = CURRENT_TIMESTAMP where id=3;
     }
 
     //현재 채널 지난 라이브 다시보기
@@ -21,17 +17,15 @@ public class ReadService {
     public void replay(long streamerId, long movieId){
 //        //mapper 연결
 //        ----  id= movieReplay
-//        SELECT url? // 조회
+//        SELECT url // 조회
 //        from liveStreaming
-//        where == streamerId, == movieId
+//        where id = id ;
     }
 
     //    현재 채널 라이브 및 동영상 목록 조회
 //    조회하는 코드에서 deletedAt에 값이 있다면 불러오지 못하게 처리할 것
     public void getLiveList(long streamerId){
 //        ----  id= getLiveList
-//        SELECT url? // 조회
-//        from liveStreaming
-//        where == streamerId
+//        SELECT id, title from liveStreaming where userId = streamerId ;
     }
 }
