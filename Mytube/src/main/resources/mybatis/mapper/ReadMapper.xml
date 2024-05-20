@@ -2,19 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.flab.Mytube.mapper.ReadMapper">
     <update id="liveDelete" useGeneratedKeys="true" keyProperty="request.id" parameterType="com.flab.Mytube.dto.movie.MovieDTO">
-        UPDATE INTO
-        movie (user_id, subject, url)
-        VALUES
-        (#{request.streamerId}, #{request.subject}, #{request.url})
+        UPDATE INTO liveStreaming (deletedAt) VALUES CURRENT_TIMESTAMP
     </update>
-    <select id="movieReplay" >
-        SELECT INTO
-        live_streaming (user_id, movie_id, title, contents, reserved_at)
-        VALUES
-        (#{request.streamerId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedTime})
+    <select id="movieReplay" resultType="com.flab.Mytube.dao.LivePageDAO">
+        SELECT id, title, contents, userCount, thumbsUp, reservedAt, updatedAt, deletedAt
+        FROM liveStreaming WHERE userId = #{request.streamerId} ;
     </select>
 
-    <select id="getLiveList" // resultType="com.flab.Mytube.dto.movie.response.StartingShowResponse">
-        SELECT id, title from liveStreaming where userId = #{request.streamerId} ;
+    <select id="getLiveList" resultType="com.flab.Mytube.dao.LiveListDAO">
+        SELECT id, title, contents, userCount, thumbsUp, reservedAt, updatedAt, deletedAt
+        FROM liveStreaming WHERE userId = #{request.streamerId} ;
     </select>
 </mapper>

@@ -9,14 +9,14 @@
     </insert>
     <insert id="reserveShow" useGeneratedKeys="true" keyProperty="request.id" parameterType="com.flab.Mytube.dto.movie.LiveStreamingDTO">
         INSERT INTO
-        live_streaming (user_id, movie_id, title, contents, reserved_at)
+        liveStreaming (user_id, movie_id, title, contents, reserved_at)
         VALUES
         (#{request.streamerId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedTime})
     </insert>
 
     <select id="findByStartingStreamingId" resultType="com.flab.Mytube.dto.movie.response.StartingShowResponse">
-        SELECT id, title, contents, user_count, thumbs_up
-        FROM live_streaming
+        SELECT id, movieId, title, contents, userCount, thumbsUp
+        FROM liveStreaming
         WHERE id = #{id}
     </select>
 
