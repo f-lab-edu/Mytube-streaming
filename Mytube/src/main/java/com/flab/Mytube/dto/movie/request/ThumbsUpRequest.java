@@ -1,14 +1,20 @@
 package com.flab.Mytube.dto.movie.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
-@Setter
+@RequiredArgsConstructor
+@Builder(toBuilder = true)
 @AllArgsConstructor
 public class ThumbsUpRequest {
     private long liveId;
     private long userId;
     private long count;
+
+    public void minusCount(){
+        this.count -= 1;
+    }
+    public void plusCount(){
+        this.count += 1;
+    }
 }

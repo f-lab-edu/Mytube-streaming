@@ -12,25 +12,32 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/live")
 public class LiveController {
     private final LiveService liveService;
+
     @PostMapping("/{liveId}/chat")
-    public void joinChat(@RequestBody ChatJoinRequest request){
+    public void joinChat(@RequestBody ChatJoinRequest request) {
         //라이브 채팅 참여
         liveService.requestJoin(request);
     }
 
     @PatchMapping("/{liveId}/end")
-    public void endLive(@PathVariable("liveId") long liveId){
+    public void endLive(@PathVariable("liveId") long liveId) {
         //라이브 종료/(저장까지?)
         liveService.endLive(liveId);
     }
 
     // 좋아요 컨트롤러
     @PostMapping("/{liveId}/prefer")
-    public HttpStatus preferLive(@PathVariable("liveId") long liveId, @RequestBody ThumbsUpRequest request){
+    public HttpStatus preferLive(@PathVariable("liveId") long liveId, @RequestBody ThumbsUpRequest request) {
         //라이브 좋아요~
-        request.setLiveId(liveId);
+//        request.builder()
+//                .liveId(liveId)
+//                .build();
+//        request.setLiveId(liveId);
+        ThumbsUpRequest newRequest= request.toBuilder()
+                .liveId(liveId)
+                .build();
 //        ThumbsUpRequest request = new ThumbsUpRequest(liveId, userId);
-        liveService.prefer(request);
+        liveService.prefer(newRequest);
         return HttpStatus.CREATED;
     }
 }
