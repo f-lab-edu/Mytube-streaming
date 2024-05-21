@@ -31,6 +31,10 @@ public class ReadService {
 
     public void replay(long liveId){
         LiveStreamingVO live=readMapper.getLiveContents(liveId);
+        if(live == null){
+            System.err.println("찾으려는 데이터가 존재하지 않습니다. ");
+            return;
+        }
         long movieId = live.getMovieId();
         MovieVO movie = readMapper.getMovieUrl(movieId);
         /* checklist

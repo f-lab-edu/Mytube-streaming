@@ -1,12 +1,16 @@
 package com.flab.Mytube.vo;
 
-import java.time.LocalDateTime;
+import lombok.Data;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
+@Data
 public class MovieVO {
     private long id;
     private long userId;
     private String subject;
     private String url;
-    private LocalDateTime createdAt;
-    private LocalDateTime deletedAt;
+    private Date createdAt;
+    private Date deletedAt;
 }
