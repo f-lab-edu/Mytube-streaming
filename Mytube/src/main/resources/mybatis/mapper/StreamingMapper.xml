@@ -3,17 +3,17 @@
 <mapper namespace="com.flab.Mytube.mapper.LiveMapper">
     <select id="checkPrefer" parameterType="com.flab.Mytube.dto.movie.request.ThumbsUpRequest" resultType="long">
         select count(id) from streamingLike
-        where streaming_id = #{request.liveId} and user_id = #{request.userId}
+        where streamingId = #{request.liveId} and userId = #{request.userId}
     </select>
 
     <insert id="addPrefer" parameterType="com.flab.Mytube.dto.movie.request.ThumbsUpRequest">
-        insert into streamingLike(streaming_id, user_id)
+        insert into streamingLike(streamingId, userId)
         values(#{request.liveId}, #{request.userId})
     </insert>
 
     <delete id="deletePrefer" parameterType="com.flab.Mytube.dto.movie.request.ThumbsUpRequest">
         delete from streamingLike
-        where streaming_id = #{request.liveId} and user_id = #{request.userId}
+        where streamingId = #{request.liveId} and user_id = #{request.userId}
     </delete>
 
     <select id="getPreferCount" parameterType="com.flab.Mytube.dto.movie.request.ThumbsUpRequest" resultType="long">

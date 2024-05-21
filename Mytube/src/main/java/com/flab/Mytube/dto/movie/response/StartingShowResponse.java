@@ -4,9 +4,11 @@ import com.flab.Mytube.dto.movie.LiveStreamingDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class StartingShowResponse {
     private long id;
     private String title;

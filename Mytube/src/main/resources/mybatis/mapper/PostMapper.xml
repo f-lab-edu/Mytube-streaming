@@ -3,13 +3,13 @@
 <mapper namespace="com.flab.Mytube.mapper.PostMapper">
     <insert id="addMovie" useGeneratedKeys="true" keyProperty="request.id" parameterType="com.flab.Mytube.dto.movie.MovieDTO">
         INSERT INTO
-        movie (user_id, subject, url)
+        movie (userId, subject, url)
         VALUES
         (#{request.streamerId}, #{request.subject}, #{request.url})
     </insert>
     <insert id="reserveShow" useGeneratedKeys="true" keyProperty="request.id" parameterType="com.flab.Mytube.dto.movie.LiveStreamingDTO">
         INSERT INTO
-        liveStreaming (user_id, movie_id, title, contents, reserved_at)
+        liveStreaming (userId, movieId, title, contents, reservedAt)
         VALUES
         (#{request.streamerId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedTime})
     </insert>

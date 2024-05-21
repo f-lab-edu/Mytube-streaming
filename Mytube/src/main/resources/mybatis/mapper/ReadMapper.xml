@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.flab.Mytube.mapper.ReadMapper">
-    <update id="liveDelete" useGeneratedKeys="true" keyProperty="request.id" parameterType="com.flab.Mytube.dto.movie.MovieDTO">
-        UPDATE INTO liveStreaming (deletedAt) VALUES CURRENT_TIMESTAMP
+    <update id="liveDelete" useGeneratedKeys="true" parameterType="com.flab.Mytube.dto.movie.MovieDTO">
+        UPDATE liveStreaming SET deletedAt = CURRENT_TIMESTAMP WHERE id = #{movieId}
     </update>
-    <select id="movieReplay" resultType="com.flab.Mytube.dao.LivePageDAO">
-        SELECT id, title, contents, userCount, thumbsUp, reservedAt, updatedAt, deletedAt
-        FROM liveStreaming WHERE userId = #{request.streamerId} ;
+
+    <select id="getLiveContents" resultType="com.flab.Mytube.vo.LiveStreamingVO">
+        SELECT id, movieId, title, contents, userCount, thumbsUp, reservedAt, updatedAt, deletedAt
+        FROM liveStreaming WHERE id=#{liveId} and deletedAt is null;
     </select>
 
-    <select id="getLiveList" resultType="com.flab.Mytube.dao.LivePageDAO">
-        SELECT id, title, contents, userCount, thumbsUp, reservedAt, updatedAt, deletedAt
-        FROM liveStreaming WHERE userId = #{request.streamerId} and deletedAt is NULL;
+    <select id="getMovieUrl" resultType="com.flab.Mytube.vo.MovieVO">
+        SELECT id, userId, subject, url, createdAt, deletedAt
+        FROM movie WHERE id = #{id} ;
+    </select>
+    <resultMap type="com.flab.Mytube.dao.LivePageDAO" id="liveMap">
+        <id column="id" property="id"/>
+        <result column="userId" property="userId"/>
+        <result column="title" property="title"/>
+        <result column="contents" property="contents"/>
+        <result column="userCount" property="userCount"/>
+        <result column="thumbsUp" property="thumbsUp"/>
+        <result column="reservedAt" property="reservedAt"/>
+        <result column="updatedAt" property="updatedAt"/>
+        <result column="deletedAt" property="deletedAt"/>
+    </resultMap>
+    <select id="getLiveList" resultMap="liveMap">
+        SELECT id, userId, title, contents, userCount, thumbsUp, reservedAt, updatedAt, deletedAt
+        FROM liveStreaming WHERE userId = #{userId} and deletedAt is NULL;
     </select>
 </mapper>

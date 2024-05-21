@@ -1,11 +1,15 @@
 package com.flab.Mytube.controller;
 
+import com.flab.Mytube.dao.LivePageDAO;
+import com.flab.Mytube.dto.movie.LiveStreamingDTO;
 import com.flab.Mytube.service.ReadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,13 +30,13 @@ public class ReadController {
     //    조회하는 코드에서 deletedAt에 값이 있다면 불러오지 못하게 처리할 것
     @GetMapping("/{streamerId}/movie/{movieId}/replay")
     public void replayLive(@PathVariable("streamerId") long streamerId, @PathVariable("movieId") long movieId){
-
+        service.replay(movieId);
     }
 
 //    현재 채널 라이브 및 동영상 목록 조회
 //    조회하는 코드에서 deletedAt에 값이 있다면 불러오지 못하게 처리할 것
-    @GetMapping("/{streamerId}")
-    public void getLiveList(@PathVariable("streamerId") long streamerId){
-
-    }
+@GetMapping("/{streamerId}")
+public List<LivePageDAO> getLiveList(@PathVariable("streamerId") long streamerId) throws Exception {
+    return service.getLiveList(streamerId);
+}
 }

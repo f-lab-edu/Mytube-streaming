@@ -8,7 +8,7 @@ import java.math.BigInteger;
 @Getter
 @AllArgsConstructor
 public class JoinChatResponse {
-    private BigInteger id;
+    private long id;
     private int code;
     private String message;
 }

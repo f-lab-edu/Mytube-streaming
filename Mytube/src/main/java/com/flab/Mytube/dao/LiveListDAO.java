@@ -19,4 +19,10 @@ public class LiveListDAO implements LiveStreamingDAO {
     public List<LiveStreamingVO> list() throws Exception{
         return sql.selectList(namespace+".list");
     }
+
+//    @Override
+//    public void getMovieId(long id){
+//        long movieId = getLiveId.liveReplay(id);
+//
+//    }
 }
