@@ -3,7 +3,6 @@ package com.flab.Mytube.service;
 import com.flab.Mytube.dto.movie.request.ChatJoinRequest;
 import com.flab.Mytube.dto.movie.request.ThumbsUpRequest;
 import com.flab.Mytube.mapper.LiveMapper;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

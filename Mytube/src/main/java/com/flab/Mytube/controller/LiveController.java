@@ -28,15 +28,9 @@ public class LiveController {
     // 좋아요 컨트롤러
     @PostMapping("/{liveId}/prefer")
     public HttpStatus preferLive(@PathVariable("liveId") long liveId, @RequestBody ThumbsUpRequest request) {
-        //라이브 좋아요~
-//        request.builder()
-//                .liveId(liveId)
-//                .build();
-//        request.setLiveId(liveId);
         ThumbsUpRequest newRequest= request.toBuilder()
                 .liveId(liveId)
                 .build();
-//        ThumbsUpRequest request = new ThumbsUpRequest(liveId, userId);
         liveService.prefer(newRequest);
         return HttpStatus.CREATED;
     }

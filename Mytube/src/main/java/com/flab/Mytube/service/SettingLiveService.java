@@ -33,14 +33,4 @@ public class SettingLiveService {
         StartingShowResponse response = postMapper.findByStartingStreamingId(streamingId);
         return response;
     }
-
-
-    // ----------
-
-//    @Transactional // 채팅 참여하기
-//    public JoinChatResponse joinChat(JoinChatRequest param, BigInteger movie_id){
-//        param.setMovie_id(movie_id);
-//        BigInteger contentsID= postMapper.joinChat(param);
-//        return new JoinChatResponse(contentsID, 201, "Success");
-//    }
 }

@@ -2,7 +2,6 @@ package com.flab.Mytube.dao;
 
 import com.flab.Mytube.vo.LiveStreamingVO;
 import org.apache.ibatis.session.SqlSession;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
@@ -19,10 +18,4 @@ public class LiveListDAO implements LiveStreamingDAO {
     public List<LiveStreamingVO> list() throws Exception{
         return sql.selectList(namespace+".list");
     }
-
-//    @Override
-//    public void getMovieId(long id){
-//        long movieId = getLiveId.liveReplay(id);
-//
-//    }
 }
