@@ -1,5 +1,6 @@
 package com.flab.Mytube.controller;
 
+import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.UploadMovieRequest;
 import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
 import com.flab.Mytube.dto.movie.response.Response;
@@ -8,6 +9,7 @@ import com.flab.Mytube.service.SettingLiveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -17,13 +19,11 @@ public class SettingLiveController {
 
     // 동영상 업로드 요청
     @PostMapping("/upload")
-    public HttpStatus upload(@RequestBody UploadMovieRequest request){
+    public HttpStatus upload(@RequestParam("movie") MultipartFile file, @RequestParam("streamerId") long streamerId, @RequestParam("subject") String subject){
         // 동영상 업로드
-        Response resultNode = settingLiveService.insertMovie(request);
-        if(resultNode.getCode()==201){
-            return HttpStatus.CREATED;
-        }
-        return HttpStatus.BAD_REQUEST;
+        FileUploadRequest request = new FileUploadRequest(file, streamerId, subject);
+        HttpStatus response = settingLiveService.insertMovie(request);
+        return response;
     }
 
     // 라이브 예약하기 요청
