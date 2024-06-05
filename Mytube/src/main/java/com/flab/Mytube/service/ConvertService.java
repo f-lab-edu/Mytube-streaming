@@ -9,7 +9,6 @@ import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.progress.Progress;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 
@@ -29,8 +28,8 @@ public class ConvertService {
     @Value("src/main/resources/static/mp4}")
     private String mp4OutputPath;
 
-    public void convertToHls( String name) {
-        String path = "src/main/resources/static" + "/" + name;
+    public void convertToHls(String name) {
+        String path = savedPath + "/" + name;
         File output = new File(hlsOutputPath + "/" + name);
 
         if (!output.exists()) {

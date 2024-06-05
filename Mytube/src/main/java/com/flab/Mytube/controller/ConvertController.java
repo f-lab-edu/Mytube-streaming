@@ -31,7 +31,7 @@ public class ConvertController {
     @GetMapping("/hls/{fileName}.m3u8")
     public ResponseEntity<Resource> videoHlsM3U8(@PathVariable String fileName) {
         log.debug("************** class = {}, function = {}", this.getClass().getName(), new Object(){}.getClass().getEnclosingMethod().getName());
-        String fileFullPath = "/Users/aristo/Desktop/2024/f-lab/project/Mytube-streaming/Mytube/src/main/resources/static/hls/forTest.mp4/master.m3u8";
+        String fileFullPath = "src/main/resources/static"+fileName;
         Resource resource = new FileSystemResource(fileFullPath);
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName + ".m3u8");
