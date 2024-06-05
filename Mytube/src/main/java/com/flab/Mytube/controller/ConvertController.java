@@ -1,6 +1,5 @@
 package com.flab.Mytube.controller;
 
-import com.flab.Mytube.service.ConvertService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
@@ -10,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 //import java.net.http.HttpHeaders;
 
@@ -18,17 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 public class ConvertController {
-    private final ConvertService convertService;
-    @ResponseBody
-    @GetMapping("/convert/hls/{movie}")
-    public String convertToHls(
-            @PathVariable("movie") String name
-    ) {
-        convertService.convertToHls(name);
-        return "success";
-    }
-
-    @GetMapping("/hls/{fileName}.m3u8")
+    @GetMapping("/hls/{fileName}")
     public ResponseEntity<Resource> videoHlsM3U8(@PathVariable String fileName) {
         log.debug("************** class = {}, function = {}", this.getClass().getName(), new Object(){}.getClass().getEnclosingMethod().getName());
         String fileFullPath = "src/main/resources/static"+fileName;

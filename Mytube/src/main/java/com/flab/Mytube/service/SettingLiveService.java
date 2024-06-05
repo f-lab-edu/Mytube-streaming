@@ -1,8 +1,6 @@
 package com.flab.Mytube.service;
 
-import com.flab.Mytube.dto.movie.MovieDTO;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
-import com.flab.Mytube.dto.movie.request.UploadMovieRequest;
 import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
 import com.flab.Mytube.dto.movie.response.Response;
 import com.flab.Mytube.dto.movie.response.StartingShowResponse;
@@ -43,18 +41,13 @@ public class SettingLiveService {
     @Value("src/main/resources/static/mp4}")
     private String mp4OutputPath;
 
-//    @Transactional // 동영상 업로드
-//    public Response insertMovie(UploadMovieRequest request){
-//        postMapper.addMovie(request.uploadMovie());
-//        return new Response( 201, "Success");
-//    }
     @Transactional
     public HttpStatus insertMovie(FileUploadRequest request){
         if (request.isEmptyFile()) {
             System.out.println("파일 넣으십셔.");
             return HttpStatus.BAD_REQUEST;
         }
-        String fileName=  request.getFile().getOriginalFilename();// 확장자 들어가든말듵ㄴ 노신경..
+        String fileName=  request.getOriginFileName();
         // Path 객체 생성, savedPath 에 file 객체 fileName 을 생성한다.
         Path filepath = Paths.get(savedPath, fileName);
 
@@ -63,16 +56,15 @@ public class SettingLiveService {
             byte[] bytes = request.getFile().getBytes();
             //Path 파일에 작성
             Files.write(filepath, bytes);
-            System.out.println("Upload SUCCESS!!! >>> ");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        movieBuilder(filepath, request);
+        movieBuilder(request);
         return HttpStatus.CREATED;
     }
 
-    private void movieBuilder(Path filepath, FileUploadRequest fileRequest){
+    public void movieBuilder(FileUploadRequest fileRequest){
         String path = savedPath + "/" + fileRequest.getOriginFileName();
 
         File output = new File(hlsOutputPath+"/streamer/"+fileRequest.getStreamerId());

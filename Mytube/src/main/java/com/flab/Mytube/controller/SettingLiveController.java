@@ -22,8 +22,10 @@ public class SettingLiveController {
     public HttpStatus upload(@RequestParam("movie") MultipartFile file, @RequestParam("streamerId") long streamerId, @RequestParam("subject") String subject){
         // 동영상 업로드
         FileUploadRequest request = new FileUploadRequest(file, streamerId, subject);
-        HttpStatus response = settingLiveService.insertMovie(request);
-        return response;
+        settingLiveService.movieBuilder(request);
+//        HttpStatus response = settingLiveService.insertMovie(request);
+        return HttpStatus.CREATED;
+//        return response;
     }
 
     // 라이브 예약하기 요청
