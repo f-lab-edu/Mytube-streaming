@@ -14,7 +14,7 @@
         (#{request.streamerId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedTime})
     </insert>
 
-    <select id="findByStartingStreamingId" resultType="com.flab.Mytube.dto.movie.response.StartingShowResponse">
+    <select id="findByStartingStreamingId" resultType="com.flab.Mytube.vo.LiveStreamingVO">
         SELECT id, movieId, title, contents, userCount, thumbsUp
         FROM liveStreaming
         WHERE id = #{id}

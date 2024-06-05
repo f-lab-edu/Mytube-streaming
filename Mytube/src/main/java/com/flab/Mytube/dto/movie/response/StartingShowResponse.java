@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Builder
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -15,15 +16,6 @@ public class StartingShowResponse {
     private String contents;
     private int userCount;
     private int thumbsUp;
-
-    @Builder
-    public StartingShowResponse(LiveStreamingDTO streaming){
-        this.id=streaming.getId();
-        this.title = streaming.getTitle();
-        this.contents = streaming.getContents();
-        this.userCount = streaming.getUserCount();
-        this.thumbsUp = streaming.getThumbsUp();
-    }
 
     @Override
     public String toString() {
@@ -36,3 +28,5 @@ public class StartingShowResponse {
         return desc;
     }
 }
+
+

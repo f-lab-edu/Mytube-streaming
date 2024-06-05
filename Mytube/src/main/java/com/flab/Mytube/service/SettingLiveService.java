@@ -1,12 +1,11 @@
 package com.flab.Mytube.service;
 
-import com.flab.Mytube.dto.movie.MovieDTO;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
-import com.flab.Mytube.dto.movie.request.UploadMovieRequest;
 import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
 import com.flab.Mytube.dto.movie.response.Response;
 import com.flab.Mytube.dto.movie.response.StartingShowResponse;
 import com.flab.Mytube.mapper.PostMapper;
+import com.flab.Mytube.vo.LiveStreamingVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.FFmpeg;
@@ -33,7 +32,6 @@ public class SettingLiveService {
     private final PostMapper postMapper;
     private final FFmpeg fFmpeg;
     private final FFprobe fFprobe;
-
     @Value("src/main/resources/static/origin")
     private String savedPath;
 
@@ -43,18 +41,13 @@ public class SettingLiveService {
     @Value("src/main/resources/static/mp4}")
     private String mp4OutputPath;
 
-//    @Transactional // 동영상 업로드
-//    public Response insertMovie(UploadMovieRequest request){
-//        postMapper.addMovie(request.uploadMovie());
-//        return new Response( 201, "Success");
-//    }
     @Transactional
     public HttpStatus insertMovie(FileUploadRequest request){
         if (request.isEmptyFile()) {
             System.out.println("파일 넣으십셔.");
             return HttpStatus.BAD_REQUEST;
         }
-        String fileName=  request.getFile().getOriginalFilename();// 확장자 들어가든말듵ㄴ 노신경..
+        String fileName=  request.getFile().getOriginalFilename();
         // Path 객체 생성, savedPath 에 file 객체 fileName 을 생성한다.
         Path filepath = Paths.get(savedPath, fileName);
 
@@ -109,16 +102,23 @@ public class SettingLiveService {
                 .run();
     }
     @Transactional // 방송 예약하기
-    public Response reserveMovie(ReserveShowRequest request){
+    public Response reserveMovie(ReserveShowRequest request) {
         postMapper.reserveShow(request.makeReservation());
-        return new Response( 201, "Success");
+        return new Response(201, "Success");
     }
 
     @Transactional // 방송 시작하기
-    public StartingShowResponse startShow(long streamingId){
+    public StartingShowResponse startShow(long streamingId) {
 // Id 를 활용해 테이블을 찾아오는 매퍼 호출
 //        return mapper.method(streamingId);
-        StartingShowResponse response = postMapper.findByStartingStreamingId(streamingId);
+        LiveStreamingVO result = postMapper.findByStartingStreamingId(streamingId);
+        // response DTO 생성하고 보내나?
+        StartingShowResponse response= StartingShowResponse.builder()
+                .id(result.getId())
+                .title(result.getTitle())
+                .contents(result.getContents())
+                .userCount(result.getUserCount())
+                .thumbsUp(result.getThumbsUp()).build();
         return response;
     }
 }
