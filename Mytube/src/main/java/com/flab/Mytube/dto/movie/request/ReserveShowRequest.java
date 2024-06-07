@@ -1,6 +1,6 @@
 package com.flab.Mytube.dto.movie.request;
 
-import com.flab.Mytube.dto.movie.LiveStreamingDTO;
+import com.flab.Mytube.dto.streaming.LiveStreamingDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

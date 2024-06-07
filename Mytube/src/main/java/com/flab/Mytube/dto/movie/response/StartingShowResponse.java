@@ -1,6 +1,5 @@
 package com.flab.Mytube.dto.movie.response;
 
-import com.flab.Mytube.dto.movie.LiveStreamingDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StartingShowResponse {
     private long id;
+    private String url;
     private String title;
     private String contents;
     private int userCount;

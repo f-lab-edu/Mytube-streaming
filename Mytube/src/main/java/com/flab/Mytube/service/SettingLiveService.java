@@ -106,9 +106,7 @@ public class SettingLiveService {
     }
     @Transactional // 방송 예약하기
     public Response reserveMovie(ReserveShowRequest request) {
-        // id 를 통해 저장된 위치 가져오기
-
-        // 저장~
+        // TODO: THINK 저장~ 하고 나서 id 를 알아야 요청을 하지 않나??
         postMapper.reserveShow(request.makeReservation());
         return new Response(201, "Success");
     }
@@ -123,12 +121,14 @@ public class SettingLiveService {
 
     @Transactional // 방송 시작하기
     public StartingShowResponse startShow(long streamingId) {
-// Id 를 활용해 테이블을 찾아오는 매퍼 호출
-//        return mapper.method(streamingId);
         LiveStreamingVO result = postMapper.findByStartingStreamingId(streamingId);
-        // response DTO 생성하고 보내나?
+        System.out.println(result.toString());
+        long movieId = result.getMovieId();
+        // 필요한 값만 가져오기 위한 객체를 생성해? 말아?
+        MovieVO movie = postMapper.getMovieURI(movieId);
         StartingShowResponse response= StartingShowResponse.builder()
                 .id(result.getId())
+                .url(movie.getUrl())
                 .title(result.getTitle())
                 .contents(result.getContents())
                 .userCount(result.getUserCount())

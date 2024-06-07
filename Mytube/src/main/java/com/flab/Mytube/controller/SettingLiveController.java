@@ -41,19 +41,16 @@ public class SettingLiveController {
         return HttpStatus.BAD_REQUEST;
     }
 
-    // 라이브 시작 요청
+    // 라이브 시작 요청 : TODO: API 명세 수정 필요할 듯. 이름이 헷갈려!!!
     @GetMapping("/{streamingId}/start")
-    public List<MovieVO> startLive( @PathVariable("streamingId") long streamingId){
-        List<MovieVO> result = settingLiveService.getUploadMovie(streamingId);
-
-//        StartingShowResponse resultNode = settingLiveService.startShow(streamingId);
-//        return resultNode.toString();
+    public StartingShowResponse startLive( @PathVariable("streamingId") long streamingId){
+        StartingShowResponse result = settingLiveService.startShow(streamingId);
         return result;
     }
 
     @GetMapping("/{streamerId}")
-    public List<MovieVO> getMovies( @PathVariable("streamingId") long streamingId){
-        List<MovieVO> result = settingLiveService.getUploadMovie(streamingId);
+    public List<MovieVO> getMovies( @PathVariable("streamerId") long streamerId){
+        List<MovieVO> result = settingLiveService.getUploadMovie(streamerId);
 
 //        StartingShowResponse resultNode = settingLiveService.startShow(streamingId);
 //        return resultNode.toString();

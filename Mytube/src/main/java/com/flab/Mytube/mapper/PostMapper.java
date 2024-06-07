@@ -16,6 +16,7 @@ public interface PostMapper {
     long addMovie(@Param("request") FileUploadRequest movie);
     long reserveShow(@Param("request") LiveStreamingDTO liveStreaming);
     LiveStreamingVO findByStartingStreamingId(@Param("id") long id);
+    MovieVO getMovieURI(@Param("id") long id);
     List<MovieVO> uploadMovieList(@Param("userId") long userId);
     //    -----
     long selectShow(@Param("request") LiveStreamingDTO liveStreaming);
