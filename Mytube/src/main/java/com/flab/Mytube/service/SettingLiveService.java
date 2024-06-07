@@ -34,13 +34,15 @@ public class SettingLiveService {
     private final PostMapper postMapper;
     private final FFmpeg fFmpeg;
     private final FFprobe fFprobe;
+
+    // 해당 경로에 디렉토리가 반드시 존재해야 함
     @Value("src/main/resources/static/origin")
     private String savedPath;
 
     @Value("src/main/resources/static/hls")
     private String hlsOutputPath;
 
-    @Value("src/main/resources/static/mp4}")
+    @Value("src/main/resources/static/mp4")
     private String mp4OutputPath;
 
     @Transactional

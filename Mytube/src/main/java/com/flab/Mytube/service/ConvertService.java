@@ -25,7 +25,7 @@ public class ConvertService {
     @Value("src/main/resources/static/hls")
     private String hlsOutputPath;
 
-    @Value("src/main/resources/static/mp4}")
+    @Value("src/main/resources/static/mp4")
     private String mp4OutputPath;
 
     public void convertToHls(String name) {
