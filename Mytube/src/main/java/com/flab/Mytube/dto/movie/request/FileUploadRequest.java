@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Path;
 
 @Getter
@@ -36,7 +37,9 @@ public class FileUploadRequest {
         return file.getOriginalFilename();
     }
 
-    public void addPath(String path){
-        this.url = path;
+    public void addPath(String path, String name){
+        StringBuilder sb = new StringBuilder(path);
+        sb.append("/"+name+"/");
+        this.url = sb.toString();
     }
 }

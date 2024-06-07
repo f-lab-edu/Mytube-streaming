@@ -6,6 +6,7 @@ import com.flab.Mytube.dto.movie.response.Response;
 import com.flab.Mytube.dto.movie.response.StartingShowResponse;
 import com.flab.Mytube.mapper.PostMapper;
 import com.flab.Mytube.vo.LiveStreamingVO;
+import com.flab.Mytube.vo.MovieVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.FFmpeg;
@@ -73,10 +74,11 @@ public class SettingLiveService {
             output.mkdirs();
         }
 
+        String fileName =fileRequest.getOriginFileName().split("\\.")[0]+".m3m8";
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(path) // 입력 소스
                 .overrideOutputFiles(true)
-                .addOutput(output.getAbsolutePath()+"/"+fileRequest.getOriginFileName().split("\\.")[0]+".m3m8")
+                .addOutput(output.getAbsolutePath()+"/"+fileName)
                 .setFormat("hls")
                 .addExtraArgs("-hls_time", "10") // 10초
                 .addExtraArgs("-hls_list_size", "0")
@@ -84,7 +86,7 @@ public class SettingLiveService {
                 .done();
 
         run(builder);
-        fileRequest.addPath(output.getPath());
+        fileRequest.addPath(output.getPath(), fileName);
         postMapper.addMovie(fileRequest);
     }
 
@@ -103,8 +105,19 @@ public class SettingLiveService {
     }
     @Transactional // 방송 예약하기
     public Response reserveMovie(ReserveShowRequest request) {
+        // id 를 통해 저장된 위치 가져오기
+
+        // 저장~
         postMapper.reserveShow(request.makeReservation());
         return new Response(201, "Success");
+    }
+
+    // 업로드한 동영상 리스트 뽑아오는 코드 필요할 듯? id 랑 subject 반환해주기
+    @Transactional
+    public void getUploadMovie(int streamerId){
+        // sreamerId 와 연관된 동영상 반환해오기
+        MovieVO result = postMapper.uploadMovieList(streamerId);
+
     }
 
     @Transactional // 방송 시작하기
