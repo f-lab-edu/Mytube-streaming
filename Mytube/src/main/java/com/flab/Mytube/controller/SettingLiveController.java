@@ -43,10 +43,20 @@ public class SettingLiveController {
 
     // 라이브 시작 요청
     @GetMapping("/{streamingId}/start")
-    public String startLive( @PathVariable("streamingId") long streamingId){
+    public List<MovieVO> startLive( @PathVariable("streamingId") long streamingId){
         List<MovieVO> result = settingLiveService.getUploadMovie(streamingId);
+
 //        StartingShowResponse resultNode = settingLiveService.startShow(streamingId);
 //        return resultNode.toString();
-        return result.toString();
+        return result;
+    }
+
+    @GetMapping("/{streamerId}")
+    public List<MovieVO> getMovies( @PathVariable("streamingId") long streamingId){
+        List<MovieVO> result = settingLiveService.getUploadMovie(streamingId);
+
+//        StartingShowResponse resultNode = settingLiveService.startShow(streamingId);
+//        return resultNode.toString();
+        return result;
     }
 }

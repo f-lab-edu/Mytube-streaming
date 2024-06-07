@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -114,10 +115,10 @@ public class SettingLiveService {
 
     // 업로드한 동영상 리스트 뽑아오는 코드 필요할 듯? id 랑 subject 반환해주기
     @Transactional
-    public void getUploadMovie(int streamerId){
+    public List<MovieVO> getUploadMovie(long streamerId){
         // sreamerId 와 연관된 동영상 반환해오기
-        MovieVO result = postMapper.uploadMovieList(streamerId);
-
+        List<MovieVO> result = postMapper.uploadMovieList(streamerId);
+        return result;
     }
 
     @Transactional // 방송 시작하기

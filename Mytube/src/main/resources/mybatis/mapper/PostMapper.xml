@@ -21,7 +21,7 @@
     </select>
 
     <select id="uploadMovieList" resultType="com.flab.Mytube.vo.MovieVO">
-        SELECT id
+        SELECT id, userId, subject, url, createdAt, deletedAt
         FROM movie
         WHERE userId = #{userId}
     </select>
