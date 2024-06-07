@@ -7,7 +7,7 @@
         VALUES
         (#{request.streamerId}, #{request.subject}, #{request.url})
     </insert>
-    <insert id="reserveShow" useGeneratedKeys="true" keyProperty="request.id" parameterType="com.flab.Mytube.dto.movie.LiveStreamingDTO">
+    <insert id="reserveShow" useGeneratedKeys="true" keyProperty="request.id" parameterType="com.flab.Mytube.dto.streaming.LiveStreamingDTO">
         INSERT INTO
         liveStreaming (userId, movieId, title, contents, reservedAt)
         VALUES
@@ -20,7 +20,13 @@
         WHERE id = #{id}
     </select>
 
-<!--    <select id="selectShow" parameterType="com.flab.Mytube.dto.movie.LiveStreamingDTO" resultType="com.flab.Mytube.dto.movie.LiveStreamingDTO">-->
+    <select id="uploadMovieList" resultType="com.flab.Mytube.vo.MovieVO">
+        SELECT id
+        FROM movie
+        WHERE userId = #{userId}
+    </select>
+
+<!--    <select id="selectShow" parameterType="com.flab.Mytube.dto.streaming.LiveStreamingDTO" resultType="com.flab.Mytube.dto.streaming.LiveStreamingDTO">-->
 <!--        select-->
 <!--        id, title, contents-->
 <!--        from live_streaming-->

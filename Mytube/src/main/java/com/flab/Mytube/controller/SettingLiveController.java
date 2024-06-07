@@ -6,10 +6,13 @@ import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
 import com.flab.Mytube.dto.movie.response.Response;
 import com.flab.Mytube.dto.movie.response.StartingShowResponse;
 import com.flab.Mytube.service.SettingLiveService;
+import com.flab.Mytube.vo.MovieVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -41,7 +44,9 @@ public class SettingLiveController {
     // 라이브 시작 요청
     @GetMapping("/{streamingId}/start")
     public String startLive( @PathVariable("streamingId") long streamingId){
-        StartingShowResponse resultNode = settingLiveService.startShow(streamingId);
-        return resultNode.toString();
+        List<MovieVO> result = settingLiveService.getUploadMovie(streamingId);
+//        StartingShowResponse resultNode = settingLiveService.startShow(streamingId);
+//        return resultNode.toString();
+        return result.toString();
     }
 }
