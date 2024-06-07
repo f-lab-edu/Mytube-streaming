@@ -39,7 +39,7 @@ public class FileUploadRequest {
 
     public void addPath(String path, String name){
         StringBuilder sb = new StringBuilder(path);
-        sb.append("/"+name+"/");
+        sb.append("/"+name);
         this.url = sb.toString();
     }
 }
