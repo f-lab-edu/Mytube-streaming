@@ -29,12 +29,17 @@
         SELECT id, movieId, title, contents, userCount, thumbsUp, reservedAt, updatedAt, deletedAt
         FROM liveStreaming WHERE id=#{liveId} and deletedAt is null;
     </select>
-    <select id="getMovieUrl" resultMap="movie">
-        SELECT id, userId, subject, url, createdAt, deletedAt
-        FROM movie WHERE id = #{id} ;
-    </select>
+<!--    <select id="getMovieUrl" resultMap="movie">-->
+<!--        SELECT id, userId, subject, url, createdAt, deletedAt-->
+<!--        FROM movie WHERE id = #{id} ;-->
+<!--    </select>-->
     <select id="getLiveList" resultMap="liveStreaming">
         SELECT id, userId, title, contents, userCount, thumbsUp, reservedAt, updatedAt, deletedAt
         FROM liveStreaming WHERE userId = #{userId} and deletedAt is NULL;
+    </select>
+    <select id="uploadMovieList" resultMap="movie">
+        SELECT id, userId, subject, url, createdAt, deletedAt
+        FROM movie
+        WHERE userId = #{userId}
     </select>
 </mapper>

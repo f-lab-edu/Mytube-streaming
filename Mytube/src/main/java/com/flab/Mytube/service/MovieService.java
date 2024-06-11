@@ -1,12 +1,7 @@
 package com.flab.Mytube.service;
 
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
-import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
-import com.flab.Mytube.dto.movie.response.Response;
-import com.flab.Mytube.dto.movie.response.StartingShowResponse;
 import com.flab.Mytube.mapper.PostMapper;
-import com.flab.Mytube.vo.LiveStreamingVO;
-import com.flab.Mytube.vo.MovieVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.FFmpeg;
@@ -25,12 +20,11 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SettingLiveService {
+public class MovieService {
     private final PostMapper postMapper;
     private final FFmpeg fFmpeg;
     private final FFprobe fFprobe;
@@ -45,8 +39,9 @@ public class SettingLiveService {
     @Value("src/main/resources/static/mp4")
     private String mp4OutputPath;
 
+    //동영상 업로드
     @Transactional
-    public HttpStatus insertMovie(FileUploadRequest request){
+    public HttpStatus uploadMovie(FileUploadRequest request){
         if (request.isEmptyFile()) {
             System.out.println("파일 넣으십셔.");
             return HttpStatus.BAD_REQUEST;
@@ -77,7 +72,7 @@ public class SettingLiveService {
             output.mkdirs();
         }
 
-        String fileName =fileRequest.getOriginFileName().split("\\.")[0]+".m3m8";
+        String fileName = fileRequest.getOriginFileName().split("\\.")[0] + ".m3m8";
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(path) // 입력 소스
                 .overrideOutputFiles(true)
@@ -106,35 +101,29 @@ public class SettingLiveService {
                 })
                 .run();
     }
-    @Transactional // 방송 예약하기
-    public Response reserveMovie(ReserveShowRequest request) {
-        // TODO: THINK 저장~ 하고 나서 id 를 알아야 요청을 하지 않나??
-        postMapper.reserveShow(request.makeReservation());
-        return new Response(201, "Success");
-    }
 
-    // 업로드한 동영상 리스트 뽑아오는 코드 필요할 듯? id 랑 subject 반환해주기
-    @Transactional
-    public List<MovieVO> getUploadMovie(long streamerId){
-        // sreamerId 와 연관된 동영상 반환해오기
-        List<MovieVO> result = postMapper.uploadMovieList(streamerId);
-        return result;
-    }
+//    // 업로드한 동영상 리스트 뽑아오는 코드 필요할 듯? id 랑 subject 반환해주기
+//    @Transactional
+//    public List<MovieVO> getUploadMovie(long streamerId){
+//        // sreamerId 와 연관된 동영상 반환해오기
+//        List<MovieVO> result = postMapper.uploadMovieList(streamerId);
+//        return result;
+//    }
 
-    @Transactional // 방송 시작하기
-    public StartingShowResponse startShow(long streamingId) {
-        LiveStreamingVO result = postMapper.findByStartingStreamingId(streamingId);
-        System.out.println(result.toString());
-        long movieId = result.getMovieId();
-        // 필요한 값만 가져오기 위한 객체를 생성해? 말아?
-        MovieVO movie = postMapper.getMovieURI(movieId);
-        StartingShowResponse response= StartingShowResponse.builder()
-                .id(result.getId())
-                .url(movie.getUrl())
-                .title(result.getTitle())
-                .contents(result.getContents())
-                .userCount(result.getUserCount())
-                .thumbsUp(result.getThumbsUp()).build();
-        return response;
-    }
+//    @Transactional // 방송 시작하기
+//    public StartingShowResponse startShow(long liveId) {
+//        LiveStreamingVO result = postMapper.findByStartingLiveId(liveId);
+//        System.out.println(result.toString());
+//        long movieId = result.getMovieId();
+//        // 필요한 값만 가져오기 위한 객체를 생성해? 말아?
+//        MovieVO movie = postMapper.getMovieURI(movieId);
+//        StartingShowResponse response= StartingShowResponse.builder()
+//                .id(result.getId())
+//                .url(movie.getUrl())
+//                .title(result.getTitle())
+//                .contents(result.getContents())
+//                .userCount(result.getUserCount())
+//                .thumbsUp(result.getThumbsUp()).build();
+//        return response;
+//    }
 }

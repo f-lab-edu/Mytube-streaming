@@ -16,4 +16,6 @@ public interface ReadMapper {
     LiveStreamingVO getLiveContents(@Param("liveId") long liveId);
     MovieVO getMovieUrl(@Param("id") long id);
     List<LivePageDAO> getLiveList(@Param("userId") long userId);
+    List<MovieVO> uploadMovieList(@Param("userId") long userId);
+
 }

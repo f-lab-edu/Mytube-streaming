@@ -7,18 +7,18 @@
         VALUES
         (#{request.streamerId}, #{request.subject}, #{request.url})
     </insert>
-    <insert id="reserveShow" useGeneratedKeys="true" keyProperty="request.id" parameterType="com.flab.Mytube.dto.streaming.LiveStreamingDTO">
-        INSERT INTO
-        liveStreaming (userId, movieId, title, contents, reservedAt)
-        VALUES
-        (#{request.streamerId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedTime})
-    </insert>
+<!--    <insert id="reserveShow" useGeneratedKeys="true" keyProperty="request.id" parameterType="com.flab.Mytube.dto.streaming.LiveStreamingDTO">-->
+<!--        INSERT INTO-->
+<!--        liveStreaming (userId, movieId, title, contents, reservedAt)-->
+<!--        VALUES-->
+<!--        (#{request.streamerId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedTime})-->
+<!--    </insert>-->
 
-    <select id="findByStartingStreamingId" resultType="com.flab.Mytube.vo.LiveStreamingVO">
-        SELECT id, movieId, title, contents, userCount, thumbsUp
-        FROM liveStreaming
-        WHERE id = #{id}
-    </select>
+<!--    <select id="findByStartingLiveId" resultType="com.flab.Mytube.vo.LiveStreamingVO">-->
+<!--        SELECT id, movieId, title, contents, userCount, thumbsUp-->
+<!--        FROM liveStreaming-->
+<!--        WHERE id = #{id}-->
+<!--    </select>-->
 
     <select id="getMovieURI" resultType="com.flab.Mytube.vo.MovieVO">
         SELECT url, subject
@@ -26,11 +26,11 @@
         WHERE id = #{id}
     </select>
 
-    <select id="uploadMovieList" resultType="com.flab.Mytube.vo.MovieVO">
-        SELECT id, userId, subject, url, createdAt, deletedAt
-        FROM movie
-        WHERE userId = #{userId}
-    </select>
+<!--    <select id="uploadMovieList" resultType="com.flab.Mytube.vo.MovieVO">-->
+<!--        SELECT id, userId, subject, url, createdAt, deletedAt-->
+<!--        FROM movie-->
+<!--        WHERE userId = #{userId}-->
+<!--    </select>-->
 
 <!--    <select id="selectShow" parameterType="com.flab.Mytube.dto.streaming.LiveStreamingDTO" resultType="com.flab.Mytube.dto.streaming.LiveStreamingDTO">-->
 <!--        select-->

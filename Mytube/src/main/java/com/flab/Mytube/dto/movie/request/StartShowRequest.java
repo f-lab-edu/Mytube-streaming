@@ -5,15 +5,15 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 public class StartShowRequest {
-    private long streamingId;
+    private long liveId;
 
     @Builder
-    public StartShowRequest(long streamingId){
-        this.streamingId = streamingId;
+    public StartShowRequest(long liveId){
+        this.liveId = liveId;
     }
 
     public StartShowRequest startShowRequest(){
         return StartShowRequest.builder()
-                .streamingId(streamingId).build();
+                .liveId(liveId).build();
     }
 }

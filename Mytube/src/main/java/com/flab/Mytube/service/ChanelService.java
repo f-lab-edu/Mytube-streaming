@@ -8,13 +8,14 @@ import com.flab.Mytube.vo.MovieVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ReadService {
+public class ChanelService {
     @Autowired
     private final ReadMapper readMapper;
 
@@ -29,6 +30,7 @@ public class ReadService {
     }
 
 
+    // 지난 라이브 조회
     public void replay(long liveId){
         LiveStreamingVO live=readMapper.getLiveContents(liveId);
         if(live == null){
@@ -50,5 +52,15 @@ public class ReadService {
     public List<LivePageDAO> getLiveList(long userId) {
 //        List<LiveStreamingVO> lists =  liveListDAO.list();
         return readMapper.getLiveList(userId);
+    }
+
+    // 업로드한 동영상 목록 조회
+    // 업로드한 동영상 리스트 뽑아오는 코드 필요할 듯? id 랑 subject 반환해주기
+    @Transactional
+    public List<MovieVO> getUploadMovie(long streamerId){
+        // sreamerId 와 연관된 동영상 반환해오기
+        List<MovieVO> result = readMapper.uploadMovieList(streamerId);
+//        List<MovieVO> result = postMapper.uploadMovieList(streamerId);
+        return result;
     }
 }
