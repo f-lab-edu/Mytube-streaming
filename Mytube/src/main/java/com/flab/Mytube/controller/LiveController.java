@@ -18,18 +18,13 @@ public class LiveController {
 
     // 라이브 예약하기 요청
     @PostMapping("")
-    public HttpStatus reserve(@RequestBody ReserveShowRequest request){
-        Response resultNode = liveService.reserveShow(request);
-        if(resultNode.getCode()==201){
-            return HttpStatus.CREATED;
-        }
-        return HttpStatus.BAD_REQUEST;
+    public void reserve(@RequestBody ReserveShowRequest request){
+        liveService.reserveShow(request);
     }
 
     // 라이브 시작 요청
     @GetMapping("/{liveId}/start")
     public StartingShowResponse startLive(@PathVariable("liveId") long liveId){
-//        StartingShowResponse result = settingLiveService.startShow(liveId);
         StartingShowResponse result = liveService.startShow(liveId);
         return result;
     }
@@ -41,10 +36,9 @@ public class LiveController {
     }
 
 
-    //라이브 삭제
+    // TODO: 라이브 삭제
 //    관련 라이브 테이블에서 deletedAt 날짜 추가하기
 //    조회하는 코드에서 이 부분에 값이 있다면 불러오지 못하게 처리할 것
-
     @PatchMapping("/{chanelId}/movies/{id}")
     public void deleteLive(@PathVariable("chanelId") long chanelId, @PathVariable("id") long id) {
         // 초기에 생각할 때 streamerId, movieId 가 필요하지 않을까 햇는데...
@@ -55,7 +49,7 @@ public class LiveController {
 
     @PostMapping("/{liveId}")
     public void joinChat(@RequestBody ChatJoinRequest request) {
-        //라이브 채팅 참여
+        // TODO: 라이브 채팅 참여
         liveService.requestJoin(request);
     }
 }

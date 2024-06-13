@@ -23,43 +23,23 @@ public class MovieController {
 
     // 동영상 업로드 요청
     @PostMapping("")
-    public HttpStatus upload(@RequestParam("movie") MultipartFile file, @RequestParam("chanelId") long chanelId) {
-        // 동영상 업로드
-//        FileUploadRequest request = new FileUploadRequest(file, chanelId);
+    public void upload(@RequestParam("movie") MultipartFile file, @RequestParam("chanelId") long chanelId) {
         FileUploadRequest request = FileUploadRequest.builder()
                 .file(file)
                 .chanelId(chanelId)
                 .build();
         request.addSubject();
-        HttpStatus response = convertMovieService.uploadMovie(request);
-        return response;
+        convertMovieService.uploadMovie(request);
     }
 
-    //    동영상 정보 요청
-//    @GetMapping("/{movieId}")
-//    public ResponseEntity<InputStreamResource> getMovie(@PathVariable("movieId") long movieId) {
-//        File liveSource = convertMovieService.getLiveFile(movieId);
-//
-//        try{
-//            InputStreamResource resource = new InputStreamResource(new FileInputStream(liveSource));
-//            return ResponseEntity.ok()
-//                    .contentType(MediaType.parseMediaType("application/x-mpegURL"))
-//                    .body(resource);
-//        } catch (FileNotFoundException e){
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//    동영상 정보 요청
-
     // 스트리밍 시작을 위한 동영상 정보(m3m8, ts file) 요청
-    @GetMapping("/chanel/{chanelId}/{fileId}")
+    @GetMapping("/chanel/{chanelId}/{movieId}")
     public ResponseEntity<InputStreamResource> getMovie(
             @PathVariable("chanelId") int chanelId,
-            @PathVariable("fileId") String fileId
+            @PathVariable("movieId") String movieId
             ) {
         MovieDtailRequest movie = MovieDtailRequest.builder()
-                .fileName(fileId)
+                .movieId(movieId)
                 .chanelId(chanelId)
                 .build();
         File liveSource = convertMovieService.getLiveFile(movie);
@@ -80,15 +60,4 @@ public class MovieController {
     public void deleteMovie(@PathVariable("{movieId}") long movieId) {
 
     }
-
-//
-//
-//    @GetMapping("/{streamerId}")
-//    public List<MovieVO> getMovies( @PathVariable("streamerId") long streamerId){
-//        List<MovieVO> result = settingLiveService.getUploadMovie(streamerId);
-//
-////        StartingShowResponse resultNode = settingLiveService.startShow(streamingId);
-////        return resultNode.toString();
-//        return result;
-//    }
 }

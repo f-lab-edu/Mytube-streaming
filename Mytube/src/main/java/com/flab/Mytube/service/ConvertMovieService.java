@@ -43,15 +43,17 @@ public class ConvertMovieService {
 
     //동영상 업로드
     @Transactional
-    public HttpStatus uploadMovie(FileUploadRequest request){
+    public void uploadMovie(FileUploadRequest request){
         if (request.isEmptyFile()) {
-            System.out.println("파일 넣으십셔.");
-            return HttpStatus.BAD_REQUEST;
+            System.err.println("파일이 입력되지 않았습니다.");
+            return ;
         }
+        // 파일 경로 지정
         String fileName=  request.getFile().getOriginalFilename();
         Path filepath = movie.createPath(request, savedPath);
         filepath = filepath.resolve(fileName);
 
+        // 파일 작성하기(복사)
         try (OutputStream os = Files.newOutputStream(filepath)) {
             byte[] bytes = request.getFile().getBytes();
             Files.write(filepath, bytes);
@@ -60,7 +62,6 @@ public class ConvertMovieService {
         }
 
         movieBuilder(filepath, request);
-        return HttpStatus.CREATED;
     }
 
     private void movieBuilder(Path filepath, FileUploadRequest request){
@@ -74,6 +75,7 @@ public class ConvertMovieService {
         String fileName = request.getOriginFileName().split("\\.")[0];
         String tsName = fileName;
 
+        // ts 파일로 분할 및 분해 설정
         String source = fileName + ".m3m8";
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(path) // 입력 소스
@@ -85,6 +87,7 @@ public class ConvertMovieService {
                 .addExtraArgs("-hls_segment_filename", output.getAbsolutePath() + "/"+tsName+"_%08d.ts") // 청크 파일 이름
                 .done();
 
+        // builder 실행
         run(builder);
         request.addPath(output.getPath(), source);
         postMapper.addMovie(request);
@@ -105,16 +108,25 @@ public class ConvertMovieService {
     }
     public File getLiveFile(MovieDtailRequest request){
         int chanelId=request.getChanelId();
-        String fileName = request.getFileName();
+        String movieId = request.getMovieId();
         // movie 의 id 가 입력된 경우
-        if(isNumberic(fileName)){
-            return getLiveFile(Long.valueOf(fileName));
+        if(isNumberic(movieId)){
+            return getLiveFile(Long.valueOf(movieId));
         }
 
-        String key = fileName.split("_")[0];
+        String key = movieId.split("_")[0];
         StringBuilder sb = new StringBuilder();
-        sb.append(hlsOutputPath).append("/chanel-" + chanelId).append("/").append(key).append("/").append(fileName);
+        sb.append(hlsOutputPath).append("/chanel-" + chanelId).append("/").append(key).append("/").append(movieId);
         String filePath =sb.toString();
+        return new File(filePath);
+    }
+
+    // id 를 통해 .m3m8 파일이 저장된 url 가져올 수 있도록
+    public File getLiveFile(Long fileId){
+        long chanelId = fileId;
+        MovieVO movie = postMapper.getMovieUrl(chanelId);
+        String filePath = movie.getUrl();
+
         return new File(filePath);
     }
     public boolean isNumberic(String str) {
@@ -125,36 +137,4 @@ public class ConvertMovieService {
         }
         return true;
     }
-    public File getLiveFile(Long fileId){
-        long chanelId = fileId;
-        MovieVO movie = postMapper.getMovieUrl(chanelId);
-        String filePath = movie.getUrl();
-
-        return new File(filePath);
-    }
-
-//    // 업로드한 동영상 리스트 뽑아오는 코드 필요할 듯? id 랑 subject 반환해주기
-//    @Transactional
-//    public List<MovieVO> getUploadMovie(long streamerId){
-//        // sreamerId 와 연관된 동영상 반환해오기
-//        List<MovieVO> result = postMapper.uploadMovieList(streamerId);
-//        return result;
-//    }
-
-//    @Transactional // 방송 시작하기
-//    public StartingShowResponse startShow(long liveId) {
-//        LiveStreamingVO result = postMapper.findByStartingLiveId(liveId);
-//        System.out.println(result.toString());
-//        long movieId = result.getMovieId();
-//        // 필요한 값만 가져오기 위한 객체를 생성해? 말아?
-//        MovieVO movie = postMapper.getMovieURI(movieId);
-//        StartingShowResponse response= StartingShowResponse.builder()
-//                .id(result.getId())
-//                .url(movie.getUrl())
-//                .title(result.getTitle())
-//                .contents(result.getContents())
-//                .userCount(result.getUserCount())
-//                .thumbsUp(result.getThumbsUp()).build();
-//        return response;
-//    }
 }

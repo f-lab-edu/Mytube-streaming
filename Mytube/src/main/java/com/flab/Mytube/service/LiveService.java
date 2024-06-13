@@ -17,9 +17,8 @@ public class LiveService {
     private final LiveMapper liveMapper;
 
     @Transactional // 방송 예약하기
-    public Response reserveShow(ReserveShowRequest request) {
+    public void reserveShow(ReserveShowRequest request) {
         liveMapper.reserveShow(request.makeReservation());
-        return new Response(201, "Success");
     }
 
     @Transactional // 라이브 시작

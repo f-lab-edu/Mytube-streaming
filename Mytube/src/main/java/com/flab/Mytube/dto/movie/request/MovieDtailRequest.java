@@ -8,5 +8,5 @@ import lombok.Data;
 public class MovieDtailRequest {
     private int chanelId;
     private String subject;
-    private  String fileName;
+    private  String movieId;
 }
