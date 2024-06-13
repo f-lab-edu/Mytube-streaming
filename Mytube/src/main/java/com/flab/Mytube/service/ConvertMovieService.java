@@ -71,19 +71,22 @@ public class ConvertMovieService {
             output.mkdirs();
         }
 
-        String fileName = request.getOriginFileName().split("\\.")[0] + ".m3m8";
+        String fileName = request.getOriginFileName().split("\\.")[0];
+        String tsName = fileName;
+
+        String source = fileName + ".m3m8";
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(path) // 입력 소스
                 .overrideOutputFiles(true)
-                .addOutput(output.getAbsolutePath()+"/"+fileName) // 저장경로
+                .addOutput(output.getAbsolutePath()+"/"+source) // 저장경로
                 .setFormat("hls")
                 .addExtraArgs("-hls_time", "10") // 10초
                 .addExtraArgs("-hls_list_size", "0")
-                .addExtraArgs("-hls_segment_filename", output.getAbsolutePath() + "/master_%08d.ts") // 청크 파일 이름
+                .addExtraArgs("-hls_segment_filename", output.getAbsolutePath() + "/"+tsName+"_%08d.ts") // 청크 파일 이름
                 .done();
 
         run(builder);
-        request.addPath(output.getPath(), fileName);
+        request.addPath(output.getPath(), source);
         postMapper.addMovie(request);
     }
 
@@ -102,16 +105,15 @@ public class ConvertMovieService {
     }
     public File getLiveFile(MovieDtailRequest request){
         int chanelId=request.getChanelId();
-        String subject = request.getSubject();
         String fileName = request.getFileName();
-        StringBuilder sb = new StringBuilder();
-
         // movie 의 id 가 입력된 경우
         if(isNumberic(fileName)){
-            return getLiveFile(fileName);
+            return getLiveFile(Long.valueOf(fileName));
         }
-        sb.append(hlsOutputPath).append("/chanel-" + chanelId).append("/")
-                .append(subject).append("/").append(fileName);
+
+        String key = fileName.split("\\.")[0];
+        StringBuilder sb = new StringBuilder();
+        sb.append(hlsOutputPath).append("/chanel-" + chanelId).append("/").append(key).append("/").append(fileName);
         String filePath =sb.toString();
         return new File(filePath);
     }
@@ -123,8 +125,8 @@ public class ConvertMovieService {
         }
         return true;
     }
-    public File getLiveFile(String fileName){
-        long chanelId = Long.valueOf(fileName);
+    public File getLiveFile(Long fileId){
+        long chanelId = fileId;
         MovieVO movie = postMapper.getMovieUrl(chanelId);
         String filePath = movie.getUrl();
         System.out.println(">>> >>> >>> "+filePath);

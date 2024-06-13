@@ -23,9 +23,16 @@ public class MovieController {
 
     // 동영상 업로드 요청
     @PostMapping("")
-    public HttpStatus upload(@RequestParam("movie") MultipartFile file, @RequestParam("chanelId") long chanelId, @RequestParam("subject") String subject) {
+    public HttpStatus upload(@RequestParam("movie") MultipartFile file, @RequestParam("chanelId") long chanelId) {
         // 동영상 업로드
-        FileUploadRequest request = new FileUploadRequest(file, chanelId, subject);
+//        FileUploadRequest request = new FileUploadRequest(file, chanelId);
+        String fileName = file.getOriginalFilename();
+        FileUploadRequest request = FileUploadRequest.builder()
+                .file(file)
+                .chanelId(chanelId)
+                .subject(fileName)
+                .build();
+//        request.addSubject();
         HttpStatus response = convertMovieService.uploadMovie(request);
         return response;
     }
@@ -48,16 +55,14 @@ public class MovieController {
 //    동영상 정보 요청
 
     // 스트리밍 시작을 위한 동영상 정보(m3m8, ts file) 요청
-    @GetMapping("{subject}/chanel/{chanelId}/{fileName}")
+    @GetMapping("/{fileName}/chanel/{chanelId}")
     public ResponseEntity<InputStreamResource> getMovie(
-            @PathVariable("subject") String subject,
-            @PathVariable("chanelId") int chanelId,
-            @PathVariable("fileName") String fileName
+            @PathVariable("fileName") String fileName,
+            @PathVariable("chanelId") int chanelId
     ) {
         MovieDtailRequest movie = MovieDtailRequest.builder()
-                .subject(subject)
-                .chanelId(chanelId)
                 .fileName(fileName)
+                .chanelId(chanelId)
                 .build();
         File liveSource = convertMovieService.getLiveFile(movie);
 

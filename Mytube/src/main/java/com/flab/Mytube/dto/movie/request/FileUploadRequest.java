@@ -1,5 +1,6 @@
 package com.flab.Mytube.dto.movie.request;
 
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,11 +14,16 @@ public class FileUploadRequest {
     private long chanelId;
     private String subject;
 
-    public FileUploadRequest(MultipartFile file, long chanelId, String subject) {
+    @Builder
+    public FileUploadRequest(MultipartFile file, long chanelId, String name) {
         this.file = file;
         this.chanelId = chanelId;
-        this.subject = subject;
+        this.subject= name;
     }
+
+//    public void addSubject(){
+//        subject= file.getOriginalFilename();
+//    }
 
     public boolean isEmptyFile() {
         return file.isEmpty();

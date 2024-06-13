@@ -2,11 +2,8 @@ package com.flab.Mytube.Utils;
 
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -19,7 +16,9 @@ public class Movies {
     public Path createPath(FileUploadRequest request, String savedPath) {
         // savedPath: ./origin/chanel-{idd}/{subject} : 원본 저장 위치
 //       TODO: StringBuilder 로 작성하니까 에러 발생...
-        String path = savedPath+"/chanel-"+request.getChanelId()+"/" + request.getSubject();
+        String fileName = request.getOriginFileName().split("\\.")[0];
+
+        String path = savedPath+"/chanel-"+request.getChanelId()+"/" + fileName;
         Path filepath = null;
         try {
             filepath = Paths.get(path);
