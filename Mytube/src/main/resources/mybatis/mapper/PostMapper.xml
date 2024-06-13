@@ -5,7 +5,7 @@
         INSERT INTO
         movie (userId, subject, url)
         VALUES
-        (#{request.streamerId}, #{request.subject}, #{request.url})
+        (#{request.chanelId}, #{request.subject}, #{request.url})
     </insert>
 <!--    <insert id="reserveShow" useGeneratedKeys="true" keyProperty="request.id" parameterType="com.flab.Mytube.dto.streaming.LiveStreamingDTO">-->
 <!--        INSERT INTO-->

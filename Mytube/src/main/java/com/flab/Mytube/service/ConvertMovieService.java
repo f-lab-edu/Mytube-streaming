@@ -2,6 +2,7 @@ package com.flab.Mytube.service;
 
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.mapper.PostMapper;
+import com.flab.Mytube.Utils.Movies;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.FFmpeg;
@@ -19,15 +20,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MovieService {
+public class ConvertMovieService {
     private final PostMapper postMapper;
     private final FFmpeg fFmpeg;
     private final FFprobe fFprobe;
+    private final Movies movie = new Movies();
 
     // 해당 경로에 디렉토리가 반드시 존재해야 함
     @Value("src/main/resources/static/origin")
@@ -47,15 +48,14 @@ public class MovieService {
             return HttpStatus.BAD_REQUEST;
         }
         String fileName=  request.getFile().getOriginalFilename();
-        // Path 객체 생성, savedPath 에 file 객체 fileName 을 생성한다.
-        Path filepath = Paths.get(savedPath, fileName);
+        Path filepath = movie.createPath(request, savedPath);
+        filepath = filepath.resolve(fileName);
 
         // 해당 path 에 파일의 스트림 데이터를 저장
         try (OutputStream os = Files.newOutputStream(filepath)) {
             byte[] bytes = request.getFile().getBytes();
             //Path 파일에 작성
             Files.write(filepath, bytes);
-            System.out.println("Upload SUCCESS!!! >>> ");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -64,19 +64,20 @@ public class MovieService {
         return HttpStatus.CREATED;
     }
 
-    private void movieBuilder(Path filepath, FileUploadRequest fileRequest){
-        String path = savedPath + "/" + fileRequest.getOriginFileName();
-
-        File output = new File(hlsOutputPath+"/streamer/"+fileRequest.getStreamerId());
+    private void movieBuilder(Path filepath, FileUploadRequest request){
+        String path = filepath.toString();
+        // hlsOutputPath/{userId}/{subject}/filName : chunk화 저장 위치
+        String outPath = movie.createPath(request, hlsOutputPath).toString();
+        File output = new File(outPath);
         if (!output.exists()) {
             output.mkdirs();
         }
 
-        String fileName = fileRequest.getOriginFileName().split("\\.")[0] + ".m3m8";
+        String fileName = request.getOriginFileName().split("\\.")[0] + ".m3m8";
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(path) // 입력 소스
                 .overrideOutputFiles(true)
-                .addOutput(output.getAbsolutePath()+"/"+fileName)
+                .addOutput(output.getAbsolutePath()+"/"+fileName) // 저장경로
                 .setFormat("hls")
                 .addExtraArgs("-hls_time", "10") // 10초
                 .addExtraArgs("-hls_list_size", "0")
@@ -84,8 +85,8 @@ public class MovieService {
                 .done();
 
         run(builder);
-        fileRequest.addPath(output.getPath(), fileName);
-        postMapper.addMovie(fileRequest);
+        request.addPath(output.getPath(), fileName);
+        postMapper.addMovie(request);
     }
 
 
@@ -96,10 +97,16 @@ public class MovieService {
                 .createJob(builder, progress -> {
                     log.info("progress ==> {}", progress);
                     if (progress.status.equals(Progress.Status.END)) {
-                        log.info("================================= JOB FINISHED =================================");
+                        log.info("============================= JOB FINISHED =============================");
                     }
                 })
                 .run();
+    }
+
+    public File getHlsFile(String filename) {
+        String path = hlsOutputPath + "/streamer/1/" + filename;
+        System.out.println(path);
+        return new File(path);
     }
 
 //    // 업로드한 동영상 리스트 뽑아오는 코드 필요할 듯? id 랑 subject 반환해주기

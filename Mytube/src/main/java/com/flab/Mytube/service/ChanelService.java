@@ -57,9 +57,9 @@ public class ChanelService {
     // 업로드한 동영상 목록 조회
     // 업로드한 동영상 리스트 뽑아오는 코드 필요할 듯? id 랑 subject 반환해주기
     @Transactional
-    public List<MovieVO> getUploadMovie(long streamerId){
+    public List<MovieVO> getUploadMovie(long chanelId){
         // sreamerId 와 연관된 동영상 반환해오기
-        List<MovieVO> result = readMapper.uploadMovieList(streamerId);
+        List<MovieVO> result = readMapper.uploadMovieList(chanelId);
 //        List<MovieVO> result = postMapper.uploadMovieList(streamerId);
         return result;
     }

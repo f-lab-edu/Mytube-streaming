@@ -1,11 +1,10 @@
 package com.flab.Mytube.controller;
 
-import com.flab.Mytube.service.HlsService;
+import com.flab.Mytube.service.ConvertMovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -16,7 +15,7 @@ import java.io.FileNotFoundException;
 @RestController
 @RequestMapping("/api/v1/test")
 public class HlsController {
-    private final HlsService hlsService;
+    private final ConvertMovieService hlsService;
 
     @ResponseBody
     @GetMapping("/hls/{filename}")

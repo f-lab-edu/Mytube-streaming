@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class ReserveShowRequest {
-    private long streamerId;
+    private long chanelId;
     private long movieId;
     private String title;
     private String contents;
@@ -19,8 +19,8 @@ public class ReserveShowRequest {
     LocalDateTime reservedTime;
 
     @Builder
-    public ReserveShowRequest(long streamerId, long movieId, String title, String contents, LocalDateTime dateTime){
-        this.streamerId = streamerId;
+    public ReserveShowRequest(long chanelId, long movieId, String title, String contents, LocalDateTime dateTime){
+        this.chanelId = chanelId;
         this.movieId=movieId;
         this.title=title;
         this.contents=contents;
@@ -29,7 +29,7 @@ public class ReserveShowRequest {
 
     public LiveStreamingDTO makeReservation(){
         return LiveStreamingDTO.builder()
-                .streamerId(streamerId)
+                .chanelId(chanelId)
                 .movieId(movieId)
                 .title(title)
                 .contents(contents)

@@ -37,16 +37,16 @@ public class ChanelController {
     //현재 채널 지난 라이브 다시보기
     //    조회하는 코드에서 deletedAt에 값이 있다면 불러오지 못하게 처리할 것
     @GetMapping("/{chanelId}/lives/{liveId}/replay")
-    public void replayLive(@PathVariable("chanelId") long streamerId, @PathVariable("liveId") long liveId) {
+    public void replayLive(@PathVariable("chanelId") long chanelId, @PathVariable("liveId") long liveId) {
         service.replay(liveId);
     }
 
 
 
 //    업로드한 동영상 목록 조회
-    @GetMapping("/{streamerId}/movies")
-    public List<MovieVO> getMovies(@PathVariable("streamerId") long streamerId){
-        List<MovieVO> result = service.getUploadMovie(streamerId);
+    @GetMapping("/{chanelId}/movies")
+    public List<MovieVO> getMovies(@PathVariable("chanelId") long chanelId){
+        List<MovieVO> result = service.getUploadMovie(chanelId);
 //        List<MovieVO> result = settingLiveService.getUploadMovie(streamerId);
 
 //        StartingShowResponse resultNode = settingLiveService.startShow(streamingId);

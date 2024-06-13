@@ -7,13 +7,13 @@ import lombok.Getter;
 @Getter
 public class UploadMovieRequest {
     long id;
-    long streamerId;
+    long chanelId;
     String subject;
     String url;
     @Builder
-    public UploadMovieRequest(long id, long streamerId, String subject, String url){
+    public UploadMovieRequest(long id, long chanelId, String subject, String url){
         this.id = id;
-        this.streamerId = streamerId;
+        this.chanelId = chanelId;
         this.subject = subject;
         this.url = url;
     }
@@ -21,7 +21,7 @@ public class UploadMovieRequest {
     public MovieDTO uploadMovie(){
         return MovieDTO.builder()
                 .id(id)
-                .streamerId(streamerId)
+                .chanelId(chanelId)
                 .subject(subject)
                 .url(url)
                 .build();

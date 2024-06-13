@@ -49,6 +49,6 @@
         INSERT INTO
         liveStreaming (userId, movieId, title, contents, reservedAt)
         VALUES
-        (#{request.streamerId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedTime})
+        (#{request.chanelId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedTime})
     </insert>
 </mapper>

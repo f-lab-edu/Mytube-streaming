@@ -4,20 +4,18 @@ import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Path;
 
 @Getter
 public class FileUploadRequest {
     private long id;
     private MultipartFile file;
     private String url;
-    private long streamerId;
+    private long chanelId;
     private String subject;
 
-    public FileUploadRequest(MultipartFile file, long streamerId, String subject) {
+    public FileUploadRequest(MultipartFile file, long chanelId, String subject) {
         this.file = file;
-        this.streamerId = streamerId;
+        this.chanelId = chanelId;
         this.subject = subject;
     }
 
