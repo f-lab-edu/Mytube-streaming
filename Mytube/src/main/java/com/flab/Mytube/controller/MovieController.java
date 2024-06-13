@@ -26,13 +26,11 @@ public class MovieController {
     public HttpStatus upload(@RequestParam("movie") MultipartFile file, @RequestParam("chanelId") long chanelId) {
         // 동영상 업로드
 //        FileUploadRequest request = new FileUploadRequest(file, chanelId);
-        String fileName = file.getOriginalFilename();
         FileUploadRequest request = FileUploadRequest.builder()
                 .file(file)
                 .chanelId(chanelId)
-                .subject(fileName)
                 .build();
-//        request.addSubject();
+        request.addSubject();
         HttpStatus response = convertMovieService.uploadMovie(request);
         return response;
     }
@@ -55,13 +53,13 @@ public class MovieController {
 //    동영상 정보 요청
 
     // 스트리밍 시작을 위한 동영상 정보(m3m8, ts file) 요청
-    @GetMapping("/{fileName}/chanel/{chanelId}")
+    @GetMapping("/chanel/{chanelId}/{fileId}")
     public ResponseEntity<InputStreamResource> getMovie(
-            @PathVariable("fileName") String fileName,
-            @PathVariable("chanelId") int chanelId
-    ) {
+            @PathVariable("chanelId") int chanelId,
+            @PathVariable("fileId") String fileId
+            ) {
         MovieDtailRequest movie = MovieDtailRequest.builder()
-                .fileName(fileName)
+                .fileName(fileId)
                 .chanelId(chanelId)
                 .build();
         File liveSource = convertMovieService.getLiveFile(movie);

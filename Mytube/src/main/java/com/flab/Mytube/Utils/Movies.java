@@ -14,10 +14,9 @@ import java.nio.file.Paths;
 @Component
 public class Movies {
     public Path createPath(FileUploadRequest request, String savedPath) {
-        // savedPath: ./origin/chanel-{idd}/{subject} : 원본 저장 위치
-//       TODO: StringBuilder 로 작성하니까 에러 발생...
         String fileName = request.getOriginFileName().split("\\.")[0];
 
+        // savedPath: ./origin/chanel-{idd}/{subject} : 원본 저장 위치
         String path = savedPath+"/chanel-"+request.getChanelId()+"/" + fileName;
         Path filepath = null;
         try {

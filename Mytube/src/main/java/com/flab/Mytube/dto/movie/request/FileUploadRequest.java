@@ -15,15 +15,18 @@ public class FileUploadRequest {
     private String subject;
 
     @Builder
-    public FileUploadRequest(MultipartFile file, long chanelId, String name) {
+    public FileUploadRequest(MultipartFile file, long chanelId) {
         this.file = file;
         this.chanelId = chanelId;
-        this.subject= name;
     }
 
-//    public void addSubject(){
-//        subject= file.getOriginalFilename();
-//    }
+    public void addSubject(){
+        try{
+            subject = file.getOriginalFilename().split("\\.")[0];
+        }catch (Exception e){
+            subject= file.getOriginalFilename();
+        }
+    }
 
     public boolean isEmptyFile() {
         return file.isEmpty();

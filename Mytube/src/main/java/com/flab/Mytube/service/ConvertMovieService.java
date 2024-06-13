@@ -111,7 +111,7 @@ public class ConvertMovieService {
             return getLiveFile(Long.valueOf(fileName));
         }
 
-        String key = fileName.split("\\.")[0];
+        String key = fileName.split("_")[0];
         StringBuilder sb = new StringBuilder();
         sb.append(hlsOutputPath).append("/chanel-" + chanelId).append("/").append(key).append("/").append(fileName);
         String filePath =sb.toString();
@@ -129,7 +129,6 @@ public class ConvertMovieService {
         long chanelId = fileId;
         MovieVO movie = postMapper.getMovieUrl(chanelId);
         String filePath = movie.getUrl();
-        System.out.println(">>> >>> >>> "+filePath);
 
         return new File(filePath);
     }
