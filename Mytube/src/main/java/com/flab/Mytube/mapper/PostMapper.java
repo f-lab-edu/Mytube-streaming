@@ -15,8 +15,9 @@ import java.util.List;
 public interface PostMapper {
     long addMovie(@Param("request") FileUploadRequest movie);
     long reserveShow(@Param("request") LiveStreamingDTO liveStreaming);
-//    LiveStreamingVO findByStartingLiveId(@Param("id") long id);
-//    List<MovieVO> uploadMovieList(@Param("userId") long userId);
+    MovieVO getMovieUrl(@Param("movieId") long movieId);
+    LiveStreamingVO findByStartingLiveId(@Param("id") long id);
+    List<MovieVO> uploadMovieList(@Param("userId") long userId);
     //    -----
     long selectShow(@Param("request") LiveStreamingDTO liveStreaming);
 //    BigInteger joinChat(JoinChatRequest param);

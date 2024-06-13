@@ -20,10 +20,10 @@
 <!--        WHERE id = #{id}-->
 <!--    </select>-->
 
-    <select id="getMovieURI" resultType="com.flab.Mytube.vo.MovieVO">
-        SELECT url, subject
+    <select id="getMovieUrl" resultType="com.flab.Mytube.vo.MovieVO">
+        SELECT id, userId, subject, url, createdAt, deletedAt
         FROM movie
-        WHERE id = #{id}
+        WHERE id = #{movieId} ;
     </select>
 
 <!--    <select id="uploadMovieList" resultType="com.flab.Mytube.vo.MovieVO">-->

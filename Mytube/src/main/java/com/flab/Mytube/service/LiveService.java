@@ -27,7 +27,6 @@ public class LiveService {
         LiveStreamingVO result = liveMapper.findByStartingLiveId(liveId);
         System.out.println(result.toString());
         long movieId = result.getMovieId();
-        // 필요한 값만 가져오기 위한 객체를 생성해? 말아?
         MovieVO movie = liveMapper.getMovieUri(movieId);
         StartingShowResponse response= StartingShowResponse.builder()
                 .id(result.getId())
@@ -41,7 +40,6 @@ public class LiveService {
 
     //라이브 종료
     public void endLive(long id){
-        // 데이터가 있는지 먼저 확인?
         System.out.println(id+" 번 라이브가 종료되었습니다.");
     }
 
@@ -51,7 +49,7 @@ public class LiveService {
 
     // 채팅
     public void requestJoin(ChatJoinRequest request){
-        System.out.println("채팅 참여하기 얍!");
+        System.out.println("채팅 참여!");
         System.out.println(request.toString());
     }
 }

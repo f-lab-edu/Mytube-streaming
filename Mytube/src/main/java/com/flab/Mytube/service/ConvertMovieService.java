@@ -1,8 +1,10 @@
 package com.flab.Mytube.service;
 
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
+import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.mapper.PostMapper;
 import com.flab.Mytube.Utils.Movies;
+import com.flab.Mytube.vo.MovieVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.FFmpeg;
@@ -30,7 +32,6 @@ public class ConvertMovieService {
     private final FFprobe fFprobe;
     private final Movies movie = new Movies();
 
-    // 해당 경로에 디렉토리가 반드시 존재해야 함
     @Value("src/main/resources/static/origin")
     private String savedPath;
 
@@ -51,10 +52,8 @@ public class ConvertMovieService {
         Path filepath = movie.createPath(request, savedPath);
         filepath = filepath.resolve(fileName);
 
-        // 해당 path 에 파일의 스트림 데이터를 저장
         try (OutputStream os = Files.newOutputStream(filepath)) {
             byte[] bytes = request.getFile().getBytes();
-            //Path 파일에 작성
             Files.write(filepath, bytes);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -66,8 +65,7 @@ public class ConvertMovieService {
 
     private void movieBuilder(Path filepath, FileUploadRequest request){
         String path = filepath.toString();
-        // hlsOutputPath/{userId}/{subject}/filName : chunk화 저장 위치
-        String outPath = movie.createPath(request, hlsOutputPath).toString();
+        String outPath = movie.createPath(request, hlsOutputPath).toString(); // 저장 위치 생성
         File output = new File(outPath);
         if (!output.exists()) {
             output.mkdirs();
@@ -102,11 +100,36 @@ public class ConvertMovieService {
                 })
                 .run();
     }
+    public File getLiveFile(MovieDtailRequest request){
+        int chanelId=request.getChanelId();
+        String subject = request.getSubject();
+        String fileName = request.getFileName();
+        StringBuilder sb = new StringBuilder();
 
-    public File getHlsFile(String filename) {
-        String path = hlsOutputPath + "/streamer/1/" + filename;
-        System.out.println(path);
-        return new File(path);
+        // movie 의 id 가 입력된 경우
+        if(isNumberic(fileName)){
+            return getLiveFile(fileName);
+        }
+        sb.append(hlsOutputPath).append("/chanel-" + chanelId).append("/")
+                .append(subject).append("/").append(fileName);
+        String filePath =sb.toString();
+        return new File(filePath);
+    }
+    public boolean isNumberic(String str) {
+        try {
+            Double.parseDouble(str);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+    public File getLiveFile(String fileName){
+        long chanelId = Long.valueOf(fileName);
+        MovieVO movie = postMapper.getMovieUrl(chanelId);
+        String filePath = movie.getUrl();
+        System.out.println(">>> >>> >>> "+filePath);
+
+        return new File(filePath);
     }
 
 //    // 업로드한 동영상 리스트 뽑아오는 코드 필요할 듯? id 랑 subject 반환해주기
