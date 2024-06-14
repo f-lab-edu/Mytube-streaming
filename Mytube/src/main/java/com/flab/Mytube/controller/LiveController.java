@@ -21,7 +21,7 @@ public class LiveController {
 
     @PatchMapping("/{liveId}/end")
     public void endLive(@PathVariable("liveId") long liveId) {
-        //라이브 종료/(저장까지?)
+        //라이브 종료/(저장까지?)s
         liveService.endLive(liveId);
     }
 
