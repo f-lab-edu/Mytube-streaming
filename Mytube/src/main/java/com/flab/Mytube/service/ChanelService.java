@@ -40,9 +40,9 @@ public class ChanelService {
         long movieId = live.getMovieId();
         MovieVO movie = readMapper.getMovieUrl(movieId);
         /* checklist
-        * : 데이터를 받아오지 않을 경우 예외처리(deletedAt : not null)
-        * : responseDTO 설계: title, contents, url, userCount, thumbsUp, reservedAt, updatedAt
-        * */
+         * : 데이터를 받아오지 않을 경우 예외처리(deletedAt : not null)
+         * : responseDTO 설계: title, contents, url, userCount, thumbsUp, reservedAt, updatedAt
+         * */
 
     }
 

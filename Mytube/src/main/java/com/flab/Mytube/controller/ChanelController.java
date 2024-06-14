@@ -40,9 +40,6 @@ public class ChanelController {
         service.replay(liveId);
     }
 
-
-
-//    업로드한 동영상 목록 조회
     @GetMapping("/{chanelId}/movies")
     public List<MovieVO> getMovies(@PathVariable("chanelId") long chanelId){
         List<MovieVO> result = service.getUploadMovie(chanelId);
