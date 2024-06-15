@@ -1,4 +1,4 @@
-package com.flab.Mytube.Utils;
+package com.flab.Mytube.utils;
 
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import lombok.NoArgsConstructor;

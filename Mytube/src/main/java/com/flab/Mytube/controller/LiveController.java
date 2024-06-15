@@ -5,6 +5,7 @@ import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
 import com.flab.Mytube.dto.movie.response.Response;
 import com.flab.Mytube.dto.movie.response.StartingShowResponse;
 import com.flab.Mytube.service.LiveService;
+import com.flab.Mytube.service.MovieStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/lives")
 public class LiveController {
     private final LiveService liveService;
+    private final MovieStatusService movieStatusService;
 
 
     // 라이브 예약하기 요청

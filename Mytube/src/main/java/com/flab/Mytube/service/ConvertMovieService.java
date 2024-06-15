@@ -3,7 +3,7 @@ package com.flab.Mytube.service;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.mapper.PostMapper;
-import com.flab.Mytube.Utils.Movies;
+import com.flab.Mytube.utils.Movies;
 import com.flab.Mytube.vo.MovieVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,6 @@ import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.progress.Progress;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
