@@ -5,6 +5,7 @@ import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
 import com.flab.Mytube.dto.movie.response.Response;
 import com.flab.Mytube.dto.movie.response.StartingShowResponse;
 import com.flab.Mytube.service.LiveService;
+import com.flab.Mytube.service.LiveStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/lives")
 public class LiveController {
     private final LiveService liveService;
+    private final LiveStatusService statusService;
 
 
     // 라이브 예약하기 요청
@@ -26,6 +28,7 @@ public class LiveController {
     @GetMapping("/{liveId}/start")
     public StartingShowResponse startLive(@PathVariable("liveId") long liveId){
         StartingShowResponse result = liveService.startShow(liveId);
+        statusService.writeHash(liveId);
         return result;
     }
 
@@ -33,6 +36,7 @@ public class LiveController {
     @PatchMapping("/{liveId}")
     public void endLive(@PathVariable("liveId") long liveId) {
         liveService.endLive(liveId);
+//        statusService.liveEnd(liveId);
     }
 
 
