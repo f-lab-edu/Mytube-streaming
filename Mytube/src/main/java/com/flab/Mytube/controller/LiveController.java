@@ -28,7 +28,7 @@ public class LiveController {
     @GetMapping("/{liveId}/start")
     public StartingShowResponse startLive(@PathVariable("liveId") long liveId){
         StartingShowResponse result = liveService.startShow(liveId);
-        statusService.writeHash(liveId);
+        statusService.startLive(liveId);
         return result;
     }
 
