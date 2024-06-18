@@ -2,6 +2,7 @@ package com.flab.Mytube.dto.streaming;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 @Data
 @Getter
 @RedisHash(value = "liveId", timeToLive = 30)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class LiveStatus implements Serializable {
@@ -71,14 +73,14 @@ public class LiveStatus implements Serializable {
         return false;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("  >>>> >>> >>> live id ->").append(liveId).append("\n");
-        sb.append("  >>>> >>> >>> status ->").append(status).append("\n");
-        sb.append("  >>>> >>> >>> currentTime ->").append(currentTime).append("\n");
-        sb.append("  >>>> >>> >>> lastUpdated ->").append(lastUpdated.toString()).append("\n");
-        return sb.toString();
-    }
+//    @Override
+//    public String toString() {
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("  >>>> >>> >>> live id ->").append(liveId).append("\n");
+//        sb.append("  >>>> >>> >>> status ->").append(status).append("\n");
+//        sb.append("  >>>> >>> >>> currentTime ->").append(currentTime).append("\n");
+//        sb.append("  >>>> >>> >>> lastUpdated ->").append(lastUpdated.toString()).append("\n");
+//        return sb.toString();
+//    }
 
 }

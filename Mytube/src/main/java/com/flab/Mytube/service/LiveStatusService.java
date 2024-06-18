@@ -24,9 +24,6 @@ public class LiveStatusService {
 
     public void writeHash(String key, long id) {
         LiveStatus status = new LiveStatus(id);
-//        System.out.println(stored.toString());
-
-        System.out.println(status.toString()); // 저장한 거 확인
         hashOperations.put(key, String.valueOf(id), status);
         LiveStatus stored = hashOperations.get(key, String.valueOf(id));
     }
@@ -41,10 +38,10 @@ public class LiveStatusService {
     // 라이브 시작
     public void startLive(long liveId) {
         String key = String.join("LIVE", String.valueOf(liveId));
-        if (isContain(key, liveId)) {
-            System.err.println(" [ ERROR 0618T0641 ] 이미 시작한 라이브 입니다. ");
-            return;
-        }
+//        if (isContain(key, liveId)) {
+//            System.err.println(" [ ERROR 0618T0641 ] 이미 시작한 라이브 입니다. ");
+//            return;
+//        }
         writeHash(key, liveId);
         LiveStatus live = hashOperations.get(key, String.valueOf(liveId));
         // 라이브 진행 상황 저장
