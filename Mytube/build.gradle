@@ -34,6 +34,7 @@ dependencies {
 	implementation 'net.bramp.ffmpeg:ffmpeg:0.7.0'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 //	compile 'io.lettuce:lettuce-core:6.3.2.RELEASE'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.4'
 
 
 	implementation 'org.slf4j:jcl-over-slf4j'

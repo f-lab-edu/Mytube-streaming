@@ -27,7 +27,7 @@ public class RedisConfig {
     public LettuceConnectionFactory lettuceConnectionFactory() {
 
         LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
-                .useSsl().and()
+//                .useSsl().and()
                 .commandTimeout(Duration.ofSeconds(2))
                 .shutdownTimeout(Duration.ZERO)
                 .build();
@@ -58,24 +58,4 @@ public class RedisConfig {
                 .build();
         return cacheManager;
     }
-
-//    @Bean
-//    public RedisTemplate<String, Object> redisTemplate (RedisConnectionFactory connectionFactory){
-//        RedisTemplate <String, Object> redisTemplate = new RedisTemplate<>();
-//        redisTemplate.setDefaultSerializer(new StringRedisSerializer());
-//
-////        redisTemplate.setKeySerializer(new StringRedisSerializer());
-////        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer()); // JSON 포맷으로 저장
-////        redisTemplate.setConnectionFactory(connectionFactory);
-////                redisTemplate.setValueSerializer(new StringRedisSerializer());
-//
-//        return redisTemplate;
-//    }
-
-//    @Bean
-//    StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-//        StringRedisTemplate template = new StringRedisTemplate();
-//        template.setConnectionFactory(redisConnectionFactory);
-//        return template;
-//    }
 }

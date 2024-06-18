@@ -20,11 +20,16 @@ public class LiveStatusService {
 //    private RedisOperations<String, Object> operations;
     @Resource(name = "statusTemplate")
     private RedisTemplate<String, LiveStatus> limitRedisTemplate;
-    private HashMap<String, LiveStatus> map = new HashMap<>();
-//    HashMapper<Object, byte[], byte[]> mapper = new ObjectHashMapper();
+//    private HashMap<String, LiveStatus> map = new HashMap<>();
+    HashMapper<Object, byte[], byte[]> mapper = new ObjectHashMapper();
 
+//    @Resource(name = "statusTemplate")
+//    HashOperations<String, byte[], byte[]> hashOperations;
     @Resource(name = "statusTemplate")
-    HashOperations<String, byte[], byte[]> hashOperations;
+    private HashOperations<String, String, LiveStatus> hashOperations;
+    @Resource(name = "redisTemplate")
+    private ListOperations<String, Object> listOps;
+
     private static String START="restart"; // 상수 모으는 파일 만들기
     private static String END="end"; // 상수 모으는 파일 만들기
     private static String STOP="stop"; // 상수 모으는 파일 만들기
@@ -33,19 +38,20 @@ public class LiveStatusService {
 
         String key = String.join("LIVE", String.valueOf(id));
         LiveStatus status = new LiveStatus(id);
-        map.put(key, status);
+//        map.put(key, status);
 
-        LiveStatus stored = map.get(key);
-        System.out.println(stored.toString());
+//        LiveStatus stored = map.get(key);
+//        System.out.println(stored.toString());
 
-//        Map<byte[], byte[]> mappedHash = mapper.toHash(status);
+
+        Map<byte[], byte[]> mappedHash = mapper.toHash(status);
 //        hashOperations.putAll(key, mappedHash);
-
+        hashOperations.put(key, String.valueOf(id), status);
     }
 
     // inject the template as ListOperations
-    @Resource(name="redisTemplate")
-    private ListOperations<String, Object> listOps;
+//    @Resource(name="redisTemplate")
+//    private ListOperations<String, Object> listOps;
 
     public void addLink(String userId, URL url) {
         listOps.leftPush(userId, url.toExternalForm());

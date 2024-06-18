@@ -1,19 +1,34 @@
 package com.flab.Mytube.dto.streaming;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@Data
 @Getter
 @RedisHash(value = "liveId", timeToLive = 30)
-public class LiveStatus {
+@NoArgsConstructor
+@AllArgsConstructor
+public class LiveStatus implements Serializable {
     @Id
     private long liveId;
     private String status;
     private int currentTime;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
     private LocalDateTime lastUpdated;
 
     public LiveStatus(long liveId){
