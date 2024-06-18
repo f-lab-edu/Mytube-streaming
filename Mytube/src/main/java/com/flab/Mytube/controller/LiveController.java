@@ -36,7 +36,14 @@ public class LiveController {
     @PatchMapping("/{liveId}")
     public void endLive(@PathVariable("liveId") long liveId) {
         liveService.endLive(liveId);
+        // 라이브 저장
+        // 해당 실시간 라이브 접근 못하도록 제한, 다시보기로만 접근 하도록
 //        statusService.liveEnd(liveId);
+    }
+
+    @GetMapping("/{liveId}")
+    public void watchLive(@PathVariable("liveId") long liveId){
+        // 라이브 시청하기
     }
 
 

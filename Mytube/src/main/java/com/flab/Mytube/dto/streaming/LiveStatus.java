@@ -28,40 +28,51 @@ public class LiveStatus implements Serializable {
     private int currentTime;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime lastUpdated;
 
-    public LiveStatus(long liveId){
-        this.liveId=liveId;
-        this.status="LIVE_ON";
-        this.lastUpdated =LocalDateTime.now();
-        this.currentTime= 0;
+    public LiveStatus(long liveId) {
+        this.liveId = liveId;
+        this.status = "LIVE_ON";
+        this.lastUpdated = LocalDateTime.now();
+        this.currentTime = 0;
     }
 
-    public LiveStatus(String status, int time){
+    public LiveStatus(String status, int time) {
         this.status = status;
-        this.currentTime=time;
+        this.currentTime = time;
         this.lastUpdated = LocalDateTime.now();
     }
 
-    public void changeState(String status){
-        switch (status){
+    public void changeState(String status) {
+        switch (status) {
             case "restart":
-                this.status="LIVE_ON";
+                this.status = "LIVE_ON";
                 break;
             case "stop":
-                this.status="LIVE_STOP";
+                this.status = "LIVE_STOP";
                 break;
             case "end":
-                this.status="LIVE_END";
+                this.status = "LIVE_END";
                 break;
             default:
                 break;
         }
     }
 
+    public void updateCurrent() {
+        this.currentTime += 10;
+        this.lastUpdated = LocalDateTime.now();
+    }
+
+    public boolean isLiveOn(){
+        if(this.status.equals("LIVE_ON"))
+            return true;
+        return false;
+    }
+
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("  >>>> >>> >>> live id ->").append(liveId).append("\n");
         sb.append("  >>>> >>> >>> status ->").append(status).append("\n");
