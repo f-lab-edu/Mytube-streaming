@@ -55,6 +55,7 @@ public class LiveStatusService {
         if (isContain(key, liveId)) {
             LiveStatus live = hashOperations.get(key, String.valueOf(liveId));
             live.changeState(STOP);
+            return;
         }
         System.err.println(" [ ERROR 0618T0648 ] 잘못된 요청입니다. ");
     }
