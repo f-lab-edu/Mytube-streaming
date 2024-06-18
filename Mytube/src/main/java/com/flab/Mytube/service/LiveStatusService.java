@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 
 import java.net.Socket;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -25,7 +26,7 @@ public class LiveStatusService {
     public void writeHash(String key, long id) {
         LiveStatus status = new LiveStatus(id);
         hashOperations.put(key, String.valueOf(id), status);
-        LiveStatus stored = hashOperations.get(key, String.valueOf(id));
+//        LiveStatus stored = hashOperations.get(key, String.valueOf(id));
     }
 
     public boolean isContain(String key, long id) {
@@ -42,11 +43,12 @@ public class LiveStatusService {
 //            System.err.println(" [ ERROR 0618T0641 ] 이미 시작한 라이브 입니다. ");
 //            return;
 //        }
+        CompletableFuture<Integer> future = new CompletableFuture<>();
         writeHash(key, liveId);
         LiveStatus live = hashOperations.get(key, String.valueOf(liveId));
-        // 라이브 진행 상황 저장
         TimeManager timer = new TimeManager(live);
-        Future<Integer> currentTime = executor.submit(timer);
+        // 라이브 진행 상황 저장
+        executor.submit(()->future.complete(timer.calling()));
     }
 
     // 라이브 일시 정지
@@ -54,7 +56,13 @@ public class LiveStatusService {
         String key = String.join("LIVE", String.valueOf(liveId));
         if (isContain(key, liveId)) {
             LiveStatus live = hashOperations.get(key, String.valueOf(liveId));
-            live.changeState(STOP);
+            live.endLive();
+
+            System.out.println("service code >>> "+live.getStatus());
+
+            hashOperations.put(key, String.valueOf(liveId), live);
+
+//            writeHash(key, live.getLiveId());
             return;
         }
         System.err.println(" [ ERROR 0618T0648 ] 잘못된 요청입니다. ");
@@ -65,6 +73,7 @@ public class LiveStatusService {
         String key = String.join("LIVE", String.valueOf(liveId));
         if (isContain(key, liveId) == false) {
             System.err.println(" [ ERROR 0618T0719 ] 해당 라이브는 존재하지 않습니다. ");
+            return;
         }
         LiveStatus stored = hashOperations.get(key, String.valueOf(liveId));
 
@@ -96,11 +105,4 @@ public class LiveStatusService {
 //        live.changeState(END);
 //        map.remove(key);
 //    }
-    class Handler implements Runnable {
-        private final Socket socket;
-        Handler(Socket socket) { this.socket = socket; }
-        public void run() {
-            // read and service request on socket
-        }
-    }
 }

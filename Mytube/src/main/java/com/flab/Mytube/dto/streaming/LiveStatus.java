@@ -62,6 +62,10 @@ public class LiveStatus implements Serializable {
         }
     }
 
+    public void endLive(){
+        this.status = "LIVE_STOP";
+    }
+
     public void updateCurrent() {
         this.currentTime += 10;
         this.lastUpdated = LocalDateTime.now();
