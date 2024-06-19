@@ -96,7 +96,4 @@ public class LiveStatusService {
         stored.updateCurrent(time);
         hashOperations.put(key, key, stored);
     }
-
-
-
 }

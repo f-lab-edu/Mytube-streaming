@@ -16,9 +16,12 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+import java.io.File;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Data
@@ -46,16 +49,38 @@ public class LiveStatus implements Serializable {
 
     public LiveStatus(long liveId, String url) {
         this.liveId = liveId;
-        this.m3u8Url=url;
+        this.m3u8Url = url;
         this.currentTime = LocalTime.of(0, 0, 1);
         startLive();
     }
-    private List<String> tsSegments;
-    public List<String> getTsSegments(LocalTime time) {
-        // 시간에 따라 ts 세그먼트를 반환하는 로직을 구현
-        // 예를 들어, 현재 시간에 맞는 ts 세그먼트를 리스트로 반환
-        return this.tsSegments;
+
+
+    public List<String> getTsSegmentUrls() {
+        // m3u8 파일을 파싱하여 ts 세그먼트 URL을 가져오는 로직을 구현
+        int seconds = currentTime.getHour() * 60 * 60 + currentTime.getMinute() * 60 + currentTime.getSecond();
+        int startIndex = seconds / 10;
+        List<String> tsSegmentUrls = parseM3u8(m3u8Url, startIndex);
+
+        return tsSegmentUrls;
     }
+
+    private List<String> parseM3u8(String m3u8Url, int start) {
+        // m3u8 파일을 다운로드 및 파싱하여 ts 세그먼트 URL 리스트를 반환하는 로직 구현
+        LinkedList<String> result = new LinkedList<>();
+        StringBuilder sb = new StringBuilder();
+        String url = m3u8Url.replace(".m3m8", "");
+        int index = start;
+        while (true) {
+            sb.append(url).append("_").append(index++).append(".ts");
+            File file = new File(sb.toString());
+            if (file.exists() == false) {
+                break;
+            }
+            result.add(sb.toString());
+        }
+        return result;
+    }
+
     public void startLive() {
         this.status = "LIVE_ON";
         this.lastUpdated = LocalDateTime.now();
