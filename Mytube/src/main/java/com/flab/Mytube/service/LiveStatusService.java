@@ -1,11 +1,11 @@
 package com.flab.Mytube.service;
 
-import com.flab.Mytube.Utils.TimeManager;
 import com.flab.Mytube.dto.streaming.LiveStatus;
 import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -44,10 +44,6 @@ public class LiveStatusService {
         writeHash(key, liveId);
         LiveStatus live = hashOperations.get(key, String.valueOf(liveId));
         // 진행도 카운팅할 메서드 비동기처리
-        CompletableFuture<Integer> future = new CompletableFuture<>();
-        TimeManager timer = new TimeManager(live);
-        // 라이브 진행 상황 저장
-        executor.submit(()->future.complete(timer.calling()));
     }
 
     // 라이브 재시작
@@ -100,14 +96,15 @@ public class LiveStatusService {
 
 
     // 라이브 상태 업데이트
-    public void currentLive(long liveId) {
+    public void currentLive(long liveId, LocalTime time) {
         String key = String.join("LIVE", String.valueOf(liveId));
         if (isContain(key, liveId) == false) {
             System.err.println(" [ ERROR 0618T0719 ] 해당 라이브는 존재하지 않습니다. ");
             return;
         }
         LiveStatus stored = hashOperations.get(key, String.valueOf(liveId));
-
+        stored.updateCurrent(time);
+        hashOperations.put(key, key, stored);
     }
 
 

@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/lives")
@@ -30,6 +33,12 @@ public class LiveController {
         StartingShowResponse result = liveService.startShow(liveId);
         statusService.startLive(liveId);
         return result;
+    }
+
+    // 라이브 진행도 반영
+    @PatchMapping("/{liveId}/{processTime}")
+    public void processLive(@PathVariable("liveId") long liveId, @PathVariable("processTime") LocalTime time){
+        statusService.currentLive(liveId, time);
     }
 
     //라이브 종료 (저장까지?)

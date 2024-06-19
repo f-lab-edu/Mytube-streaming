@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -16,6 +18,7 @@ import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 @Getter
@@ -27,7 +30,12 @@ public class LiveStatus implements Serializable {
     @Id
     private long liveId;
     private String status;
-    private int currentTime;
+    @JsonSerialize(using = LocalTimeSerializer.class)
+    @JsonDeserialize(using = LocalTimeDeserializer.class)
+    @JsonFormat(pattern = "kk:mm:ss")
+    private LocalTime currentTime;
+
+
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
@@ -35,44 +43,47 @@ public class LiveStatus implements Serializable {
 
     public LiveStatus(long liveId) {
         this.liveId = liveId;
-        this.currentTime = 0;
+        this.currentTime = LocalTime.of(0, 0, 1);
         startLive();
     }
 
-    public LiveStatus(String status, int time) {
+    public LiveStatus(String status, LocalTime time) {
         this.status = status;
         this.currentTime = time;
         this.lastUpdated = LocalDateTime.now();
     }
 
-    public void startLive(){
+    public void startLive() {
         this.status = "LIVE_ON";
         this.lastUpdated = LocalDateTime.now();
     }
-    public void stopLive(){
+
+    public void stopLive() {
         this.status = "LIVE_STOP";
         this.lastUpdated = LocalDateTime.now();
     }
-    public void endLive(){
+
+    public void endLive() {
         this.status = "LIVE_STOP";
         this.lastUpdated = LocalDateTime.now();
     }
-    public void reservedLive(){
+
+    public void reservedLive() {
         this.status = "LIVE_RESERVED";
         this.lastUpdated = LocalDateTime.now();
     }
 
-    public synchronized void updateCurrent() {
-        this.currentTime += 10;
+    public synchronized void updateCurrent(LocalTime time) {
+        this.currentTime = time;
         this.lastUpdated = LocalDateTime.now();
     }
 
-    public synchronized String getStatus(){
+    public synchronized String getStatus() {
         return this.status;
     }
 
-    public boolean isLiveOn(){
-        if(this.status.equals("LIVE_ON"))
+    public boolean isLiveOn() {
+        if (this.status.equals("LIVE_ON"))
             return true;
         return false;
     }
