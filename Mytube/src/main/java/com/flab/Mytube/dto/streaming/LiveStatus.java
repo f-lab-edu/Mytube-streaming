@@ -67,11 +67,12 @@ public class LiveStatus implements Serializable {
     private List<String> parseM3u8(String m3u8Url, int start) {
         // m3u8 파일을 다운로드 및 파싱하여 ts 세그먼트 URL 리스트를 반환하는 로직 구현
         LinkedList<String> result = new LinkedList<>();
-        StringBuilder sb = new StringBuilder();
-        String url = m3u8Url.replace(".m3m8", "");
+        String url = m3u8Url.replace(".m3m8", "_");
         int index = start;
         while (true) {
-            sb.append(url).append("_").append(index++).append(".ts");
+            StringBuilder sb = new StringBuilder();
+            String tsIndex = String.format("%08d", index++);
+            sb.append(url).append(tsIndex).append(".ts");
             File file = new File(sb.toString());
             if (file.exists() == false) {
                 break;

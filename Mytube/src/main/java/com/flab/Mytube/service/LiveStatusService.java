@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
+import java.util.List;
 
 
 @Service
@@ -74,14 +75,15 @@ public class LiveStatusService {
     }
 
     // TODO: 라이브 중간 참여 요청 : 레디스에서 데이터 불러오기
-    public void joinLive(long liveId) {
+    public List<String> joinLive(long liveId) {
         String key = String.join("LIVE", String.valueOf(liveId));
         if (isContain(key, liveId) == false) {
             System.err.println(" [ ERROR 0618T0719 ] 해당 라이브는 존재하지 않습니다. ");
-            return;
+            return null;
         }
         LiveStatus stored = hashOperations.get(key, String.valueOf(liveId));
         // stored 에서 이어보게 될 구간 확인
+        return stored.getTsSegmentUrls();
     }
 
 

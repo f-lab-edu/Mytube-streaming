@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -52,8 +53,9 @@ public class LiveController {
     }
 
     @GetMapping("/{liveId}")
-    public void watchLive(@PathVariable("liveId") long liveId){
+    public List<String> watchLive(@PathVariable("liveId") long liveId){
         // 라이브 시청하기
+        return statusService.joinLive(liveId);
     }
 
 
