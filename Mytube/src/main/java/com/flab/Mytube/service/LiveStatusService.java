@@ -92,7 +92,15 @@ public class LiveStatusService {
     }
 
     // 라이브 중간 참여 요청 : 레디스에서 데이터 불러오기
-
+    public void joinLive(long liveId) {
+        String key = String.join("LIVE", String.valueOf(liveId));
+        if (isContain(key, liveId) == false) {
+            System.err.println(" [ ERROR 0618T0719 ] 해당 라이브는 존재하지 않습니다. ");
+            return;
+        }
+        LiveStatus stored = hashOperations.get(key, String.valueOf(liveId));
+        // stored 에서 이어보게 될 구간 확인
+    }
 
 
     // 라이브 상태 업데이트
