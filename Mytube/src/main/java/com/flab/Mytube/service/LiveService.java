@@ -24,7 +24,6 @@ public class LiveService {
     @Transactional // 라이브 시작
     public StartingShowResponse startShow(long liveId) {
         LiveStreamingVO result = liveMapper.findByStartingLiveId(liveId);
-        System.out.println(result.toString());
         long movieId = result.getMovieId();
         MovieVO movie = liveMapper.getMovieUri(movieId);
         StartingShowResponse response= StartingShowResponse.builder()

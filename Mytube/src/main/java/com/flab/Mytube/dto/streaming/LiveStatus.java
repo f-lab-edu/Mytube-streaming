@@ -35,9 +35,8 @@ public class LiveStatus implements Serializable {
 
     public LiveStatus(long liveId) {
         this.liveId = liveId;
-        this.status = "LIVE_ON";
-        this.lastUpdated = LocalDateTime.now();
         this.currentTime = 0;
+        startLive();
     }
 
     public LiveStatus(String status, int time) {
@@ -46,29 +45,30 @@ public class LiveStatus implements Serializable {
         this.lastUpdated = LocalDateTime.now();
     }
 
-    public void changeState(String status) {
-        switch (status) {
-            case "restart":
-                this.status = "LIVE_ON";
-                break;
-            case "stop":
-                this.status = "LIVE_STOP";
-                break;
-            case "end":
-                this.status = "LIVE_END";
-                break;
-            default:
-                break;
-        }
+    public void startLive(){
+        this.status = "LIVE_ON";
+        this.lastUpdated = LocalDateTime.now();
     }
-
+    public void stopLive(){
+        this.status = "LIVE_STOP";
+        this.lastUpdated = LocalDateTime.now();
+    }
     public void endLive(){
         this.status = "LIVE_STOP";
+        this.lastUpdated = LocalDateTime.now();
+    }
+    public void reservedLive(){
+        this.status = "LIVE_RESERVED";
+        this.lastUpdated = LocalDateTime.now();
     }
 
-    public void updateCurrent() {
+    public synchronized void updateCurrent() {
         this.currentTime += 10;
         this.lastUpdated = LocalDateTime.now();
+    }
+
+    public synchronized String getStatus(){
+        return this.status;
     }
 
     public boolean isLiveOn(){
