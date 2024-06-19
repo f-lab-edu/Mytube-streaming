@@ -44,8 +44,9 @@ public class LiveStatus implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime lastUpdated;
 
-    public LiveStatus(long liveId) {
+    public LiveStatus(long liveId, String url) {
         this.liveId = liveId;
+        this.m3u8Url=url;
         this.currentTime = LocalTime.of(0, 0, 1);
         startLive();
     }

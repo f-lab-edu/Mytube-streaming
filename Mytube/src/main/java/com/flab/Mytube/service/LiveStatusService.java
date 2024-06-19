@@ -6,25 +6,12 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 
 @Service
 public class LiveStatusService {
     @Resource(name = "statusTemplate")
     private HashOperations<String, String, LiveStatus> hashOperations;
-
-    private static String START = "restart"; // 상수 모으는 파일 만들기
-    private static String END = "end"; // 상수 모으는 파일 만들기
-    private static String STOP = "stop"; // 상수 모으는 파일 만들기
-    static ExecutorService executor = Executors.newCachedThreadPool();
-
-    public void writeHash(String key, long id) {
-        LiveStatus status = new LiveStatus(id);
-        hashOperations.put(key, String.valueOf(id), status);
-    }
 
     public boolean isContain(String key, long id) {
         if (hashOperations.hasKey(key, String.valueOf(id))) {
@@ -34,16 +21,15 @@ public class LiveStatusService {
     }
 
     // 라이브 시작
-    public void startLive(long liveId) {
+    public void startLive(long liveId, String url) {
         String key = String.join("LIVE", String.valueOf(liveId));
 //        if (isContain(key, liveId)) {
 //            System.err.println(" [ ERROR 0618T0641 ] 이미 시작한 라이브 입니다. ");
 //            return;
 //        }
         // 새로운 객체 캐시에 작성
-        writeHash(key, liveId);
-        LiveStatus live = hashOperations.get(key, String.valueOf(liveId));
-        // 진행도 카운팅할 메서드 비동기처리
+        LiveStatus status = new LiveStatus(liveId, url);
+        hashOperations.put(key, String.valueOf(liveId), status);
     }
 
     // 라이브 재시작
@@ -53,7 +39,6 @@ public class LiveStatusService {
             LiveStatus live = hashOperations.get(key, String.valueOf(liveId));
             // 라이브 상태 정지시키고 캐시 저장
             live.startLive();
-            System.out.println("service code >>> "+live.getStatus());
             hashOperations.put(key, String.valueOf(liveId), live);
             return;
         }
@@ -67,7 +52,6 @@ public class LiveStatusService {
             LiveStatus live = hashOperations.get(key, String.valueOf(liveId));
             // 라이브 상태 정지시키고 캐시 저장
             live.stopLive();
-            System.out.println("service code >>> "+live.getStatus());
             hashOperations.put(key, String.valueOf(liveId), live);
             return;
         }
@@ -82,16 +66,14 @@ public class LiveStatusService {
             live.endLive();
 
             System.out.println("service code >>> "+live.getStatus());
-            // 관련 캐시 삭제하기
+            // TODO : 관련 캐시 삭제하기
             hashOperations.put(key, String.valueOf(liveId), live);
-
-//            writeHash(key, live.getLiveId());
             return;
         }
         System.err.println(" [ ERROR 0619T1436 ] 잘못된 요청입니다. ");
     }
 
-    // 라이브 중간 참여 요청 : 레디스에서 데이터 불러오기
+    // TODO: 라이브 중간 참여 요청 : 레디스에서 데이터 불러오기
     public void joinLive(long liveId) {
         String key = String.join("LIVE", String.valueOf(liveId));
         if (isContain(key, liveId) == false) {
