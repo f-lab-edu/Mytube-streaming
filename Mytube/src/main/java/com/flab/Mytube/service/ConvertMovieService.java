@@ -64,28 +64,28 @@ public class ConvertMovieService {
         movieBuilder(filepath, request);
     }
 
+
     private void movieBuilder(Path filepath, FileUploadRequest request){
         String path = filepath.toString();
         String outPath = movie.createPath(request, hlsOutputPath).toString(); // 저장 위치 생성
-        File output = new File(outPath);
-        if (!output.exists()) {
-            output.mkdirs();
-        }
+        File output = movie.resultFile(outPath);
 
         String fileName = request.getOriginFileName().split("\\.")[0];
         String tsName = fileName;
 
-        // ts 파일로 분할 및 분해 설정
+//        // ts 파일로 분할 및 분해 설정
         String source = fileName + ".m3m8";
-        FFmpegBuilder builder = new FFmpegBuilder()
-                .setInput(path) // 입력 소스
-                .overrideOutputFiles(true)
-                .addOutput(output.getAbsolutePath()+"/"+source) // 저장경로
-                .setFormat("hls")
-                .addExtraArgs("-hls_time", "10") // 10초
-                .addExtraArgs("-hls_list_size", "0")
-                .addExtraArgs("-hls_segment_filename", output.getAbsolutePath() + "/"+tsName+"_%08d.ts") // 청크 파일 이름
-                .done();
+//        FFmpegBuilder builder = new FFmpegBuilder()
+//                .setInput(path) // 입력 소스
+//                .overrideOutputFiles(true)
+//                .addOutput(output.getAbsolutePath()+"/"+source) // 저장경로
+//                .setFormat("hls")
+//                .addExtraArgs("-hls_time", "10") // 10초
+//                .addExtraArgs("-hls_list_size", "0")
+//                .addExtraArgs("-hls_segment_filename", output.getAbsolutePath() + "/"+tsName+"_%08d.ts") // 청크 파일 이름
+//                .done();
+
+        FFmpegBuilder builder = movie.segmentationTs(source, path, output, tsName);
 
         // builder 실행
         run(builder);
