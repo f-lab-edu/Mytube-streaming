@@ -43,10 +43,6 @@ public class ChanelController {
     @GetMapping("/{chanelId}/movies")
     public List<MovieVO> getMovies(@PathVariable("chanelId") long chanelId){
         List<MovieVO> result = service.getUploadMovie(chanelId);
-//        List<MovieVO> result = settingLiveService.getUploadMovie(streamerId);
-
-//        StartingShowResponse resultNode = settingLiveService.startShow(streamingId);
-//        return resultNode.toString();
         return result;
     }
 }

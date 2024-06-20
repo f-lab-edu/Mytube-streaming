@@ -9,10 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
@@ -26,6 +23,7 @@ import java.util.List;
 
 @Data
 @Getter
+@Builder
 @RedisHash(value = "liveId", timeToLive = 30)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
@@ -35,10 +33,11 @@ public class LiveStatus implements Serializable {
     private long liveId;
     private String status;
     private String m3u8Url; // m3u8 파일의 URL
+    private long chanelId;
 
     @JsonSerialize(using = LocalTimeSerializer.class)
     @JsonDeserialize(using = LocalTimeDeserializer.class)
-    @JsonFormat(pattern = "kk:mm:ss")
+    @JsonFormat(pattern = "HH:mm:ss")
     private LocalTime currentTime;
 
 
@@ -55,13 +54,12 @@ public class LiveStatus implements Serializable {
     }
 
 
-    public List<String> getTsSegmentUrls() {
+    public int getTsIndex() {
         // m3u8 파일을 파싱하여 ts 세그먼트 URL을 가져오는 로직을 구현
         int seconds = currentTime.getHour() * 60 * 60 + currentTime.getMinute() * 60 + currentTime.getSecond();
         int startIndex = seconds / 10;
-        List<String> tsSegmentUrls = parseM3u8(m3u8Url, startIndex);
 
-        return tsSegmentUrls;
+        return startIndex;
     }
 
     private List<String> parseM3u8(String m3u8Url, int start) {
@@ -80,6 +78,19 @@ public class LiveStatus implements Serializable {
             result.add(sb.toString());
         }
         return result;
+    }
+
+    private String getFileName() {
+        String[] filepath = m3u8Url.split("/");
+        return filepath[filepath.length-1];
+    }
+
+    private String getBasePath() {
+        return m3u8Url.replace(getFileName(), "");
+    }
+
+    public String getBasePath(String tsName) {
+        return m3u8Url.replace(getFileName(), tsName);
     }
 
     public void startLive() {

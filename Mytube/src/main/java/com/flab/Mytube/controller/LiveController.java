@@ -1,15 +1,23 @@
 package com.flab.Mytube.controller;
 
 import com.flab.Mytube.dto.movie.request.ChatJoinRequest;
+import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
+import com.flab.Mytube.dto.movie.request.WatchLiveRequest;
 import com.flab.Mytube.dto.movie.response.Response;
 import com.flab.Mytube.dto.movie.response.StartingShowResponse;
 import com.flab.Mytube.service.LiveService;
 import com.flab.Mytube.service.LiveStatusService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -52,11 +60,46 @@ public class LiveController {
 //        statusService.liveEnd(liveId);
     }
 
-    @GetMapping("/{liveId}")
-    public List<String> watchLive(@PathVariable("liveId") long liveId){
-        // 라이브 시청하기
-        return statusService.joinLive(liveId);
+    @GetMapping("/{liveId}/{chanelId}")
+    public ResponseEntity<InputStreamResource> getMovie(
+            @PathVariable("chanelId") String chanelId,
+            @PathVariable("liveId") int liveId
+    ) {
+        WatchLiveRequest request = WatchLiveRequest.builder()
+                .chanelId(chanelId)
+                .liveId(liveId)
+                .build();
+        File liveSource = statusService.joinLive(request); // service 에서 파일 불러오기
+        try {
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(liveSource));
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType("application/x-mpegURL"))
+                    .body(resource);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+//    @GetMapping("/{liveId}") // doing
+//    public ResponseEntity<InputStreamResource> watchLive(@PathVariable("liveId") String liveId){
+//        // 라이브 시청하기
+//        File liveSource = statusService.joinLive(liveId);
+//        System.out.println(liveSource.getPath());
+//        if (liveSource == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        try {
+//            InputStreamResource resource = new InputStreamResource(new FileInputStream(liveSource));
+//            System.out.println(liveSource.getName());
+//            return ResponseEntity.ok()
+//                    .contentType(MediaType.parseMediaType("application/x-mpegURL"))
+//                    .body(resource);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(500).build();
+//        }
+//    }
 
 
     // TODO: 라이브 삭제

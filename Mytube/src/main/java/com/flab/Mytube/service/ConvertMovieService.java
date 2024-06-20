@@ -75,16 +75,6 @@ public class ConvertMovieService {
 
 //        // ts 파일로 분할 및 분해 설정
         String source = fileName + ".m3m8";
-//        FFmpegBuilder builder = new FFmpegBuilder()
-//                .setInput(path) // 입력 소스
-//                .overrideOutputFiles(true)
-//                .addOutput(output.getAbsolutePath()+"/"+source) // 저장경로
-//                .setFormat("hls")
-//                .addExtraArgs("-hls_time", "10") // 10초
-//                .addExtraArgs("-hls_list_size", "0")
-//                .addExtraArgs("-hls_segment_filename", output.getAbsolutePath() + "/"+tsName+"_%08d.ts") // 청크 파일 이름
-//                .done();
-
         FFmpegBuilder builder = movie.segmentationTs(source, path, output, tsName);
 
         // builder 실행
@@ -134,6 +124,9 @@ public class ConvertMovieService {
             Double.parseDouble(str);
         } catch (NumberFormatException e) {
             return false;
+        } catch(Exception e){
+            System.err.println("[ Error 0620T1010 ] 숫자 검증 실패");
+            e.printStackTrace();
         }
         return true;
     }
