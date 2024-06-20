@@ -39,9 +39,9 @@ public class RedisConfig {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
         template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new Jackson2JsonRedisSerializer(LiveStatus.class));// <<< 각각의 DTO 만들어서 반환
+        template.setValueSerializer(new Jackson2JsonRedisSerializer(LiveStatus.class));
         template.setHashKeySerializer(new StringRedisSerializer());
-        template.setHashValueSerializer(new Jackson2JsonRedisSerializer(LiveStatus.class));// <<<<
+        template.setHashValueSerializer(new Jackson2JsonRedisSerializer(LiveStatus.class));
         return template;
     }
 

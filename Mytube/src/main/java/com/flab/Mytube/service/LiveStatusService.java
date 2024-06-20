@@ -8,7 +8,6 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 
@@ -42,7 +41,6 @@ public class LiveStatusService {
         String key = String.join("LIVE", String.valueOf(liveId));
         if (isContain(key, liveId)) {
             LiveStatus live = hashOperations.get(key, String.valueOf(liveId));
-            // 라이브 상태 정지시키고 캐시 저장
             live.startLive();
             hashOperations.put(key, String.valueOf(liveId), live);
             return;
@@ -55,7 +53,6 @@ public class LiveStatusService {
         String key = String.join("LIVE", String.valueOf(liveId));
         if (isContain(key, liveId)) {
             LiveStatus live = hashOperations.get(key, String.valueOf(liveId));
-            // 라이브 상태 정지시키고 캐시 저장
             live.stopLive();
             hashOperations.put(key, String.valueOf(liveId), live);
             return;
@@ -78,7 +75,7 @@ public class LiveStatusService {
         System.err.println(" [ ERROR 0619T1436 ] 잘못된 요청입니다. ");
     }
 
-    // TODO: 라이브 중간 참여 요청 : 레디스에서 데이터 불러오기
+    // 라이브 중간에 참여 요청 : 레디스에서 진행도 데이터 불러오기
     public File joinLive(WatchLiveRequest request) {
         int id = request.getLiveId();
         String key = String.join("LIVE", String.valueOf(id));
@@ -87,23 +84,12 @@ public class LiveStatusService {
 //            return null;
 //        }
         LiveStatus stored = hashOperations.get(key, String.valueOf(id));
-//        liveId 로 id 가 건너올 경우 -> return m3u8;
+        //  liveId 로 id 가 건너올 경우 -> return m3u8;
         if(isNumberic(request.getChanelId()) == true){
             // stored 에서 이어보게 될 구간 확인
             return movie.createM3U8(stored.getM3u8Url(), stored.getTsIndex());
         }
         return new File(stored.getBasePath(request.getChanelId()));
-//        return new File(request.getLiveId());
-////        liveId 로 ts 파일 이름이 건너올 경우:
-//
-//        if(isNumberic(liveId) != true){ // ts 기반 반환
-////            LiveStatus live = hashOperations.get(key, String.valueOf(liveId));
-////            String path = live.getM3u8Url();
-////            path.replace(".m3u8", )
-////            return new File(path);
-//        }
-//        // stored 에서 이어보게 될 구간 확인
-//        return movie.createM3U8(stored.getM3u8Url(), stored.getTsIndex());
     }
 
     public boolean isNumberic(String str) {

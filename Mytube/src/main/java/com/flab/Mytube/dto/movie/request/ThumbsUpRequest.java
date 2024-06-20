@@ -4,12 +4,15 @@ import lombok.*;
 
 @Getter
 @RequiredArgsConstructor
-@Builder(toBuilder = true)
 @AllArgsConstructor
 public class ThumbsUpRequest {
     private long liveId;
     private long userId;
     private long count;
+
+    public ThumbsUpRequest(long liveId){
+        this.liveId=liveId;
+    }
 
     public void minusCount(){
         this.count -= 1;

@@ -34,7 +34,7 @@ public class LiveStreamingDTO extends TimeDTO {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime updatedAt; // 방송 수정 시간(방제, 컨텐츠 등 ...)
-    public void setUpdatedAtToNow() {
-        updatedAt = LocalDateTime.now();
-    }
+//    public void setUpdatedAtToNow() {
+//        updatedAt = LocalDateTime.now();
+//    }
 }

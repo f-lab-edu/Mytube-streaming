@@ -5,7 +5,6 @@ import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.service.ConvertMovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 
 @Getter
 public class FileUploadRequest {
@@ -30,14 +29,6 @@ public class FileUploadRequest {
 
     public boolean isEmptyFile() {
         return file.isEmpty();
-    }
-
-    public byte[] getBytes() {
-        try {
-            return file.getBytes();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public String getOriginFileName(){

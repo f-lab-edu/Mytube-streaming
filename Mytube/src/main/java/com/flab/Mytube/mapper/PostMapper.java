@@ -20,5 +20,4 @@ public interface PostMapper {
     List<MovieVO> uploadMovieList(@Param("userId") long userId);
     //    -----
     long selectShow(@Param("request") LiveStreamingDTO liveStreaming);
-//    BigInteger joinChat(JoinChatRequest param);
 }
