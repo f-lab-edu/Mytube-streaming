@@ -3,13 +3,11 @@ package com.flab.Mytube.Utils;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import lombok.NoArgsConstructor;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
-import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;

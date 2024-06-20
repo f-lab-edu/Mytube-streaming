@@ -19,8 +19,8 @@ public class ChanelService {
     @Autowired
     private final ReadMapper readMapper;
 
-    @Inject
-    private LiveStreamingDAO liveListDAO ;
+//    @Inject
+//    private LiveStreamingDAO liveListDAO ;
 
 
     public void delete(long liveId){
@@ -60,7 +60,6 @@ public class ChanelService {
     public List<MovieVO> getUploadMovie(long chanelId){
         // sreamerId 와 연관된 동영상 반환해오기
         List<MovieVO> result = readMapper.uploadMovieList(chanelId);
-//        List<MovieVO> result = postMapper.uploadMovieList(streamerId);
         return result;
     }
 }

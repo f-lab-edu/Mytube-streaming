@@ -13,13 +13,9 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-import java.io.File;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 @Data
 @Getter
@@ -62,33 +58,10 @@ public class LiveStatus implements Serializable {
         return startIndex;
     }
 
-    private List<String> parseM3u8(String m3u8Url, int start) {
-        // m3u8 파일을 다운로드 및 파싱하여 ts 세그먼트 URL 리스트를 반환하는 로직 구현
-        LinkedList<String> result = new LinkedList<>();
-        String url = m3u8Url.replace(".m3m8", "_");
-        int index = start;
-        while (true) {
-            StringBuilder sb = new StringBuilder();
-            String tsIndex = String.format("%08d", index++);
-            sb.append(url).append(tsIndex).append(".ts");
-            File file = new File(sb.toString());
-            if (file.exists() == false) {
-                break;
-            }
-            result.add(sb.toString());
-        }
-        return result;
-    }
-
     private String getFileName() {
         String[] filepath = m3u8Url.split("/");
         return filepath[filepath.length-1];
     }
-
-    private String getBasePath() {
-        return m3u8Url.replace(getFileName(), "");
-    }
-
     public String getBasePath(String tsName) {
         return m3u8Url.replace(getFileName(), tsName);
     }
@@ -121,21 +94,4 @@ public class LiveStatus implements Serializable {
     public synchronized String getStatus() {
         return this.status;
     }
-
-    public boolean isLiveOn() {
-        if (this.status.equals("LIVE_ON"))
-            return true;
-        return false;
-    }
-
-//    @Override
-//    public String toString() {
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("  >>>> >>> >>> live id ->").append(liveId).append("\n");
-//        sb.append("  >>>> >>> >>> status ->").append(status).append("\n");
-//        sb.append("  >>>> >>> >>> currentTime ->").append(currentTime).append("\n");
-//        sb.append("  >>>> >>> >>> lastUpdated ->").append(lastUpdated.toString()).append("\n");
-//        return sb.toString();
-//    }
-
 }

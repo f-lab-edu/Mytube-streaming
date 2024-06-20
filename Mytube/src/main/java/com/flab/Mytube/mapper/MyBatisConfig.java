@@ -30,7 +30,6 @@ public class MyBatisConfig {
         factoryBean.setTypeAliasesPackage("vo.User");
 
         factoryBean.setConfigLocation(resolver.getResource("classpath:mybatis/sqlmap_config.xml"));
-//        factoryBean.setConfigLocation(resolver.getResource("classpath:mybatis/map/*.xml"));
         return factoryBean.getObject();
     }
 

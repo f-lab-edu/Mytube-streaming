@@ -60,7 +60,7 @@ public class ConvertMovieService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+//       filepath 경로에 파일 저장
         movieBuilder(filepath, request);
     }
 
@@ -103,7 +103,7 @@ public class ConvertMovieService {
         if(isNumberic(movieId)){
             return getLiveFile(Long.valueOf(movieId));
         }
-
+        // movie 의 .ts 파일 이름이 입력된 경우
         String key = movieId.split("_")[0];
         StringBuilder sb = new StringBuilder();
         sb.append(hlsOutputPath).append("/chanel-" + chanelId).append("/").append(key).append("/").append(movieId);
