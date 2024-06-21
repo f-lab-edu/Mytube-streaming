@@ -21,7 +21,7 @@ public class MovieController {
 
   private final ConvertMovieService convertMovieService;
 
-  // 동영상 업로드 요청
+  // 동영상 업로드 요청 TODO: 올바른 파일 형식인지 확인 (ex. 사진이라면? 문서파일이라면?)
   @PostMapping("")
   public void upload(@RequestParam("movie") MultipartFile file,
       @RequestParam("chanelId") long chanelId) {
@@ -56,7 +56,7 @@ public class MovieController {
     return null;
   }
 
-  //    동영상 삭제
+  //    TODO: 동영상 삭제
   @PatchMapping("/{movieId}")
   public void deleteMovie(@PathVariable("{movieId}") long movieId) {
 
