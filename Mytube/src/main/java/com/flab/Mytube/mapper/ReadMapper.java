@@ -12,9 +12,14 @@ import java.util.List;
 @Component
 @Mapper
 public interface ReadMapper {
-    void liveDelete(@Param("movieId") long movieId);
-    LiveStreamingVO getLiveContents(@Param("liveId") long liveId);
-    MovieVO getMovieUrl(@Param("id") long id);
-    List<LivePageDAO> getLiveList(@Param("userId") long userId);
-    List<MovieVO> uploadMovieList(@Param("userId") long userId);
+
+  void liveDelete(@Param("movieId") long movieId);
+
+  LiveStreamingVO getLiveContents(@Param("liveId") long liveId);
+
+  MovieVO getMovieUrl(@Param("id") long id);
+
+  List<LivePageDAO> getLiveList(@Param("userId") long userId);
+
+  List<MovieVO> uploadMovieList(@Param("userId") long userId);
 }

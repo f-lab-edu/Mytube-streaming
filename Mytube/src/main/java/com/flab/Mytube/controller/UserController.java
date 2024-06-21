@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 public class UserController {
-    private final UserService userService;
-    // 좋아요 컨트롤러
-    @PostMapping("/prefer/lives/{liveId}")
-    public HttpStatus preferLive(@PathVariable("liveId") long liveId, @RequestBody ThumbsUpRequest request) {
-        ThumbsUpRequest newRequest= new ThumbsUpRequest(liveId);
-        userService.prefer(newRequest);
-        return HttpStatus.CREATED;
-    }
+
+  private final UserService userService;
+
+  // 좋아요 컨트롤러
+  @PostMapping("/prefer/lives/{liveId}")
+  public HttpStatus preferLive(@PathVariable("liveId") long liveId,
+      @RequestBody ThumbsUpRequest request) {
+    ThumbsUpRequest newRequest = new ThumbsUpRequest(liveId);
+    userService.prefer(newRequest);
+    return HttpStatus.CREATED;
+  }
 }

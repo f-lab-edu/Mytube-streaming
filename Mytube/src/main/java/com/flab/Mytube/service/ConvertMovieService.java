@@ -27,107 +27,111 @@ import java.nio.file.Path;
 @Service
 @RequiredArgsConstructor
 public class ConvertMovieService {
-    private final PostMapper postMapper;
-    private final FFmpeg fFmpeg;
-    private final FFprobe fFprobe;
-    private final Movies movie = new Movies();
 
-    @Value("src/main/resources/static/origin")
-    private String savedPath;
+  private final PostMapper postMapper;
+  private final FFmpeg fFmpeg;
+  private final FFprobe fFprobe;
+  private final Movies movie = new Movies();
 
-    @Value("src/main/resources/static/hls")
-    private String hlsOutputPath;
+  @Value("src/main/resources/static/origin")
+  private String savedPath;
 
-    @Value("src/main/resources/static/mp4")
-    private String mp4OutputPath;
+  @Value("src/main/resources/static/hls")
+  private String hlsOutputPath;
 
-    //동영상 업로드
-    @Transactional
-    public void uploadMovie(FileUploadRequest request){
-        if (request.isEmptyFile()) {
-            System.err.println("파일이 입력되지 않았습니다.");
-            return ;
-        }
-        // 파일 경로 지정
-        String fileName=  request.getFile().getOriginalFilename();
-        Path filepath = movie.createPath(request, savedPath);
-        filepath = filepath.resolve(fileName);
+  @Value("src/main/resources/static/mp4")
+  private String mp4OutputPath;
 
-        // 파일 작성하기(복사)
-        try (OutputStream os = Files.newOutputStream(filepath)) {
-            byte[] bytes = request.getFile().getBytes();
-            Files.write(filepath, bytes);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-//       filepath 경로에 파일 저장
-        movieBuilder(filepath, request);
+  //동영상 업로드
+  @Transactional
+  public void uploadMovie(FileUploadRequest request) {
+    if (request.isEmptyFile()) {
+      System.err.println("파일이 입력되지 않았습니다.");
+      return;
     }
+    // 파일 경로 지정
+    String fileName = request.getFile().getOriginalFilename();
+    Path filepath = movie.createPath(request, savedPath);
+    filepath = filepath.resolve(fileName);
+
+    // 파일 작성하기(복사)
+    try (OutputStream os = Files.newOutputStream(filepath)) {
+      byte[] bytes = request.getFile().getBytes();
+      Files.write(filepath, bytes);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+//       filepath 경로에 파일 저장
+    movieBuilder(filepath, request);
+  }
 
 
-    private void movieBuilder(Path filepath, FileUploadRequest request){
-        String path = filepath.toString();
-        String outPath = movie.createPath(request, hlsOutputPath).toString(); // 저장 위치 생성
-        File output = movie.resultFile(outPath);
+  private void movieBuilder(Path filepath, FileUploadRequest request) {
+    String path = filepath.toString();
+    String outPath = movie.createPath(request, hlsOutputPath).toString(); // 저장 위치 생성
+    File output = movie.resultFile(outPath);
 
-        String fileName = request.getOriginFileName().split("\\.")[0];
-        String tsName = fileName;
+    String fileName = request.getOriginFileName().split("\\.")[0];
+    String tsName = fileName;
 
 //        // ts 파일로 분할 및 분해 설정
-        String source = fileName + ".m3m8";
-        FFmpegBuilder builder = movie.segmentationTs(source, path, output, tsName);
+    String source = fileName + ".m3m8";
+    FFmpegBuilder builder = movie.segmentationTs(source, path, output, tsName);
 
-        // builder 실행
-        run(builder);
-        request.addPath(output.getPath(), source);
-        postMapper.addMovie(request);
+    // builder 실행
+    run(builder);
+    request.addPath(output.getPath(), source);
+    postMapper.addMovie(request);
+  }
+
+
+  private void run(FFmpegBuilder builder) {
+    FFmpegExecutor executor = new FFmpegExecutor(fFmpeg, fFprobe);
+
+    executor
+        .createJob(builder, progress -> {
+          log.info("progress ==> {}", progress);
+          if (progress.status.equals(Progress.Status.END)) {
+            log.info("============================= JOB FINISHED =============================");
+          }
+        })
+        .run();
+  }
+
+  public File getLiveFile(MovieDtailRequest request) {
+    int chanelId = request.getChanelId();
+    String movieId = request.getMovieId();
+    // movie 의 id 가 입력된 경우
+    if (isNumberic(movieId)) {
+      return getLiveFile(Long.valueOf(movieId));
     }
+    // movie 의 .ts 파일 이름이 입력된 경우
+    String key = movieId.split("_")[0];
+    StringBuilder sb = new StringBuilder();
+    sb.append(hlsOutputPath).append("/chanel-" + chanelId).append("/").append(key).append("/")
+        .append(movieId);
+    String filePath = sb.toString();
+    return new File(filePath);
+  }
 
+  // id 를 통해 .m3m8 파일이 저장된 url 가져올 수 있도록
+  public File getLiveFile(Long fileId) {
+    long chanelId = fileId;
+    MovieVO movie = postMapper.getMovieUrl(chanelId);
+    String filePath = movie.getUrl();
 
-    private void run(FFmpegBuilder builder) {
-        FFmpegExecutor executor = new FFmpegExecutor(fFmpeg, fFprobe);
+    return new File(filePath);
+  }
 
-        executor
-                .createJob(builder, progress -> {
-                    log.info("progress ==> {}", progress);
-                    if (progress.status.equals(Progress.Status.END)) {
-                        log.info("============================= JOB FINISHED =============================");
-                    }
-                })
-                .run();
+  public boolean isNumberic(String str) {
+    try {
+      Double.parseDouble(str);
+    } catch (NumberFormatException e) {
+      return false;
+    } catch (Exception e) {
+      System.err.println("[ Error 0620T1010 ] 숫자 검증 실패");
+      e.printStackTrace();
     }
-    public File getLiveFile(MovieDtailRequest request){
-        int chanelId=request.getChanelId();
-        String movieId = request.getMovieId();
-        // movie 의 id 가 입력된 경우
-        if(isNumberic(movieId)){
-            return getLiveFile(Long.valueOf(movieId));
-        }
-        // movie 의 .ts 파일 이름이 입력된 경우
-        String key = movieId.split("_")[0];
-        StringBuilder sb = new StringBuilder();
-        sb.append(hlsOutputPath).append("/chanel-" + chanelId).append("/").append(key).append("/").append(movieId);
-        String filePath =sb.toString();
-        return new File(filePath);
-    }
-
-    // id 를 통해 .m3m8 파일이 저장된 url 가져올 수 있도록
-    public File getLiveFile(Long fileId){
-        long chanelId = fileId;
-        MovieVO movie = postMapper.getMovieUrl(chanelId);
-        String filePath = movie.getUrl();
-
-        return new File(filePath);
-    }
-    public boolean isNumberic(String str) {
-        try {
-            Double.parseDouble(str);
-        } catch (NumberFormatException e) {
-            return false;
-        } catch(Exception e){
-            System.err.println("[ Error 0620T1010 ] 숫자 검증 실패");
-            e.printStackTrace();
-        }
-        return true;
-    }
+    return true;
+  }
 }

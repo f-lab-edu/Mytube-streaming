@@ -6,7 +6,8 @@ import lombok.Data;
 @Data
 @Builder
 public class MovieDtailRequest {
-    private int chanelId;
-    private String subject;
-    private  String movieId;
+
+  private int chanelId;
+  private String subject;
+  private String movieId;
 }

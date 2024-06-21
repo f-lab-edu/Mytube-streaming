@@ -11,16 +11,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO extends TimeDTO {
-    private long id;
-    @NonNull
-    private String password;
-    @NonNull
-    private String nickname;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime updatedAt;
+
+  private long id;
+  @NonNull
+  private String password;
+  @NonNull
+  private String nickname;
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  private LocalDateTime updatedAt;
 
 
-    public void setCreatedAtToNow() {
-        updatedAt = LocalDateTime.now();
-    }
+  public void setCreatedAtToNow() {
+    updatedAt = LocalDateTime.now();
+  }
 }

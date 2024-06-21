@@ -12,21 +12,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedisConnectionTest {
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+  @Autowired
+  private RedisTemplate<String, Object> redisTemplate;
 
-    @PostConstruct
-    public void testConnection() {
-        try {
-            String result = redisTemplate.getConnectionFactory().getConnection().ping();
-            if ("PONG".equals(result)) {
-                System.out.println("Redis connection successful!");
-            } else {
-                System.err.println("Redis connection failed!");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Redis connection failed!");
-        }
+  @PostConstruct
+  public void testConnection() {
+    try {
+      String result = redisTemplate.getConnectionFactory().getConnection().ping();
+      if ("PONG".equals(result)) {
+        System.out.println("Redis connection successful!");
+      } else {
+        System.err.println("Redis connection failed!");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.err.println("Redis connection failed!");
     }
+  }
 }

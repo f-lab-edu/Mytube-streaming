@@ -9,10 +9,9 @@ import org.springframework.cache.annotation.EnableCaching;
 @EnableCaching
 @SpringBootApplication
 public class MytubeApplication {
-	private static final Log LOG = LogFactory.getLog(MytubeApplication.class);
 
-	public static void main(String[] args) {
-		SpringApplication.run(MytubeApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(MytubeApplication.class, args);
+  }
 
 }

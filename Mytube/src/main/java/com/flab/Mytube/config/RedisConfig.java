@@ -19,43 +19,46 @@ import java.util.Collections;
 
 @Configuration
 public class RedisConfig {
-    @Value("${spring.redis.port}")
-    int port;
-    @Value("${spring.redis.host}")
-    String host;
-    @Bean
-    public LettuceConnectionFactory lettuceConnectionFactory() {
 
-        LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
+  @Value("${spring.redis.port}")
+  int port;
+  @Value("${spring.redis.host}")
+  String host;
+
+  @Bean
+  public LettuceConnectionFactory lettuceConnectionFactory() {
+
+    LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
 //                .useSsl().and()
-                .commandTimeout(Duration.ofSeconds(2))
-                .shutdownTimeout(Duration.ZERO)
-                .build();
+        .commandTimeout(Duration.ofSeconds(2))
+        .shutdownTimeout(Duration.ZERO)
+        .build();
 
-        return new LettuceConnectionFactory(new RedisStandaloneConfiguration(host, port), clientConfig);
-    }
-    @Bean
-    RedisTemplate<String, Object> statusTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new Jackson2JsonRedisSerializer(LiveStatus.class));
-        template.setHashKeySerializer(new StringRedisSerializer());
-        template.setHashValueSerializer(new Jackson2JsonRedisSerializer(LiveStatus.class));
-        return template;
-    }
+    return new LettuceConnectionFactory(new RedisStandaloneConfiguration(host, port), clientConfig);
+  }
 
-    @Bean
-    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
-        RedisCacheConfiguration defaults = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofHours(6));
-        RedisCacheManager cacheManager = RedisCacheManager.builder(connectionFactory)
-                .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig())
-                .transactionAware()
-                .withInitialCacheConfigurations(Collections.singletonMap("predefined",
-                        RedisCacheConfiguration.defaultCacheConfig().disableCachingNullValues()))
-                .cacheDefaults(defaults)
-                .build();
-        return cacheManager;
-    }
+  @Bean
+  RedisTemplate<String, Object> statusTemplate(RedisConnectionFactory connectionFactory) {
+    RedisTemplate<String, Object> template = new RedisTemplate<>();
+    template.setConnectionFactory(connectionFactory);
+    template.setKeySerializer(new StringRedisSerializer());
+    template.setValueSerializer(new Jackson2JsonRedisSerializer(LiveStatus.class));
+    template.setHashKeySerializer(new StringRedisSerializer());
+    template.setHashValueSerializer(new Jackson2JsonRedisSerializer(LiveStatus.class));
+    return template;
+  }
+
+  @Bean
+  public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
+    RedisCacheConfiguration defaults = RedisCacheConfiguration.defaultCacheConfig()
+        .entryTtl(Duration.ofHours(6));
+    RedisCacheManager cacheManager = RedisCacheManager.builder(connectionFactory)
+        .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig())
+        .transactionAware()
+        .withInitialCacheConfigurations(Collections.singletonMap("predefined",
+            RedisCacheConfiguration.defaultCacheConfig().disableCachingNullValues()))
+        .cacheDefaults(defaults)
+        .build();
+    return cacheManager;
+  }
 }

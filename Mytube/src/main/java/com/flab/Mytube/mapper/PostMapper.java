@@ -13,11 +13,17 @@ import java.util.List;
 @Component
 @Mapper
 public interface PostMapper {
-    long addMovie(@Param("request") FileUploadRequest movie);
-    long reserveShow(@Param("request") LiveStreamingDTO liveStreaming);
-    MovieVO getMovieUrl(@Param("movieId") long movieId);
-    LiveStreamingVO findByStartingLiveId(@Param("id") long id);
-    List<MovieVO> uploadMovieList(@Param("userId") long userId);
-    //    -----
-    long selectShow(@Param("request") LiveStreamingDTO liveStreaming);
+
+  long addMovie(@Param("request") FileUploadRequest movie);
+
+  long reserveShow(@Param("request") LiveStreamingDTO liveStreaming);
+
+  MovieVO getMovieUrl(@Param("movieId") long movieId);
+
+  LiveStreamingVO findByStartingLiveId(@Param("id") long id);
+
+  List<MovieVO> uploadMovieList(@Param("userId") long userId);
+
+  //    -----
+  long selectShow(@Param("request") LiveStreamingDTO liveStreaming);
 }

@@ -12,18 +12,19 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TimeDTO {
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime createdAt;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime deletedAt;
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  private LocalDateTime createdAt;
+
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  private LocalDateTime deletedAt;
 
 
-    public void setCreatedAtToNow() {
-        createdAt = LocalDateTime.now();
-    }
+  public void setCreatedAtToNow() {
+    createdAt = LocalDateTime.now();
+  }
 
-    public void setDeletedAtToNow() {
-        deletedAt = LocalDateTime.now();
-    }
+  public void setDeletedAtToNow() {
+    deletedAt = LocalDateTime.now();
+  }
 }
