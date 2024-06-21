@@ -13,7 +13,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 @EnableCaching
 @SpringBootApplication
 public class MytubeApplication {
-
+//./bin/zookeeper-server-start.sh config/zookeeper.properties
+//	./bin/kafka-server-start.sh config/server.properties
 	public static void main(String[] args) {
 		SpringApplication.run(MytubeApplication.class, args);
 	}
