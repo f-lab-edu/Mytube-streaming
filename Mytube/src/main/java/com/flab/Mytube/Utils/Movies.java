@@ -60,7 +60,7 @@ public class Movies {
     return builder;
   }
 
-  public File createM3U8(String masterPath, int startIndex) {
+  public File getFfmpegBuilder(String masterPath, int startIndex) {
     List<String> lines;
     StringBuilder sb = new StringBuilder();
     String base = masterPath.split("\\.")[0];

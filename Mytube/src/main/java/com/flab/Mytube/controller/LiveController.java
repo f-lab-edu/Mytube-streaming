@@ -52,9 +52,8 @@ public class LiveController {
   public void endLive(@PathVariable("liveId") long liveId) {
     liveService.endLive(liveId);
     statusService.stopLive(liveId);
+    // TODO: 해당 실시간 라이브 접근 못하도록 제한, 다시보기로만 접근 하도록
     // 라이브 저장
-    // 해당 실시간 라이브 접근 못하도록 제한, 다시보기로만 접근 하도록
-//        statusService.liveEnd(liveId);
   }
 
   //    live 중간에 시청자 유입
@@ -67,7 +66,7 @@ public class LiveController {
         .chanelId(chanelId)
         .liveId(liveId)
         .build();
-    File liveSource = statusService.joinLive(request); // service 에서 파일 불러오기
+    File liveSource = statusService.joinLive(request);
     try {
       InputStreamResource resource = new InputStreamResource(new FileInputStream(liveSource));
       return ResponseEntity.ok()

@@ -36,16 +36,16 @@ public class LiveService {
     return response;
   }
 
-  //라이브 종료
+  // TODO: 라이브 종료
   public void endLive(long id) {
     System.out.println(id + " 번 라이브가 종료되었습니다.");
   }
 
-  // 라이브 삭제
+  // TODO: 라이브 삭제
   public void delete(long id) {
   }
 
-  // 채팅
+  // TODO: 채팅
   public void requestJoin(ChatJoinRequest request) {
     System.out.println("채팅 참여!");
     System.out.println(request.toString());

@@ -13,7 +13,6 @@ import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.progress.Progress;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,7 +60,7 @@ public class ConvertMovieService {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-//       filepath 경로에 파일 저장
+//  filepath 경로에 파일 저장
     movieBuilder(filepath, request);
   }
 
@@ -74,7 +73,7 @@ public class ConvertMovieService {
     String fileName = request.getOriginFileName().split("\\.")[0];
     String tsName = fileName;
 
-//        // ts 파일로 분할 및 분해 설정
+//  ts 파일로 분할 및 분해 설정
     String source = fileName + ".m3m8";
     FFmpegBuilder builder = movie.segmentationTs(source, path, output, tsName);
 
@@ -102,7 +101,8 @@ public class ConvertMovieService {
     int chanelId = request.getChanelId();
     String movieId = request.getMovieId();
     // movie 의 id 가 입력된 경우
-    if (isNumberic(movieId)) {
+
+    if (isNumeric(movieId)) {
       return getLiveFile(Long.valueOf(movieId));
     }
     // movie 의 .ts 파일 이름이 입력된 경우
@@ -123,7 +123,7 @@ public class ConvertMovieService {
     return new File(filePath);
   }
 
-  public boolean isNumberic(String str) {
+  public boolean isNumeric(String str) {
     try {
       Double.parseDouble(str);
     } catch (NumberFormatException e) {

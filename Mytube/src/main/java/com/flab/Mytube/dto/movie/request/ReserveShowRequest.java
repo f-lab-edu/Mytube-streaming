@@ -17,7 +17,7 @@ public class ReserveShowRequest {
   private String title;
   private String contents;
   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-  LocalDateTime reservedTime;
+  private LocalDateTime reservedTime;
 
   @Builder
   public ReserveShowRequest(long chanelId, long movieId, String title, String contents,
