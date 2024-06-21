@@ -11,29 +11,31 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class ReserveShowRequest {
-    private long chanelId;
-    private long movieId;
-    private String title;
-    private String contents;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    LocalDateTime reservedTime;
 
-    @Builder
-    public ReserveShowRequest(long chanelId, long movieId, String title, String contents, LocalDateTime dateTime){
-        this.chanelId = chanelId;
-        this.movieId=movieId;
-        this.title=title;
-        this.contents=contents;
-        this.reservedTime =dateTime;
-    }
+  private long chanelId;
+  private long movieId;
+  private String title;
+  private String contents;
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+  LocalDateTime reservedTime;
 
-    public LiveStreamingDTO makeReservation(){
-        return LiveStreamingDTO.builder()
-                .chanelId(chanelId)
-                .movieId(movieId)
-                .title(title)
-                .contents(contents)
-                .reservedTime(reservedTime)
-                .build();
-    }
+  @Builder
+  public ReserveShowRequest(long chanelId, long movieId, String title, String contents,
+      LocalDateTime dateTime) {
+    this.chanelId = chanelId;
+    this.movieId = movieId;
+    this.title = title;
+    this.contents = contents;
+    this.reservedTime = dateTime;
+  }
+
+  public LiveStreamingDTO makeReservation() {
+    return LiveStreamingDTO.builder()
+        .chanelId(chanelId)
+        .movieId(movieId)
+        .title(title)
+        .contents(contents)
+        .reservedTime(reservedTime)
+        .build();
+  }
 }

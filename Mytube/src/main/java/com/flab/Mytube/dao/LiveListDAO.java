@@ -9,13 +9,14 @@ import java.util.List;
 
 @Repository
 public class LiveListDAO implements LiveStreamingDAO {
-    @Inject
-    private SqlSession sql;
 
-    private static String namespace="com.flab.Mytube.mapper.ReadMapper";
+  @Inject
+  private SqlSession sql;
 
-    @Override
-    public List<LiveStreamingVO> list() throws Exception{
-        return sql.selectList(namespace+".list");
-    }
+  private static String namespace = "com.flab.Mytube.mapper.ReadMapper";
+
+  @Override
+  public List<LiveStreamingVO> list() throws Exception {
+    return sql.selectList(namespace + ".list");
+  }
 }

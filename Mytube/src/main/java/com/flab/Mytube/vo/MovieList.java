@@ -9,13 +9,14 @@ import java.util.List;
 
 @Repository
 public class MovieList implements MovieListDAO {
-    @Inject
-    private SqlSession sql;
-    private static String namespace="com.flab.Mytube.mapper.PostMapper";
+
+  @Inject
+  private SqlSession sql;
+  private static String namespace = "com.flab.Mytube.mapper.PostMapper";
 
 
-    @Override
-    public List<MovieVO> list() throws Exception{
-        return sql.selectList("postMapper.list");
-    }
+  @Override
+  public List<MovieVO> list() throws Exception {
+    return sql.selectList("postMapper.list");
+  }
 }

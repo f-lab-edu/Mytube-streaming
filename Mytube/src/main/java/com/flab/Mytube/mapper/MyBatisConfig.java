@@ -15,31 +15,32 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-@MapperScan(value="com.flab.Mytube.mapper", annotationClass = Mapper.class)
+@MapperScan(value = "com.flab.Mytube.mapper", annotationClass = Mapper.class)
 public class MyBatisConfig {
-    @Autowired
-    private DataSource dataSource;
 
-    @Bean
-    public SqlSessionFactory sqlSessionFactory() throws Exception {
-        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
-        factoryBean.setDataSource(dataSource);
-        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+  @Autowired
+  private DataSource dataSource;
 
-        factoryBean.setMapperLocations(resolver.getResources("classpath:mybatis/mapper/*.xml"));
-        factoryBean.setTypeAliasesPackage("vo.User");
+  @Bean
+  public SqlSessionFactory sqlSessionFactory() throws Exception {
+    SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+    factoryBean.setDataSource(dataSource);
+    PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
-        factoryBean.setConfigLocation(resolver.getResource("classpath:mybatis/sqlmap_config.xml"));
-        return factoryBean.getObject();
-    }
+    factoryBean.setMapperLocations(resolver.getResources("classpath:mybatis/mapper/*.xml"));
+    factoryBean.setTypeAliasesPackage("vo.User");
 
-    @Bean
-    public DataSourceTransactionManager transactionManager(){
-        return new DataSourceTransactionManager(dataSource);
-    }
+    factoryBean.setConfigLocation(resolver.getResource("classpath:mybatis/sqlmap_config.xml"));
+    return factoryBean.getObject();
+  }
 
-    @Bean
-    public SqlSessionTemplate sqlSession() throws Exception {
-        return new SqlSessionTemplate(sqlSessionFactory(), ExecutorType.BATCH);
-    }
+  @Bean
+  public DataSourceTransactionManager transactionManager() {
+    return new DataSourceTransactionManager(dataSource);
+  }
+
+  @Bean
+  public SqlSessionTemplate sqlSession() throws Exception {
+    return new SqlSessionTemplate(sqlSessionFactory(), ExecutorType.BATCH);
+  }
 }
