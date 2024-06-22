@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import com.flab.Mytube.constants.Status;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
@@ -28,7 +29,7 @@ public class LiveStatus implements Serializable {
 
   @Id
   private long liveId;
-  private String status;
+  private Status status;
   private String m3u8Url; // m3u8 파일의 URL
   private long chanelId;
 
@@ -70,31 +71,31 @@ public class LiveStatus implements Serializable {
   }
 
   public void startLive() {
-    this.status = "LIVE_ON";
+    this.status = Status.LIVE_ON;
     this.lastUpdated = LocalDateTime.now();
   }
 
   public void stopLive() {
-    this.status = "LIVE_STOP";
+    this.status = Status.LIVE_PAUSE;
     this.lastUpdated = LocalDateTime.now();
   }
 
   public void endLive() {
-    this.status = "LIVE_STOP";
+    this.status = Status.LIVE_END;
     this.lastUpdated = LocalDateTime.now();
   }
 
   public void reservedLive() {
-    this.status = "LIVE_RESERVED";
+    this.status = Status.LIVE_RESERVED;
     this.lastUpdated = LocalDateTime.now();
   }
 
-  public synchronized void updateCurrent(LocalTime time) {
+  public void updateCurrent(LocalTime time) {
     this.currentTime = time;
     this.lastUpdated = LocalDateTime.now();
   }
 
-  public synchronized String getStatus() {
+  public Status getStatus() {
     return this.status;
   }
 }
