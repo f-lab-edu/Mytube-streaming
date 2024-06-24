@@ -23,7 +23,7 @@ public class TimeDTO {
     createdAt = LocalDateTime.now();
   }
 
-  public void setDeletedAtToNow() {
+  public void delete(){
     deletedAt = LocalDateTime.now();
   }
 }

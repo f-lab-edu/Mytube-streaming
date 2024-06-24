@@ -8,6 +8,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
+// TODO: 이 파일도 삭제하자 ㅋㅋ
+
 @Getter
 @NoArgsConstructor
 public class ReserveShowRequest {
