@@ -2,7 +2,6 @@ package com.flab.Mytube.dto.movie.request;
 
 import lombok.*;
 
-// TODO: 삭제
 @Getter
 @RequiredArgsConstructor
 @AllArgsConstructor
