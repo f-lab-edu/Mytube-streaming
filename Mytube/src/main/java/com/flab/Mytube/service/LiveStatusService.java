@@ -1,9 +1,12 @@
 package com.flab.Mytube.service;
 
+import com.flab.Mytube.error.exceptions.ResourceNotFoundException;
 import com.flab.Mytube.utils.Movies;
 import com.flab.Mytube.dto.movie.request.WatchLiveRequest;
 import com.flab.Mytube.dto.streaming.LiveStatus;
+import com.flab.Mytube.utils.Validations;
 import jakarta.annotation.Resource;
+import jakarta.validation.Validation;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +16,7 @@ import java.time.LocalTime;
 
 @Service
 public class LiveStatusService {
+  private static Validations validation;
 
   @Resource(name = "statusTemplate")
   private HashOperations<String, String, LiveStatus> hashOperations;
@@ -46,7 +50,7 @@ public class LiveStatusService {
       hashOperations.put(key, String.valueOf(liveId), live);
       return;
     }
-    System.err.println(" [ ERROR 0619T1439 ] 잘못된 요청입니다. ");
+    throw new ResourceNotFoundException("요청한 라이브 정보가 존재하지 않습니다.");
   }
 
   // 라이브 일시 정지
@@ -58,7 +62,7 @@ public class LiveStatusService {
       hashOperations.put(key, String.valueOf(liveId), live);
       return;
     }
-    System.err.println(" [ ERROR 0618T0648 ] 잘못된 요청입니다. ");
+    throw new ResourceNotFoundException("요청한 라이브 정보가 존재하지 않습니다.");
   }
 
   // 라이브 종료
@@ -72,7 +76,7 @@ public class LiveStatusService {
       hashOperations.put(key, String.valueOf(liveId), live);
       return;
     }
-    System.err.println(" [ ERROR 0619T1436 ] 잘못된 요청입니다. ");
+    throw new ResourceNotFoundException("요청한 라이브 정보가 존재하지 않습니다.");
   }
 
   // 라이브 중간에 참여 요청 : 레디스에서 진행도 데이터 불러오기
@@ -85,26 +89,13 @@ public class LiveStatusService {
 //        }
     LiveStatus stored = hashOperations.get(key, String.valueOf(id));
     //  liveId 로 id 가 건너올 경우 -> return m3u8;
-    if (isNumeric(request.getChanelId()) == true) {
+    if (validation.isNumeric(request.getChanelId()) == true) {
       // stored 에서 이어보게 될 구간 확인
       System.out.println(stored.getTsIndex());
       return movie.getFfmpegBuilder(stored.getM3u8Url(), stored.getTsIndex());
     }
     return new File(stored.getBasePath(request.getChanelId()));
   }
-
-  public boolean isNumeric(String str) {
-    try {
-      Double.parseDouble(str);
-    } catch (NumberFormatException e) {
-      return false;
-    } catch (Exception e) {
-      System.err.println("[ Error 0620T1010 ] 숫자 검증 실패");
-      e.printStackTrace();
-    }
-    return true;
-  }
-
 
   // 라이브 상태 업데이트
   public void currentLive(long liveId, LocalTime time) {
