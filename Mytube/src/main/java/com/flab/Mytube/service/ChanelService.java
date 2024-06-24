@@ -2,7 +2,7 @@ package com.flab.Mytube.service;
 
 import com.flab.Mytube.dao.LivePageDAO;
 import com.flab.Mytube.error.exceptions.ResourceNotFoundException;
-import com.flab.Mytube.mapper.ReadMapper;
+import com.flab.Mytube.mapper_v1.ReadMapper;
 import com.flab.Mytube.vo.LiveStreamingVO;
 import com.flab.Mytube.vo.MovieVO;
 import lombok.RequiredArgsConstructor;

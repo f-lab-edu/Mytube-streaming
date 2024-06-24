@@ -1,4 +1,4 @@
-package com.flab.Mytube.mapper;
+package com.flab.Mytube.mapper_v1;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.ExecutorType;

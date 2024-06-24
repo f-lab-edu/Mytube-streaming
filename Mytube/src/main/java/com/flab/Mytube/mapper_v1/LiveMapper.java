@@ -1,6 +1,5 @@
-package com.flab.Mytube.mapper;
+package com.flab.Mytube.mapper_v1;
 
-import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
 import com.flab.Mytube.dto.movie.request.ThumbsUpRequest;
 import com.flab.Mytube.dto.streaming.LiveStreamingDTO;
 import com.flab.Mytube.vo.LiveStreamingVO;
