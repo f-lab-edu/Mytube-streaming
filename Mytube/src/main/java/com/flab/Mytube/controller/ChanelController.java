@@ -27,9 +27,9 @@ public class ChanelController {
 
   //현재 채널 지난 라이브 다시보기
   @GetMapping("/{chanelId}/lives/{liveId}/replay")
-  public void replayLive(@PathVariable("chanelId") long chanelId,
+  public MovieVO replayLive(@PathVariable("chanelId") long chanelId,
       @PathVariable("liveId") long liveId) {
-    service.replay(liveId);
+    return service.replay(liveId, chanelId);
   }
 
   @GetMapping("/{chanelId}/movies")
