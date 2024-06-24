@@ -52,6 +52,7 @@ public class LiveStatus implements Serializable {
   }
 
 
+  // TODO: 범위 밖의 데이터 index 를 반환하는 경우(error)
   public int getTsIndex() {
     // m3u8 파일을 파싱하여 ts 세그먼트 URL을 가져오는 로직을 구현
     int seconds =
@@ -81,11 +82,6 @@ public class LiveStatus implements Serializable {
 
   public void endLive() {
     this.status = Status.LIVE_END;
-    this.lastUpdated = LocalDateTime.now();
-  }
-
-  public void reservedLive() {
-    this.status = Status.LIVE_RESERVED;
     this.lastUpdated = LocalDateTime.now();
   }
 

@@ -2,7 +2,6 @@ package com.flab.Mytube.controller;
 
 import com.flab.Mytube.domain.LiveStreaming;
 import com.flab.Mytube.dto.movie.request.ChatJoinRequest;
-import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
 import com.flab.Mytube.dto.movie.request.WatchLiveRequest;
 import com.flab.Mytube.dto.movie.response.StartingShowResponse;
 import com.flab.Mytube.service.LiveService;
