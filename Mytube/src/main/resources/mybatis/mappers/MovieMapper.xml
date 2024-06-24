@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.flab.Mytube.mapper.MovieMapper">
+<mapper namespace="com.flab.Mytube.mappers.MovieMapper">
   <resultMap type="com.flab.Mytube.domain.Movie" id="Movie">
     <id column="id" property="id"/>
     <result column="userId" property="chanelId"/>

@@ -12,6 +12,6 @@ public class UserDao {
   }
 
   public User getUser(String userId) {
-    return sqlSession.selectOne("org.mybatis.spring.sample.mapper.UserMapper.getUser", userId);
+    return sqlSession.selectOne("org.mybatis.spring.sample.mappers.UserMapper.getUser", userId);
   }
 }

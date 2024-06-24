@@ -13,7 +13,7 @@ public class LiveListDAO implements LiveStreamingDAO {
   @Inject
   private SqlSession sql;
 
-  private static String namespace = "com.flab.Mytube.mapper.ReadMapper";
+  private static String namespace = "com.flab.Mytube.mappers.ReadMapper";
 
   @Override
   public List<LiveStreamingVO> list() throws Exception {

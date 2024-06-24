@@ -1,5 +1,6 @@
 package com.flab.Mytube.controller;
 
+import com.flab.Mytube.domain.LiveStreaming;
 import com.flab.Mytube.dto.movie.request.ChatJoinRequest;
 import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
 import com.flab.Mytube.dto.movie.request.WatchLiveRequest;
@@ -28,8 +29,8 @@ public class LiveController {
 
   // 라이브 예약하기 요청
   @PostMapping("")
-  public void reserve(@RequestBody ReserveShowRequest request) {
-    liveService.reserveShow(request);
+  public void reserve(@RequestBody LiveStreaming request) {
+    liveService.saveReservation(request);
   }
 
   // 라이브 시작 요청

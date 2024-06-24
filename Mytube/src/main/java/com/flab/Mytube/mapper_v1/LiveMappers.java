@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Mapper
-public interface LiveMapper {
+public interface LiveMappers {
 
   long getPreferCount(@Param("request") ThumbsUpRequest request);
 

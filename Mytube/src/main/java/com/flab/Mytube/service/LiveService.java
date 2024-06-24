@@ -1,11 +1,11 @@
 package com.flab.Mytube.service;
 
+import com.flab.Mytube.domain.LiveStreaming;
+import com.flab.Mytube.domain.Movie;
 import com.flab.Mytube.dto.movie.request.ChatJoinRequest;
-import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
 import com.flab.Mytube.dto.movie.response.StartingShowResponse;
-import com.flab.Mytube.mapper_v1.LiveMapper;
-import com.flab.Mytube.vo.LiveStreamingVO;
-import com.flab.Mytube.vo.MovieVO;
+import com.flab.Mytube.mappers.LiveStreamingMapper;
+import com.flab.Mytube.mappers.MovieMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,18 +14,20 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class LiveService {
 
-  private final LiveMapper liveMapper;
+  private final LiveStreamingMapper liveMapper;
+  private final MovieMapper movieeMapper;
 
   @Transactional // 방송 예약하기
-  public void reserveShow(ReserveShowRequest request) {
-    liveMapper.reserveShow(request.makeReservation());
+  public void saveReservation(LiveStreaming liveStreaming) {
+    liveMapper.save(liveStreaming);
   }
 
   @Transactional // 라이브 시작
   public StartingShowResponse startShow(long liveId) {
-    LiveStreamingVO result = liveMapper.findByStartingLiveId(liveId);
+    LiveStreaming result = liveMapper.findByLiveId(liveId);
     long movieId = result.getMovieId();
-    MovieVO movie = liveMapper.getMovieUri(movieId);
+    Movie movie = movieeMapper.findByMovieId(movieId);
+    // TODO: 여기 맞는 responseDTO 는 따로 있어야 할 듯?
     StartingShowResponse response = StartingShowResponse.builder()
         .id(result.getId())
         .url(movie.getUrl())
@@ -43,6 +45,7 @@ public class LiveService {
 
   // TODO: 라이브 삭제
   public void delete(long id) {
+    liveMapper.delete(id);
   }
 
   // TODO: 채팅

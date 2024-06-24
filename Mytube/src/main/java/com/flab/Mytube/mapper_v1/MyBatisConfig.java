@@ -15,7 +15,8 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-@MapperScan(value = "com.flab.Mytube.mapper", annotationClass = Mapper.class)
+@MapperScan(value = "com.flab.Mytube.mappers", annotationClass = Mapper.class)
+@MapperScan(value = "com.flab.Mytube.mapper_v1", annotationClass = Mapper.class)
 public class MyBatisConfig {
 
   @Autowired
@@ -27,8 +28,9 @@ public class MyBatisConfig {
     factoryBean.setDataSource(dataSource);
     PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
-    factoryBean.setMapperLocations(resolver.getResources("classpath:mybatis/mapper/*.xml"));
+    factoryBean.setMapperLocations(resolver.getResources("classpath:mybatis/mappers/*.xml"));
     factoryBean.setTypeAliasesPackage("vo.User");
+    factoryBean.setMapperLocations(resolver.getResources("classpath:mybatis/mapper_v1/*.xml"));
 
     factoryBean.setConfigLocation(resolver.getResource("classpath:mybatis/sqlmap_config.xml"));
     return factoryBean.getObject();
