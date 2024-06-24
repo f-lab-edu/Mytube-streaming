@@ -24,7 +24,7 @@ public class LiveService {
 
   @Transactional // 라이브 시작
   public StartingShowResponse startShow(long liveId) {
-    LiveStreaming result = liveMapper.getLiveId(liveId);
+    LiveStreaming result = liveMapper.findByLiveId(liveId);
     long movieId = result.getMovieId();
     Movie movie = movieeMapper.findByMovieId(movieId);
     // TODO: 여기 맞는 responseDTO 는 따로 있어야 할 듯?

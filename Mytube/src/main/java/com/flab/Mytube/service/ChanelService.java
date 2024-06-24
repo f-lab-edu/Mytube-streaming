@@ -18,6 +18,8 @@ public class ChanelService {
 
   @Autowired
   private final ReadMapper readMapper;
+  @Autowired
+  private final ReadMapper readMapper_v1;
 
 
   public void delete(long liveId) {

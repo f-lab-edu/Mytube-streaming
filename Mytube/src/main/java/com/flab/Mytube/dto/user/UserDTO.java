@@ -13,9 +13,7 @@ import java.time.LocalDateTime;
 public class UserDTO extends TimeDTO {
 
   private long id;
-  @NonNull
   private String password;
-  @NonNull
   private String nickname;
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private LocalDateTime updatedAt;

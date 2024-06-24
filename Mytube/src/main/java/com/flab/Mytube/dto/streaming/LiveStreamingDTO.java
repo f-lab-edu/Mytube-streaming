@@ -17,11 +17,8 @@ import java.time.LocalDateTime;
 public class LiveStreamingDTO extends TimeDTO {
 
   private long id;
-  @NonNull
   private long chanelId; // 라이브 방송 호스트 id
-  @NonNull
   private long movieId; //방송하는 영상 Id
-  @NonNull
   private String title; //방송 제목
 
   private String contents; // 방송 내용

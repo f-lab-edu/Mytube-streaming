@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Mapper
-public interface UserMapper {
+public interface UserMappers {
 
   long checkPrefer(@Param("request") ThumbsUpRequest request);
 

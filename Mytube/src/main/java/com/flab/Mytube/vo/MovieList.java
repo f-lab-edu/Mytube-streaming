@@ -12,7 +12,7 @@ public class MovieList implements MovieListDAO {
 
   @Inject
   private SqlSession sql;
-  private static String namespace = "com.flab.Mytube.mapper.PostMapper";
+  private static String namespace = "com.flab.Mytube.mappers.PostMapper";
 
 
   @Override
