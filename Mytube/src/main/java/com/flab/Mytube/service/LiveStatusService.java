@@ -1,6 +1,6 @@
 package com.flab.Mytube.service;
 
-import com.flab.Mytube.Utils.Movies;
+import com.flab.Mytube.utils.Movies;
 import com.flab.Mytube.dto.movie.request.WatchLiveRequest;
 import com.flab.Mytube.dto.streaming.LiveStatus;
 import jakarta.annotation.Resource;

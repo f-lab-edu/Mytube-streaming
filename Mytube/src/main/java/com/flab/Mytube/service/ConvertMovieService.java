@@ -3,7 +3,7 @@ package com.flab.Mytube.service;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.mapper.PostMapper;
-import com.flab.Mytube.Utils.Movies;
+import com.flab.Mytube.utils.Movies;
 import com.flab.Mytube.vo.MovieVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

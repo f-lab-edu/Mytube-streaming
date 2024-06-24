@@ -29,11 +29,11 @@
         SELECT id, movieId, title, contents, userCount, thumbsUp, reservedAt, updatedAt, deletedAt
         FROM liveStreaming WHERE id=#{liveId} and deletedAt is null;
     </select>
-<!--    <select id="getMovie" resultMap="movie">-->
-<!--        SELECT id, userId, subject, url, createdAt, deletedAt-->
-<!--        FROM movie-->
-<!--        WHERE id = #{movieId} ;-->
-<!--    </select>-->
+    <select id="getMovieUrl" resultMap="movie">
+        SELECT id, userId, subject, url, createdAt, deletedAt
+        FROM movie
+        WHERE id = #{movieId} ;
+    </select>
     <select id="getLiveList" resultMap="liveStreaming">
         SELECT id, userId, title, contents, userCount, thumbsUp, reservedAt, updatedAt, deletedAt
         FROM liveStreaming
