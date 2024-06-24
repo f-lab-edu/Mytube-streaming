@@ -3,6 +3,7 @@ package com.flab.Mytube.service;
 import com.flab.Mytube.domain.Movie;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
+import com.flab.Mytube.error.exceptions.NoDataSubmitException;
 import com.flab.Mytube.mappers.MovieMapper;
 import com.flab.Mytube.utils.Movies;
 import com.flab.Mytube.utils.Validations;
@@ -48,8 +49,7 @@ public class ConvertMovieService {
   @Transactional
   public void uploadMovie(FileUploadRequest request) {
     if (request.isEmptyFile()) {
-      System.err.println("파일이 입력되지 않았습니다.");
-      return;
+      throw new NoDataSubmitException("파일을 제출하지 않았습니다.");
     }
     // 파일 경로 지정
     String fileName = request.getFile().getOriginalFilename();

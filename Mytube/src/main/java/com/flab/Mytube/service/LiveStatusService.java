@@ -84,7 +84,7 @@ public class LiveStatusService {
     int id = request.getLiveId();
     String key = String.join("LIVE", String.valueOf(id));
 //            if (!hashOperations.hasKey(key, String.valueOf(id))) {
-//            System.err.println(" [ ERROR 0618T0719 ] 해당 라이브는 존재하지 않습니다. ");
+//    throw new ResourceNotFoundException("해당 라이브는 존재하지 않습니다.");
 //            return null;
 //        }
     LiveStatus stored = hashOperations.get(key, String.valueOf(id));
@@ -101,8 +101,7 @@ public class LiveStatusService {
   public void currentLive(long liveId, LocalTime time) {
     String key = String.join("LIVE", String.valueOf(liveId));
     if (contains(key, liveId) == false) {
-      System.err.println(" [ ERROR 0618T0719 ] 해당 라이브는 존재하지 않습니다. ");
-      return;
+      throw new ResourceNotFoundException("해당 라이브는 존재하지 않습니다.");
     }
     LiveStatus stored = hashOperations.get(key, String.valueOf(liveId));
     stored.updateCurrent(time);
