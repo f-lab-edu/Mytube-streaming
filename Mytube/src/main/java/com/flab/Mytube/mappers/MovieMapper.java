@@ -3,7 +3,9 @@ package com.flab.Mytube.mappers;
 import com.flab.Mytube.domain.Movie;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Component;
 
+@Component
 @Mapper
 public interface MovieMapper {
   public void save(Movie Movie);

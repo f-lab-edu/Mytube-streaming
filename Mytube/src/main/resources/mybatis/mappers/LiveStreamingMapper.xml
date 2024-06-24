@@ -16,10 +16,10 @@
     <result column="deletedAt" property="deletedAt"/>
   </resultMap>
 
-  <insert id="save" useGeneratedKeys="true" keyProperty="request.id"
+  <insert id="save" useGeneratedKeys="true" keyProperty="id"
     parameterType="com.flab.Mytube.domain.LiveStreaming">
     insert into liveStreaming (userId, movieId, title, contents, reservedAt)
-    values (#{chanelId},#{movieId}, #{title}, #{contents}, #{reservedTime})
+    values (#{request.chanelId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedTime})
   </insert>
 
   <update id="delete" parameterType="long" keyProperty="steramingId">
@@ -32,7 +32,8 @@
   </select>
 
   <select id="findByChanelId" parameterType="long" resultMap="LiveStreaming">
-    select * from LiveStreaming where userId = #{chanelId}
+    select * from liveStreaming
+    WHERE userId = #{chanelId} and deletedAt is NULL;
   </select>
 
 

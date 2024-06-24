@@ -9,11 +9,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Getter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,7 +32,7 @@ public class LiveStreaming extends TimeDTO {
   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
   @JsonSerialize(using = LocalDateSerializer.class)
   @JsonDeserialize(using = LocalDateDeserializer.class)
-  private LocalDate reservedTime; //방송 예약 시간
+  private LocalDate reservedAt; //방송 예약 시간
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private LocalDateTime updatedAt;
