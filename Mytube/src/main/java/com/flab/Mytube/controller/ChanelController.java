@@ -21,7 +21,7 @@ public class ChanelController {
   //    현재 채널 라이브 및 동영상 목록 조회
   //    TODO: 조회하는 코드에서 deletedAt에 값이 있다면 불러오지 못하게 처리할 것
   @GetMapping("/{chanelId}")
-  public List<LivePageDAO> getLiveList(@PathVariable("chanelId") long chanelId) throws Exception {
+  public List<LivePageDAO> getLiveList(@PathVariable("chanelId") long chanelId) {
     return service.getLiveList(chanelId);
   }
 
