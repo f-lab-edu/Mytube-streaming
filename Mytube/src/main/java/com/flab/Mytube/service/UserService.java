@@ -18,7 +18,7 @@ public class UserService {
   // 좋아요 서비스
   public void prefer(ThumbsUpRequest request) {
     if (userMapper.checkPrefer(request) > 0) { // 좋아요 테이블이 1개 이상 존재
-      request.minusCount();
+      request.minusCount(); // TODO 매퍼에서 연산할 수 있도록
       userMapper.updatePrefer(request);
       userMapper.deletePrefer(request);
       return;
