@@ -1,4 +1,4 @@
-package com.flab.Mytube.mapper_v1;
+package com.flab.Mytube.config;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.ExecutorType;
@@ -16,7 +16,6 @@ import javax.sql.DataSource;
 
 @Configuration
 @MapperScan(value = "com.flab.Mytube.mappers", annotationClass = Mapper.class)
-@MapperScan(value = "com.flab.Mytube.mapper_v1", annotationClass = Mapper.class)
 public class MyBatisConfig {
 
   @Autowired
@@ -30,7 +29,6 @@ public class MyBatisConfig {
 
     factoryBean.setMapperLocations(resolver.getResources("classpath:mybatis/mappers/*.xml"));
     factoryBean.setTypeAliasesPackage("vo.User");
-    factoryBean.setMapperLocations(resolver.getResources("classpath:mybatis/mapper_v1/*.xml"));
 
     factoryBean.setConfigLocation(resolver.getResource("classpath:mybatis/sqlmap_config.xml"));
     return factoryBean.getObject();

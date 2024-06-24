@@ -10,9 +10,9 @@ public class FileUploadRequest {
 
   private long id;
   private MultipartFile file;
-  private String url;
   private long chanelId;
   private String subject;
+  private String url;
 
   @Builder
   public FileUploadRequest(MultipartFile file, long chanelId) {

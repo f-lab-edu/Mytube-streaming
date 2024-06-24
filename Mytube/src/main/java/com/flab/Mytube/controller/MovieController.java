@@ -1,8 +1,10 @@
 package com.flab.Mytube.controller;
 
+import com.flab.Mytube.domain.Movie;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.service.ConvertMovieService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
@@ -56,9 +58,13 @@ public class MovieController {
     return null;
   }
 
-  //    TODO: 동영상 삭제
   @PatchMapping("/{movieId}")
-  public void deleteMovie(@PathVariable("{movieId}") long movieId) {
+  public void deleteMovie(@PathVariable("movieId") long movieId) {
+    convertMovieService.delete(movieId);
+  }
 
+  @GetMapping("/chanels/{chanelId}")
+  public List<Movie> MovieList(@PathVariable("chanelId") long chanelId){
+    return convertMovieService.getLiveLists(chanelId);
   }
 }

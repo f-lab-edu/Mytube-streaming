@@ -9,4 +9,26 @@
     <result column="createdAt" property="createdAt"/>
     <result column="deletedAt" property="deletedAt"/>
   </resultMap>
+
+  <insert id = "save" useGeneratedKeys="true" keyProperty="id"
+    parameterType="com.flab.Mytube.dto.movie.request.FileUploadRequest">
+    insert into movie(userId, subject, url)
+    values(#{request.chanelId}, #{request.subject}, #{request.url})
+  </insert>
+
+  <update id="delete" parameterType="long" keyProperty="movieId">
+    update movie
+    set deletedAt = SYSDATE()
+    where id = #{movieId}
+  </update>
+
+  <select id="findByMovieId" resultMap="Movie" parameterType="long">
+    select * from Movie
+    where id = #{movieId};
+  </select>
+
+  <select id="findByChanelId" parameterType="long" resultMap="Movie">
+    select * from Movie
+    where userId = #{chanelId};
+  </select>
 </mapper>

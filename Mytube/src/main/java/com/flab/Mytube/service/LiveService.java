@@ -43,7 +43,6 @@ public class LiveService {
     System.out.println(id + " 번 라이브가 종료되었습니다.");
   }
 
-  // TODO: 라이브 삭제
   public void delete(long id) {
     liveMapper.delete(id);
   }

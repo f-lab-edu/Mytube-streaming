@@ -57,7 +57,6 @@ public class LiveStatus implements Serializable {
     int seconds =
         currentTime.getHour() * 60 * 60 + currentTime.getMinute() * 60 + currentTime.getSecond();
     int startIndex = seconds / 10;
-
     return startIndex;
   }
 

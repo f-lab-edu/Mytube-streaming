@@ -28,10 +28,10 @@ public class LiveStatusService {
   // 라이브 시작
   public void startLive(long liveId, String url) {
     String key = String.join("LIVE", String.valueOf(liveId));
-        if (contains(key, liveId)) {
-            System.err.println(" [ ERROR 0618T0641 ] 이미 시작한 라이브 입니다. ");
-            return;
-        }
+//        if (contains(key, liveId)) {
+//            System.err.println(" [ ERROR 0618T0641 ] 이미 시작한 라이브 입니다. ");
+//            return;
+//        }
     // 새로운 객체 캐시에 작성
     LiveStatus status = new LiveStatus(liveId, url);
     hashOperations.put(key, String.valueOf(liveId), status);
@@ -68,7 +68,6 @@ public class LiveStatusService {
       LiveStatus live = hashOperations.get(key, String.valueOf(liveId));
       live.endLive();
 
-      System.out.println("service code >>> " + live.getStatus());
       // TODO : 관련 캐시 삭제하기
       hashOperations.put(key, String.valueOf(liveId), live);
       return;
@@ -88,6 +87,7 @@ public class LiveStatusService {
     //  liveId 로 id 가 건너올 경우 -> return m3u8;
     if (isNumeric(request.getChanelId()) == true) {
       // stored 에서 이어보게 될 구간 확인
+      System.out.println(stored.getTsIndex());
       return movie.getFfmpegBuilder(stored.getM3u8Url(), stored.getTsIndex());
     }
     return new File(stored.getBasePath(request.getChanelId()));
