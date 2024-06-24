@@ -46,7 +46,6 @@ public class ChanelService {
       throw new ResourceNotFoundException("요청하신 라이브를 찾을 수 없습니다.");
     }
     return movieMapper.findByMovieId(movieId);
-//    return null;
   }
 
   //    현재 채널 라이브 및 동영상 목록 조회

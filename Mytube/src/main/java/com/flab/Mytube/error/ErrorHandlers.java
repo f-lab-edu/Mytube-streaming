@@ -1,7 +1,9 @@
 package com.flab.Mytube.error;
 
+import com.flab.Mytube.error.exceptions.DuplicatedPathException;
 import com.flab.Mytube.error.exceptions.ResourceNotFoundException;
 import com.flab.Mytube.error.exceptions.UserNotFoundException;
+import javax.ws.rs.core.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,5 +20,10 @@ public class ErrorHandlers extends RuntimeException{
   @ExceptionHandler(UserNotFoundException.class)
   public ResponseEntity handleUserNotFoundException(UserNotFoundException err){
     return ErrorMessage.toResponseEntity(HttpStatus.NOT_FOUND, err);
+  }
+
+  @ExceptionHandler(DuplicatedPathException.class)
+  public ResponseEntity handleDuplicatedPath(DuplicatedPathException err){
+    return ErrorMessage.toResponseEntity(HttpStatus.CONFLICT, err);
   }
 }

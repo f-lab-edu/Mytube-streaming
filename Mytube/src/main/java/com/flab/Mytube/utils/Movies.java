@@ -1,6 +1,7 @@
 package com.flab.Mytube.utils;
 
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
+import com.flab.Mytube.error.exceptions.DuplicatedPathException;
 import lombok.NoArgsConstructor;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import org.springframework.stereotype.Component;
@@ -30,7 +31,7 @@ public class Movies {
       filepath = Paths.get(path);
       Files.createDirectories(filepath); // 디렉토리 생성
     } catch (FileAlreadyExistsException e) {
-      System.err.print("경로가 이미 존재합니다.");
+      throw new DuplicatedPathException("이미 업로드한 동영상 입니다.");
     } catch (IOException e) {
       e.printStackTrace();
     }

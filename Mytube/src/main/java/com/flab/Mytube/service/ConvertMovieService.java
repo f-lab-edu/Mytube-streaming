@@ -5,6 +5,7 @@ import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.mappers.MovieMapper;
 import com.flab.Mytube.utils.Movies;
+import com.flab.Mytube.utils.Validations;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ public class ConvertMovieService {
   private final FFmpeg fFmpeg;
   private final FFprobe fFprobe;
   private final Movies movie = new Movies();
+  private static Validations validation;
 
   @Value("src/main/resources/static/origin")
   private String savedPath;
@@ -103,7 +105,7 @@ public class ConvertMovieService {
     String movieId = request.getMovieId();
     // movie 의 id 가 입력된 경우
 
-    if (isNumeric(movieId)) {
+    if (validation.isNumeric(movieId)) {
       return getLiveFile(Long.valueOf(movieId));
     }
     // movie 의 .ts 파일 이름이 입력된 경우
@@ -121,18 +123,6 @@ public class ConvertMovieService {
     String filePath = movie.getUrl();
 
     return new File(filePath);
-  }
-
-  public boolean isNumeric(String str) {
-    try {
-      Double.parseDouble(str);
-    } catch (NumberFormatException e) {
-      return false;
-    } catch (Exception e) {
-      System.err.println("[ Error 0620T1010 ] 숫자 검증 실패");
-      e.printStackTrace();
-    }
-    return true;
   }
 
   public void delete(long movieId){
