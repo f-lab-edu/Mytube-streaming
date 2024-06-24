@@ -1,10 +1,8 @@
 package com.flab.Mytube.controller;
 
-import com.flab.Mytube.dao.LivePageDAO;
 import com.flab.Mytube.domain.LiveStreaming;
 import com.flab.Mytube.domain.Movie;
 import com.flab.Mytube.service.ChanelService;
-import com.flab.Mytube.vo.MovieVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +27,7 @@ public class ChanelController {
 
   //현재 채널 지난 라이브 다시보기
   @GetMapping("/lives/{liveId}/replay")
-  public MovieVO replayLive(@PathVariable("liveId") long liveId) {
+  public Movie replayLive(@PathVariable("liveId") long liveId) {
     return service.replay(liveId);
   }
 
