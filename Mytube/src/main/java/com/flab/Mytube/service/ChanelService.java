@@ -2,8 +2,10 @@ package com.flab.Mytube.service;
 
 import com.flab.Mytube.dao.LivePageDAO;
 import com.flab.Mytube.domain.LiveStreaming;
+import com.flab.Mytube.domain.Movie;
 import com.flab.Mytube.error.exceptions.ResourceNotFoundException;
 import com.flab.Mytube.mappers.LiveStreamingMapper;
+import com.flab.Mytube.mappers.MovieMapper;
 import com.flab.Mytube.vo.LiveStreamingVO;
 import com.flab.Mytube.vo.MovieVO;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,8 @@ public class ChanelService {
 
   @Autowired
   private final LiveStreamingMapper liveMapper;
+  @Autowired
+  private final MovieMapper movieMapper;
 
 
   public void delete(long liveId) {
@@ -32,7 +36,7 @@ public class ChanelService {
 
   // 지난 라이브 조회
 //  TODO: 라이브 조회할 대 liveId, chanelId 모두 사용해서 탐색하도록
-  public MovieVO replay(long liveId) {
+  public Movie replay(long liveId) {
     LiveStreaming live = liveMapper.findByLiveId(liveId);
     if (live == null) {
       throw new ResourceNotFoundException("요청하신 라이브를 찾을 수 없습니다.");
@@ -41,12 +45,11 @@ public class ChanelService {
     if (movieId == 0) {
       throw new ResourceNotFoundException("요청하신 라이브를 찾을 수 없습니다.");
     }
-//    return liveMapper.getMovieUrl(movieId);
-    return null;
+    return movieMapper.findByMovieId(movieId);
+//    return null;
   }
 
   //    현재 채널 라이브 및 동영상 목록 조회
-//    https://authorkim0921.tistory.com/7 (참고)
   public List<LiveStreaming> getLiveList(long userId) {
     List<LiveStreaming> lists = liveMapper.findByChanelId(userId);
 
