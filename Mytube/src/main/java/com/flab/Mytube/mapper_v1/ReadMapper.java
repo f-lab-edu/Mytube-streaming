@@ -1,4 +1,4 @@
-package com.flab.Mytube.mapper;
+package com.flab.Mytube.mapper_v1;
 
 import com.flab.Mytube.dao.LivePageDAO;
 import com.flab.Mytube.vo.LiveStreamingVO;

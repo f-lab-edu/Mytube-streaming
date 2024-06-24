@@ -3,7 +3,7 @@ package com.flab.Mytube.service;
 import com.flab.Mytube.dto.movie.request.ChatJoinRequest;
 import com.flab.Mytube.dto.movie.request.ReserveShowRequest;
 import com.flab.Mytube.dto.movie.response.StartingShowResponse;
-import com.flab.Mytube.mapper.LiveMapper;
+import com.flab.Mytube.mapper_v1.LiveMapper;
 import com.flab.Mytube.vo.LiveStreamingVO;
 import com.flab.Mytube.vo.MovieVO;
 import lombok.RequiredArgsConstructor;

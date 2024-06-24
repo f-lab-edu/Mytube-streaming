@@ -10,5 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class User  extends TimeDTO {
   private Long id;
-  private String name;
+  private String email;
+  private String password;
+  private String nickname;
 }
