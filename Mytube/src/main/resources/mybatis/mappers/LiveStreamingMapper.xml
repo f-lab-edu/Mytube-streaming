@@ -19,16 +19,17 @@
   <insert id="save" useGeneratedKeys="true" keyProperty="id"
     parameterType="com.flab.Mytube.domain.LiveStreaming">
     insert into liveStreaming (userId, movieId, title, contents, reservedAt)
-    values (#{request.chanelId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedTime})
+    values (#{request.chanelId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedAt})
   </insert>
 
   <update id="delete" parameterType="long" keyProperty="steramingId">
-    insert into liveStreaming(deletedAt, UpdatedAt)
-    values (SYSDATE(), SYSDATE()) where id = #{steramingId}
+    update liveStreaming
+    set deletedAt = SYSDATE(), updatedAt = SYSDATE()
+    where id = #{steramingId}
   </update>
 
   <select id="findByLiveId" parameterType="long" resultMap="LiveStreaming">
-    select * from LiveStreaming where id = #{liveId}
+    select * from liveStreaming where id = #{liveId}
   </select>
 
   <select id="findByChanelId" parameterType="long" resultMap="LiveStreaming">

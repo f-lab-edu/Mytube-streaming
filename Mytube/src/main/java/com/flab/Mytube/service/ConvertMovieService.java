@@ -1,10 +1,11 @@
 package com.flab.Mytube.service;
 
+import com.flab.Mytube.domain.Movie;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
-//import com.flab.Mytube.mapper_v1.PostMapper;
+import com.flab.Mytube.mappers.MovieMapper;
 import com.flab.Mytube.utils.Movies;
-import com.flab.Mytube.vo.MovieVO;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.FFmpeg;
@@ -27,7 +28,7 @@ import java.nio.file.Path;
 @RequiredArgsConstructor
 public class ConvertMovieService {
 
-//  private final PostMapper postMapper;
+  private final MovieMapper movieMapper;
   private final FFmpeg fFmpeg;
   private final FFprobe fFprobe;
   private final Movies movie = new Movies();
@@ -80,7 +81,7 @@ public class ConvertMovieService {
     // builder 실행
     run(builder);
     request.addPath(output.getPath(), source);
-//    postMapper.addMovie(request);
+    movieMapper.save(request);
   }
 
 
@@ -102,9 +103,9 @@ public class ConvertMovieService {
     String movieId = request.getMovieId();
     // movie 의 id 가 입력된 경우
 
-//    if (isNumeric(movieId)) {
-//      return getLiveFile(Long.valueOf(movieId));
-//    }
+    if (isNumeric(movieId)) {
+      return getLiveFile(Long.valueOf(movieId));
+    }
     // movie 의 .ts 파일 이름이 입력된 경우
     String key = movieId.split("_")[0];
     StringBuilder sb = new StringBuilder();
@@ -115,13 +116,12 @@ public class ConvertMovieService {
   }
 
   // id 를 통해 .m3m8 파일이 저장된 url 가져올 수 있도록
-//  public File getLiveFile(Long fileId) {
-//    long chanelId = fileId;
-//    MovieVO movie = postMapper.getMovieUrl(chanelId);
-//    String filePath = movie.getUrl();
+  public File getLiveFile(Long fileId) {
+    Movie movie = movieMapper.findByMovieId(fileId);
+    String filePath = movie.getUrl();
 
-//    return new File(filePath);
-//  }
+    return new File(filePath);
+  }
 
   public boolean isNumeric(String str) {
     try {
@@ -133,5 +133,13 @@ public class ConvertMovieService {
       e.printStackTrace();
     }
     return true;
+  }
+
+  public void delete(long movieId){
+    movieMapper.delete(movieId);
+  }
+
+  public List<Movie> getLiveLists(long chanelId) {
+    return movieMapper.findByChanelId(chanelId);
   }
 }

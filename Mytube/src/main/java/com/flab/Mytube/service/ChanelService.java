@@ -41,7 +41,6 @@ public class ChanelService {
     if (movieId == 0) {
       throw new ResourceNotFoundException("요청하신 라이브를 찾을 수 없습니다.");
     }
-    System.out.println(" >>> >>> >>> "+live.getTitle());
 //    return liveMapper.getMovieUrl(movieId);
     return null;
   }
