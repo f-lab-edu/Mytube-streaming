@@ -48,6 +48,7 @@ public class ChanelService {
 //    https://authorkim0921.tistory.com/7 (참고)
   public List<LivePageDAO> getLiveList(long userId) {
     List<LivePageDAO> lists = readMapper.getLiveList(userId);
+
     if(lists.size()==0){
       throw new ResourceNotFoundException(userId+"님이 진행했던 Live 를 찾을 수 없습니다.");
     }
