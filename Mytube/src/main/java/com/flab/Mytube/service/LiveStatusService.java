@@ -17,7 +17,7 @@ import java.time.LocalTime;
 
 @Service
 public class LiveStatusService {
-  private static Validations validation;
+  private static Validations validation = new Validations();
 
 
   @Resource(name = "statusTemplate")
@@ -88,6 +88,9 @@ public class LiveStatusService {
 //            return null;
 //        }
     LiveStatus stored = hashOperations.get(key, String.valueOf(id));
+    if(stored == null){
+      throw new ResourceNotFoundException("찾을 수 없는 라이브 입니다.");
+    }
     if(stored.isEndLive()){
       throw new AlreadyEndedLiveException("이미 종료된 라이브 입니다.");
     }

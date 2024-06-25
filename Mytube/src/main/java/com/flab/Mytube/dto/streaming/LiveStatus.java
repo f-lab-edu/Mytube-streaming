@@ -90,12 +90,10 @@ public class LiveStatus implements Serializable {
     this.lastUpdated = LocalDateTime.now();
   }
 
-  public Status getStatus() {
-    return this.status;
-  }
-  public boolean isEndLive(){
-    if(status.equals(Status.LIVE_END))
+  public boolean isEndLive() {
+    if (status.equals(Status.LIVE_END)) {
       return true;
+    }
     return false;
   }
 }
