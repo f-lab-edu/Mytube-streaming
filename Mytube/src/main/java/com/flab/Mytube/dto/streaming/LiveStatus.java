@@ -31,7 +31,7 @@ public class LiveStatus implements Serializable {
   private long liveId;
   private Status status;
   private String m3u8Url; // m3u8 파일의 URL
-  private long chanelId;
+  private long channelId;
 
   @JsonSerialize(using = LocalTimeSerializer.class)
   @JsonDeserialize(using = LocalTimeDeserializer.class)

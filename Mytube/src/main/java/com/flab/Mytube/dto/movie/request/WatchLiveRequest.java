@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class WatchLiveRequest {
 
-  String chanelId;// or liveSource(.ts)
+  String channelId;// or liveSource(.ts)
   int liveId;
 }

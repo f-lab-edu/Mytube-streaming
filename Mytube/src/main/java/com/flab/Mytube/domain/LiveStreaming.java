@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -21,7 +20,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class LiveStreaming extends TimeDTO {
 
   private long id;
-  private long chanelId; // 라이브 방송 호스트 id
+  private long channelId; // 라이브 방송 호스트 id
   private long movieId; //방송하는 영상 Id
   private String title; //방송 제목
 

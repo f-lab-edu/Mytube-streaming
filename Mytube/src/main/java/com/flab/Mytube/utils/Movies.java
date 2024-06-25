@@ -21,11 +21,11 @@ import java.util.stream.Stream;
 @Component
 public class Movies {
 
-  public Path createPath(FileUploadRequest request, String savedPath) {
+  public Path rootPath(FileUploadRequest request, String savedPath) {
     String fileName = request.getOriginFileName().split("\\.")[0];
 
-    // savedPath: ./origin/chanel-{id}/{subject} : 원본 저장 위치
-    String path = savedPath + "/chanel-" + request.getChanelId() + "/" + fileName;
+    // savedPath: ./origin/channel-{id}/{subject} : 원본 저장 위치
+    String path = savedPath + "/channel-" + request.getChannelId() + "/" + fileName;
     Path filepath = null;
     try {
       filepath = Paths.get(path);

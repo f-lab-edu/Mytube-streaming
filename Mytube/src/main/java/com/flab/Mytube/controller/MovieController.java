@@ -26,24 +26,24 @@ public class MovieController {
   // 동영상 업로드 요청 TODO: 올바른 파일 형식인지 확인 (ex. 사진이라면? 문서파일이라면?)
   @PostMapping("")
   public void upload(@RequestParam("movie") MultipartFile file,
-      @RequestParam("chanelId") long chanelId) {
+      @RequestParam("channelId") long channelId) {
     FileUploadRequest request = FileUploadRequest.builder()
         .file(file)
-        .chanelId(chanelId)
+        .channelId(channelId)
         .build();
     request.addSubject();
     convertMovieService.uploadMovie(request);
   }
 
   // 스트리밍 시작을 위한 동영상 정보(m3m8, ts file) 요청
-  @GetMapping("/{movieId}/chanels/{chanelId}")
+  @GetMapping("/{movieId}/channels/{channelId}")
   public ResponseEntity<InputStreamResource> getMovie(
-      @PathVariable("chanelId") int chanelId,
+      @PathVariable("channelId") int channelId,
       @PathVariable("movieId") String movieId
   ) {
     MovieDtailRequest movie = MovieDtailRequest.builder()
         .movieId(movieId)
-        .chanelId(chanelId)
+        .channel(channelId)
         .build();
     File liveSource = convertMovieService.getLiveFile(movie);
 
@@ -63,8 +63,8 @@ public class MovieController {
     convertMovieService.delete(movieId);
   }
 
-  @GetMapping("/chanels/{chanelId}")
-  public List<Movie> MovieList(@PathVariable("chanelId") long chanelId){
-    return convertMovieService.getLiveLists(chanelId);
+  @GetMapping("/channels/{channelId}")
+  public List<Movie> MovieList(@PathVariable("channelId") long channelId){
+    return convertMovieService.getLiveLists(channelId);
   }
 }
