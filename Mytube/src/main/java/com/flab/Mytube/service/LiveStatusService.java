@@ -17,7 +17,6 @@ import java.time.LocalTime;
 
 @Service
 public class LiveStatusService {
-  private static Validations validation = new Validations();
 
 
   @Resource(name = "statusTemplate")
@@ -34,10 +33,9 @@ public class LiveStatusService {
   // 라이브 시작
   public void startLive(long liveId, String url) {
     String key = String.join(Status.LIVE_ON.name(), String.valueOf(liveId));
-//        if (contains(key, liveId)) {
-//    throw new ResourceNotFoundException("이미 시작한 라이브 입니다.");
-//            return;
-//        }
+    if (contains(key, liveId)) {
+      throw new ResourceNotFoundException("이미 시작한 라이브 입니다.");
+    }
     // 새로운 객체 캐시에 작성
     LiveStatus status = new LiveStatus(liveId, url);
     hashOperations.put(key, String.valueOf(liveId), status);
@@ -83,19 +81,18 @@ public class LiveStatusService {
   public File joinLive(WatchLiveRequest request) {
     int id = request.getLiveId();
     String key = String.join("LIVE", String.valueOf(id));
-//            if (!hashOperations.hasKey(key, String.valueOf(id))) {
-//    throw new ResourceNotFoundException("해당 라이브는 존재하지 않습니다.");
-//            return null;
-//        }
+    if (!hashOperations.hasKey(key, String.valueOf(id))) {
+      throw new ResourceNotFoundException("해당 라이브는 존재하지 않습니다.");
+    }
     LiveStatus stored = hashOperations.get(key, String.valueOf(id));
-    if(stored == null){
+    if (stored == null) {
       throw new ResourceNotFoundException("찾을 수 없는 라이브 입니다.");
     }
-    if(stored.isEndLive()){
+    if (stored.isEndLive()) {
       throw new AlreadyEndedLiveException("이미 종료된 라이브 입니다.");
     }
     //  liveId 로 id 가 건너올 경우 -> return m3u8;
-    if (validation.isNumeric(request.getChannelId()) == true) {
+    if (Validations.isNumeric(request.getChannelId()) == true) {
       // stored 에서 이어보게 될 구간 확인
       System.out.println(stored.getTsIndex());
       return movie.getFfmpegBuilder(stored.getM3u8Url(), stored.getTsIndex());

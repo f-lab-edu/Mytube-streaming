@@ -32,7 +32,7 @@ public class ChannelService {
 
 
   // 지난 라이브 조회
-//  TODO: 라이브 조회할 대 liveId, channelId 모두 사용해서 탐색하도록?
+//  TODO: 라이브 조회할 때 chanelId 인증
   public Movie replay(long liveId) {
     LiveStreaming live = liveMapper.findByLiveId(liveId);
     if (live == null) {

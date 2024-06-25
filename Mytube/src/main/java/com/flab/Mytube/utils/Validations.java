@@ -1,13 +1,11 @@
 package com.flab.Mytube.utils;
 
-import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor
-@Component
+@UtilityClass
 public class Validations {
 
-  public boolean isNumeric(String str) {
+  public static boolean isNumeric(String str) {
     try {
       Double.parseDouble(str);
       return true;

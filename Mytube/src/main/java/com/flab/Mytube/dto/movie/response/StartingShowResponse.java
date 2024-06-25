@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-// TODO: 사용 범위 잘 생각해보기
+
 @ToString
 @Builder
 @Getter

@@ -34,7 +34,6 @@ public class ConvertMovieService {
   private final FFmpeg fFmpeg;
   private final FFprobe fFprobe;
   private final Movies movie = new Movies();
-  private static Validations validation;
 
   @Value("src/main/resources/static/origin")
   private String savedPath;
@@ -105,7 +104,7 @@ public class ConvertMovieService {
     String movieId = request.getMovieId();
     // movie 의 id 가 입력된 경우
 
-    if (validation.isNumeric(movieId)) {
+    if (Validations.isNumeric(movieId)) {
       return getLiveFile(Long.valueOf(movieId));
     }
     // movie 의 .ts 파일 이름이 입력된 경우

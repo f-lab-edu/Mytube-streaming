@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class ErrorHandlers extends RuntimeException {
+public class ErrorHandlers {
 
   @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity handleResourceNotFoundException(ResourceNotFoundException err) {

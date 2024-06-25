@@ -32,7 +32,6 @@ public class MovieController {
         .file(file)
         .channelId(channelId)
         .build();
-//    request.addSubject();
     convertMovieService.uploadMovie(request);
   }
 
