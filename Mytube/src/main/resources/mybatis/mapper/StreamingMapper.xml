@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flab.Mytube.mapper.LiveMapper">
+
+    <resultMap type="com.flab.Mytube.vo.MovieVO" id="movie">
+        <id column="id" property="id"/>
+        <result column="userId" property="userId"/>
+        <result column="subject" property="subject"/>
+        <result column="url" property="url"/>
+        <result column="updatedAt" property="updatedAt"/>
+        <result column="deletedAt" property="deletedAt"/>
+    </resultMap>
+
+    <select id="findByStartingLiveId" resultType="com.flab.Mytube.vo.LiveStreamingVO">
+        SELECT id, movieId, title, contents, userCount, thumbsUp
+        FROM liveStreaming
+        WHERE id = #{id}
+    </select>
+    <select id="checkPrefer" parameterType="com.flab.Mytube.dto.movie.request.ThumbsUpRequest" resultType="long">
+        select count(id) from streamingLike
+        where streamingId = #{request.liveId} and userId = #{request.userId}
+    </select>
+
+    <insert id="addPrefer" parameterType="com.flab.Mytube.dto.movie.request.ThumbsUpRequest">
+        insert into streamingLike(streamingId, userId)
+        values(#{request.liveId}, #{request.userId})
+    </insert>
+
+    <delete id="deletePrefer" parameterType="com.flab.Mytube.dto.movie.request.ThumbsUpRequest">
+        delete from streamingLike
+        where streamingId = #{request.liveId} and userId = #{request.userId}
+    </delete>
+
+    <select id="getPreferCount" parameterType="com.flab.Mytube.dto.movie.request.ThumbsUpRequest" resultType="long">
+        select count(thumbsUp) from liveStreaming
+        where id = #{request.liveId}
+    </select>
+
+    <update id="updatePrefer" parameterType="com.flab.Mytube.dto.movie.request.ThumbsUpRequest">
+        update liveStreaming set thumbsUp = #{request.count}
+        where id = #{request.liveId}
+    </update>
+
+    <select id="getMovieUri" resultMap="movie">
+        SELECT id, userId, subject, url, createdAt, deletedAt
+        FROM movie WHERE id = #{id} ;
+    </select>
+    <insert id="reserveShow" useGeneratedKeys="true" keyProperty="request.id" parameterType="com.flab.Mytube.dto.streaming.LiveStreamingDTO">
+        INSERT INTO
+        liveStreaming (userId, movieId, title, contents, reservedAt)
+        VALUES
+        (#{request.chanelId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedTime})
+    </insert>
+</mapper>
