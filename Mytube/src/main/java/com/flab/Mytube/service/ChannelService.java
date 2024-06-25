@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ChanelService {
+public class ChannelService {
 
   @Autowired
   private final LiveStreamingMapper liveMapper;
@@ -31,7 +31,7 @@ public class ChanelService {
 
 
   // 지난 라이브 조회
-//  TODO: 라이브 조회할 대 liveId, chanelId 모두 사용해서 탐색하도록
+//  TODO: 라이브 조회할 대 liveId, channelId 모두 사용해서 탐색하도록
   public Movie replay(long liveId) {
     LiveStreaming live = liveMapper.findByLiveId(liveId);
     if (live == null) {
@@ -46,7 +46,7 @@ public class ChanelService {
 
   //    현재 채널 라이브 및 동영상 목록 조회
   public List<LiveStreaming> getLiveList(long userId) {
-    List<LiveStreaming> lists = liveMapper.findByChanelId(userId);
+    List<LiveStreaming> lists = liveMapper.findByChannelId(userId);
 
     if(lists.size()==0){
       throw new ResourceNotFoundException(userId+"님이 진행했던 Live 를 찾을 수 없습니다.");
@@ -56,11 +56,11 @@ public class ChanelService {
 
   // 업로드한 동영상 목록 조회
 //  @Transactional
-//  public List<Movie> getUploadMovie(long chanelId) {
+//  public List<Movie> getUploadMovie(long channelId) {
 //    // sreamerId 와 연관된 동영상 반환해오기
-//    List<Movie> result = liveMapper.uploadMovieList(chanelId);
+//    List<Movie> result = liveMapper.uploadMovieList(channelId);
 //    if(result==null||result.isEmpty()){
-//      throw new ResourceNotFoundException(chanelId+"님이 업로드한 영상을 불러오지 못했습니다.");
+//      throw new ResourceNotFoundException(channelId+"님이 업로드한 영상을 불러오지 못했습니다.");
 //    }
 //    return result;
 //  }

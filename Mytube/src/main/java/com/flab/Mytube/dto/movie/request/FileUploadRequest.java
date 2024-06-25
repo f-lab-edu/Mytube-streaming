@@ -10,14 +10,14 @@ public class FileUploadRequest {
 
   private long id;
   private MultipartFile file;
-  private long chanelId;
+  private long channelId;
   private String subject;
   private String url;
 
   @Builder
-  public FileUploadRequest(MultipartFile file, long chanelId) {
+  public FileUploadRequest(MultipartFile file, long channelId) {
     this.file = file;
-    this.chanelId = chanelId;
+    this.channelId = channelId;
   }
 
   public void addSubject() {

@@ -13,5 +13,5 @@ public interface MovieMapper {
   public void save(@Param("request") FileUploadRequest Movie);
   public void delete(@Param("movieId") long movieId);
   public Movie findByMovieId(@Param("movieId") long movieId);
-  public List<Movie> findByChanelId(@Param("chanelId") long chanelId);
+  public List<Movie> findByChannelId(@Param("channelId") long channelId);
 }

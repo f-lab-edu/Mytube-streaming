@@ -6,7 +6,6 @@ import com.flab.Mytube.dto.movie.request.WatchLiveRequest;
 import com.flab.Mytube.dto.streaming.LiveStatus;
 import com.flab.Mytube.utils.Validations;
 import jakarta.annotation.Resource;
-import jakarta.validation.Validation;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 
@@ -89,12 +88,12 @@ public class LiveStatusService {
 //        }
     LiveStatus stored = hashOperations.get(key, String.valueOf(id));
     //  liveId 로 id 가 건너올 경우 -> return m3u8;
-    if (validation.isNumeric(request.getChanelId()) == true) {
+    if (validation.isNumeric(request.getChannelId()) == true) {
       // stored 에서 이어보게 될 구간 확인
       System.out.println(stored.getTsIndex());
       return movie.getFfmpegBuilder(stored.getM3u8Url(), stored.getTsIndex());
     }
-    return new File(stored.getBasePath(request.getChanelId()));
+    return new File(stored.getBasePath(request.getChannelId()));
   }
 
   // 라이브 상태 업데이트

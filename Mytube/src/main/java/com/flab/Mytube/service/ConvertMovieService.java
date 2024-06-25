@@ -53,7 +53,7 @@ public class ConvertMovieService {
     }
     // 파일 경로 지정
     String fileName = request.getFile().getOriginalFilename();
-    Path filepath = movie.createPath(request, savedPath);
+    Path filepath = movie.rootPath(request, savedPath);
     filepath = filepath.resolve(fileName);
 
     // 파일 작성하기(복사)
@@ -70,7 +70,7 @@ public class ConvertMovieService {
 
   private void movieBuilder(Path filepath, FileUploadRequest request) {
     String path = filepath.toString();
-    String outPath = movie.createPath(request, hlsOutputPath).toString(); // 저장 위치 생성
+    String outPath = movie.rootPath(request, hlsOutputPath).toString(); // 저장 위치 생성
     File output = movie.resultFile(outPath);
 
     String fileName = request.getOriginFileName().split("\\.")[0];
@@ -101,7 +101,7 @@ public class ConvertMovieService {
   }
 
   public File getLiveFile(MovieDtailRequest request) {
-    int chanelId = request.getChanelId();
+    int channelId = request.getChannel();
     String movieId = request.getMovieId();
     // movie 의 id 가 입력된 경우
 
@@ -111,7 +111,7 @@ public class ConvertMovieService {
     // movie 의 .ts 파일 이름이 입력된 경우
     String key = movieId.split("_")[0];
     StringBuilder sb = new StringBuilder();
-    sb.append(hlsOutputPath).append("/chanel-" + chanelId).append("/").append(key).append("/")
+    sb.append(hlsOutputPath).append("/channel-" + channelId).append("/").append(key).append("/")
         .append(movieId);
     String filePath = sb.toString();
     return new File(filePath);
@@ -129,7 +129,7 @@ public class ConvertMovieService {
     movieMapper.delete(movieId);
   }
 
-  public List<Movie> getLiveLists(long chanelId) {
-    return movieMapper.findByChanelId(chanelId);
+  public List<Movie> getLiveLists(long channelId) {
+    return movieMapper.findByChannelId(channelId);
   }
 }

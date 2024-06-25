@@ -4,7 +4,7 @@
 <mapper namespace="com.flab.Mytube.mappers.LiveStreamingMapper">
   <resultMap id="LiveStreaming" type="com.flab.Mytube.domain.LiveStreaming">
     <id column="id" property="id"/>
-    <result column="userId" property="chanelId"/>
+    <result column="userId" property="channelId"/>
     <result column="movieId" property="movieId"/>
     <result column="title" property="title"/>
     <result column="contents" property="contents"/>
@@ -19,7 +19,7 @@
   <insert id="save" useGeneratedKeys="true" keyProperty="id"
     parameterType="com.flab.Mytube.domain.LiveStreaming">
     insert into liveStreaming (userId, movieId, title, contents, reservedAt)
-    values (#{request.chanelId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedAt})
+    values (#{request.channelId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedAt})
   </insert>
 
   <update id="delete" parameterType="long" keyProperty="steramingId">
@@ -32,9 +32,9 @@
     select * from liveStreaming where id = #{liveId}
   </select>
 
-  <select id="findByChanelId" parameterType="long" resultMap="LiveStreaming">
+  <select id="findByChannelId" parameterType="long" resultMap="LiveStreaming">
     select * from liveStreaming
-    WHERE userId = #{chanelId} and deletedAt is NULL;
+    WHERE userId = #{channelId} and deletedAt is NULL;
   </select>
 
 

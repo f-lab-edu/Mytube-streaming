@@ -3,7 +3,7 @@
 <mapper namespace="com.flab.Mytube.mappers.LikeMapper">
   <resultMap id="id" type="com.flab.Mytube.domain.Like">
     <id column="id" property="id"/>
-    <result column="userId" property="chanelId"/>
+    <result column="userId" property="channelId"/>
     <result column="streamingId" property="streamingId"/>
   </resultMap>
 </mapper>

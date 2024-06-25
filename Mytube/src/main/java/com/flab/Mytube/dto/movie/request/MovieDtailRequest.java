@@ -10,7 +10,7 @@ import lombok.Data;
 @Builder
 public class MovieDtailRequest {
 
-  private int chanelId;
+  private int channel;
   private String subject;
   private String movieId;
 }
