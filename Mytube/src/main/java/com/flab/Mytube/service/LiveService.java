@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class LiveService {
 
   private final LiveStreamingMapper liveMapper;
-  private final MovieMapper movieeMapper;
+  private final MovieMapper movieMapper;
 
   @Transactional // 방송 예약하기
   public void saveReservation(LiveStreaming liveStreaming) {
@@ -26,7 +26,7 @@ public class LiveService {
   public StartingShowResponse startShow(long liveId) {
     LiveStreaming result = liveMapper.findByLiveId(liveId);
     long movieId = result.getMovieId();
-    Movie movie = movieeMapper.findByMovieId(movieId);
+    Movie movie = movieMapper.findByMovieId(movieId);
     StartingShowResponse response = StartingShowResponse.builder()
         .id(result.getId())
         .url(movie.getUrl())
