@@ -1,5 +1,7 @@
 src/main/resources/static
 application.properties
+dump.rdb
+
 
 HELP.md
 .gradle
