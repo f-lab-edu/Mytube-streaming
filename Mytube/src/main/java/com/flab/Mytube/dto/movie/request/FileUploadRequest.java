@@ -29,7 +29,7 @@ public class FileUploadRequest {
     if (extention.equals("mp4") == false && extention.equals(".mov") == false){
       throw new InvalidFileExtension("동영상 파일(.mp4, .mov)만 스트리밍이 가능합니다.");
     }
-    return StringUtils.getFilename(file.getOriginalFilename());
+    return StringUtils.getFilename(file.getOriginalFilename().split(".")[0]);
   }
 
   public boolean isEmptyFile() {

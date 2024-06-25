@@ -1,5 +1,7 @@
 package com.flab.Mytube.service;
 
+import com.flab.Mytube.constants.Status;
+import com.flab.Mytube.error.exceptions.AlreadyEndedLiveException;
 import com.flab.Mytube.error.exceptions.ResourceNotFoundException;
 import com.flab.Mytube.utils.Movies;
 import com.flab.Mytube.dto.movie.request.WatchLiveRequest;
@@ -17,6 +19,7 @@ import java.time.LocalTime;
 public class LiveStatusService {
   private static Validations validation;
 
+
   @Resource(name = "statusTemplate")
   private HashOperations<String, String, LiveStatus> hashOperations;
   static Movies movie = new Movies();
@@ -30,7 +33,7 @@ public class LiveStatusService {
 
   // 라이브 시작
   public void startLive(long liveId, String url) {
-    String key = String.join("LIVE", String.valueOf(liveId));
+    String key = String.join(Status.LIVE_ON.name(), String.valueOf(liveId));
 //        if (contains(key, liveId)) {
 //    throw new ResourceNotFoundException("이미 시작한 라이브 입니다.");
 //            return;
@@ -70,9 +73,7 @@ public class LiveStatusService {
     if (contains(key, liveId)) {
       LiveStatus live = hashOperations.get(key, String.valueOf(liveId));
       live.endLive();
-
-      // TODO : 관련 캐시 삭제하기
-      hashOperations.put(key, String.valueOf(liveId), live);
+      hashOperations.delete(key, String.valueOf(liveId));
       return;
     }
     throw new ResourceNotFoundException("요청한 라이브 정보가 존재하지 않습니다.");
@@ -87,6 +88,9 @@ public class LiveStatusService {
 //            return null;
 //        }
     LiveStatus stored = hashOperations.get(key, String.valueOf(id));
+    if(stored.isEndLive()){
+      throw new AlreadyEndedLiveException("이미 종료된 라이브 입니다.");
+    }
     //  liveId 로 id 가 건너올 경우 -> return m3u8;
     if (validation.isNumeric(request.getChannelId()) == true) {
       // stored 에서 이어보게 될 구간 확인
