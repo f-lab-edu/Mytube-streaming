@@ -32,7 +32,7 @@ public class LiveStatusService {
   public void startLive(long liveId, String url) {
     String key = String.join("LIVE", String.valueOf(liveId));
 //        if (contains(key, liveId)) {
-//            System.err.println(" [ ERROR 0618T0641 ] 이미 시작한 라이브 입니다. ");
+//    throw new ResourceNotFoundException("이미 시작한 라이브 입니다.");
 //            return;
 //        }
     // 새로운 객체 캐시에 작성

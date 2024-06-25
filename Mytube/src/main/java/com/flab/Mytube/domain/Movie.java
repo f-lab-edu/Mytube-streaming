@@ -1,15 +1,16 @@
 package com.flab.Mytube.domain;
 
 import com.flab.Mytube.dto.TimeDTO;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+//import lombok.RequiredArgsConstructor;
 
 @Getter
 @Builder
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class Movie extends TimeDTO {
 
   private long id;

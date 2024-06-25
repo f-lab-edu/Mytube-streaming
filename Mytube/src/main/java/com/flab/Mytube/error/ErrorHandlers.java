@@ -1,6 +1,7 @@
 package com.flab.Mytube.error;
 
 import com.flab.Mytube.error.exceptions.DuplicatedPathException;
+import com.flab.Mytube.error.exceptions.InvalidFileExtension;
 import com.flab.Mytube.error.exceptions.NoDataSubmitException;
 import com.flab.Mytube.error.exceptions.ResourceNotFoundException;
 import com.flab.Mytube.error.exceptions.UserNotFoundException;
@@ -31,5 +32,10 @@ public class ErrorHandlers extends RuntimeException{
   @ExceptionHandler(NoDataSubmitException.class)
   public ResponseEntity handleNoDataSubmitException(NoDataSubmitException err){
     return ErrorMessage.toResponseEntity(HttpStatus.CONFLICT, err);
+  }
+
+  @ExceptionHandler(InvalidFileExtension.class)
+  public ResponseEntity handleInvalidFileExtension(InvalidFileExtension err){
+    return ErrorMessage.toResponseEntity(HttpStatus.UNSUPPORTED_MEDIA_TYPE, err);
   }
 }

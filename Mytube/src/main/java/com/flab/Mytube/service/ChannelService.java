@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class ChannelService {
 
 
   // 지난 라이브 조회
-//  TODO: 라이브 조회할 대 liveId, channelId 모두 사용해서 탐색하도록
+//  TODO: 라이브 조회할 대 liveId, channelId 모두 사용해서 탐색하도록?
   public Movie replay(long liveId) {
     LiveStreaming live = liveMapper.findByLiveId(liveId);
     if (live == null) {
@@ -53,15 +54,4 @@ public class ChannelService {
     }
     return lists;
   }
-
-  // 업로드한 동영상 목록 조회
-//  @Transactional
-//  public List<Movie> getUploadMovie(long channelId) {
-//    // sreamerId 와 연관된 동영상 반환해오기
-//    List<Movie> result = liveMapper.uploadMovieList(channelId);
-//    if(result==null||result.isEmpty()){
-//      throw new ResourceNotFoundException(channelId+"님이 업로드한 영상을 불러오지 못했습니다.");
-//    }
-//    return result;
-//  }
 }

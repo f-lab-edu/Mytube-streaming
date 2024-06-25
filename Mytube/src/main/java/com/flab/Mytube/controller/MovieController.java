@@ -3,6 +3,7 @@ package com.flab.Mytube.controller;
 import com.flab.Mytube.domain.Movie;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
+import com.flab.Mytube.error.exceptions.ResourceNotFoundException;
 import com.flab.Mytube.service.ConvertMovieService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class MovieController {
         .file(file)
         .channelId(channelId)
         .build();
-    request.addSubject();
+//    request.addSubject();
     convertMovieService.uploadMovie(request);
   }
 
@@ -53,9 +54,8 @@ public class MovieController {
           .contentType(MediaType.parseMediaType("application/x-mpegURL"))
           .body(resource);
     } catch (FileNotFoundException e) {
-      e.printStackTrace();
+      throw new ResourceNotFoundException("데이터를 불러오지 못했습니다.");
     }
-    return null;
   }
 
   @PatchMapping("/{movieId}")
@@ -64,7 +64,7 @@ public class MovieController {
   }
 
   @GetMapping("/channels/{channelId}")
-  public List<Movie> MovieList(@PathVariable("channelId") long channelId){
+  public List<Movie> MovieList(@PathVariable("channelId") long channelId) {
     return convertMovieService.getLiveLists(channelId);
   }
 }
