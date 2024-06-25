@@ -77,10 +77,6 @@ public class LiveController {
     }
     return null;
   }
-
-  // TODO: 라이브 삭제
-//    관련 라이브 테이블에서 deletedAt 날짜 추가하기
-//    조회하는 코드에서 이 부분에 값이 있다면 불러오지 못하게 처리할 것
   @PatchMapping("/{channelId}/movies/{id}")
   public void deleteLive(@PathVariable("channelId") long channelId, @PathVariable("id") long id) {
     liveService.delete(id);

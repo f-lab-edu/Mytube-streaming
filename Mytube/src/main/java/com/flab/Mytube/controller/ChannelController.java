@@ -19,7 +19,6 @@ public class ChannelController {
   private final ChannelService service;
 
   //    현재 채널 라이브 및 동영상 목록 조회
-  //    TODO: 조회하는 코드에서 deletedAt에 값이 있다면 불러오지 못하게 처리할 것
   @GetMapping("/{channelId}")
   public List<LiveStreaming> getLiveList(@PathVariable("channelId") long channelId) {
     return service.getLiveList(channelId);
@@ -30,10 +29,4 @@ public class ChannelController {
   public Movie replayLive(@PathVariable("liveId") long liveId) {
     return service.replay(liveId);
   }
-
-//  @GetMapping("/{channelId}/movies")
-//  public List<Movie> getMovies(@PathVariable("channelId") long channelId) {
-//    List<Movie> result = service.getUploadMovie(channelId);
-//    return result;
-//  }
 }

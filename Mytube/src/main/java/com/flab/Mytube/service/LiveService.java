@@ -27,7 +27,6 @@ public class LiveService {
     LiveStreaming result = liveMapper.findByLiveId(liveId);
     long movieId = result.getMovieId();
     Movie movie = movieeMapper.findByMovieId(movieId);
-    // TODO: 여기 맞는 responseDTO 는 따로 있어야 할 듯?
     StartingShowResponse response = StartingShowResponse.builder()
         .id(result.getId())
         .url(movie.getUrl())
