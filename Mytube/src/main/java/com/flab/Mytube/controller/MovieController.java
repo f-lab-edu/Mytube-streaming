@@ -24,7 +24,7 @@ public class MovieController {
 
   private final ConvertMovieService convertMovieService;
 
-  // 동영상 업로드 요청 TODO: 올바른 파일 형식인지 확인 (ex. 사진이라면? 문서파일이라면?)
+  // 동영상 업로드 요청
   @PostMapping("")
   public void upload(@RequestParam("movie") MultipartFile file,
       @RequestParam("channelId") long channelId) {
