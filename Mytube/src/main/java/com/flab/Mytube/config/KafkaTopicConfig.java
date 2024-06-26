@@ -1,42 +1,56 @@
 package com.flab.Mytube.config;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.common.config.TopicConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.KafkaAdmin;
 
+
+// automatically add topics to the broker.
 @Configuration
 public class KafkaTopicConfig {
 
-  @Value(value = "${spring.kafka.bootstrap-servers}")
-  private String bootstrapAddress;
-
-  @Value("${spring.kafka.topic.name}")
-  private String topicName;
-  @Value("${kafka.topic.alarm.numPartitions}")
-  private String numPartitions;
-  @Value("${kafka.topic.alarm.replicationFactor}")
-  private String replicationFactor;
-
+  @Value("${spring.kafka.bootstrap-servers}")
+  private String bootstrapServers;
   @Bean
-  public KafkaAdmin kafkaAdmin() {
+  public KafkaAdmin admin() {
     Map<String, Object> configs = new HashMap<>();
-    configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+    configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
     return new KafkaAdmin(configs);
   }
-  /**
-   * broker 를 두개만 설정하였으므로 최소 Replication Factor로 2를 설정하고
-   * Partition의 경우 Event 의 Consumer인 WAS를 2대까지만 실행되도록 해두었기 때문에 2로 설정함.
-   * 이보다 Partition을 크게 설정한다고 해서 Consume 속도가 빨라지지 않기 때문이다.
-   * @return
-   */
+
   @Bean
-  public NewTopic newTopic() {
-    return new NewTopic(topicName, Integer.parseInt(numPartitions), Short.parseShort(replicationFactor));
+  public NewTopic topic1() {
+    return TopicBuilder.name("thing1")
+        .partitions(10)
+        .replicas(3)
+        .compact()
+        .build();
   }
 
+  @Bean
+  public NewTopic topic2() {
+    return TopicBuilder.name("thing2")
+        .partitions(10)
+        .replicas(3)
+        .config(TopicConfig.COMPRESSION_TYPE_CONFIG, "zstd")
+        .build();
+  }
+
+  @Bean
+  public NewTopic topic3() {
+    return TopicBuilder.name("thing3")
+        .assignReplicas(0, List.of(0, 1))
+        .assignReplicas(1, List.of(1, 2))
+        .assignReplicas(2, List.of(2, 0))
+        .config(TopicConfig.COMPRESSION_TYPE_CONFIG, "zstd")
+        .build();
+  }
 }

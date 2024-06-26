@@ -19,30 +19,23 @@ import org.springframework.kafka.listener.ContainerProperties.AckMode;
 public class KafkaConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
 
-    @Value("${kafka.consumer.autoOffsetResetConfig}")
-    private String autoOffsetResetConfig;
-    @Value("${kafka.consumer.alarm.rdb-group-id}")
-    private String rdbGroupId;
-
-    @Value("${kafka.consumer.alarm.redis-group-id}")
-    private String redisGroupId;
-
-    @Bean
-    public ConsumerFactory<String, Object> consumerFactory() {
+    public ConsumerFactory<String, Object> kafkaConsumerFactory() {
         Map<String, Object> config = new HashMap<>();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "group_1");
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserialize.class);
 
         return new DefaultKafkaConsumerFactory<>(config);
     }
 
-    @Bean
+    @Bean(name = "consumerFactory")
     public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
+        factory.setConsumerFactory(kafkaConsumerFactory());
         factory.getContainerProperties().setAckMode(AckMode.MANUAL);
 
         return factory;
