@@ -19,6 +19,7 @@ public class KafkaTopicConfig {
 
   @Value("${spring.kafka.bootstrap-servers}")
   private String bootstrapServers;
+
   @Bean
   public KafkaAdmin admin() {
     Map<String, Object> configs = new HashMap<>();
@@ -30,7 +31,7 @@ public class KafkaTopicConfig {
   public NewTopic topic1() {
     return TopicBuilder.name("thing1")
         .partitions(10)
-        .replicas(3)
+        .replicas(1) // 복제 팩터를 1로 설정
         .compact()
         .build();
   }
@@ -39,7 +40,7 @@ public class KafkaTopicConfig {
   public NewTopic topic2() {
     return TopicBuilder.name("thing2")
         .partitions(10)
-        .replicas(3)
+        .replicas(1)
         .config(TopicConfig.COMPRESSION_TYPE_CONFIG, "zstd")
         .build();
   }

@@ -18,7 +18,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 public class Producer {
 
   @Autowired
-  private KafkaTemplate<Integer, String> template;
+  private KafkaTemplate<String, String> template;
 
 //  public void sendToKafka(final MyOutputData data) {
 //    final ProducerRecord<String, String> record = createRecord(data);
@@ -35,7 +35,7 @@ public class Producer {
 
   public void sendMessage(final MyOutputData data) {
     ProducerRecord<String, String> record = createRecord(data);
-    CompletableFuture<SendResult<Integer, String>> future = template.send((Message<?>) record);
+    CompletableFuture<SendResult<String, String>> future = template.send(record);
 
     future.whenComplete((result, ex) -> {
       if (ex == null) {
