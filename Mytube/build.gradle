@@ -26,10 +26,20 @@ repositories {
 }
 
 dependencies {
+	testImplementation 'junit:junit:4.13.1'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation 'net.bramp.ffmpeg:ffmpeg:0.7.0'//9
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//	compile 'io.lettuce:lettuce-core:6.3.2.RELEASE'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.4'
+	implementation 'org.springframework.kafka:spring-kafka'
+
+
+	implementation 'org.slf4j:jcl-over-slf4j'
+	implementation 'ch.qos.logback:logback-classic'
 
 	compileOnly 'org.springframework.boot:spring-boot-devtools'
 	compileOnly 'org.projectlombok:lombok'
@@ -42,6 +52,9 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '6.1.0.jre7'
+
+	implementation 'org.springframework.boot:spring-boot-starter-validation:3.2.1'
+
 }
 
 tasks.named('test') {
