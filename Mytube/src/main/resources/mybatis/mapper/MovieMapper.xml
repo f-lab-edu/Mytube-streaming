@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flab.Mytube.mapper.PostMapper">
+<!--    <resultMap id="LiveStreamingDTO" type="com.flab.Mytube.dto.movie.LiveStreamingDTO">-->
+<!--        <id property="id" column="id"/>-->
+<!--        <result property="streamerId" column="user_id"/>-->
+<!--        <result property="movieId" column="movie_id"/>-->
+<!--        <result property="title" column="title"/>-->
+<!--        <result property="contents" column="contents"/>-->
+<!--        <result property="userCount" column="user_count"/>-->
+<!--        <result property="thumbsUp" column="thumbs_up"/>-->
+<!--        <result property="reservedTime" column="reserved_at"/>-->
+<!--        <result property="updatedAt" column="updated_at"/>-->
+<!--    </resultMap>-->
+    <insert id="addMovie" useGeneratedKeys="true" keyProperty="ID" parameterType="com.flab.Mytube.dto.movie.request.InsertMovieRequest">
+        INSERT INTO
+        movie (USER_ID, SUBJECT, URL)
+        VALUES
+        (#{param.streamer_id}, #{param.subject}, #{param.url})
+    </insert>
+
+    <insert id="reserveShow" useGeneratedKeys="true" keyProperty="request.id" parameterType="com.flab.Mytube.dto.movie.LiveStreamingDTO">
+        INSERT INTO
+        live_streaming (user_id, movie_id, title, contents, reserved_at)
+        VALUES
+        (#{request.streamerId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedTime})
+    </insert>
+    <select id="selectShow" parameterType="com.flab.Mytube.dto.movie.LiveStreamingDTO" resultType="com.flab.Mytube.dto.movie.LiveStreamingDTO">
+        select
+        id, title, contents
+        from live_streaming
+        where id = #{request.id}
+    </select>
+
+    <insert id="joinChat" useGeneratedKeys="true" keyProperty="param.ID">
+        INSERT INTO
+        LiveStreaming (USER_ID, MOVIE_ID, CONTENTS)
+        VALUES
+        (#{param.userId},#{param.movie_id}, #{param.chatContents})
+    </insert>
+</mapper>
