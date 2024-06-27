@@ -1,7 +1,6 @@
 package com.flab.Mytube.dto.movie.request;
 
 import com.flab.Mytube.error.exceptions.InvalidFileExtension;
-import io.netty.util.internal.StringUtil;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
