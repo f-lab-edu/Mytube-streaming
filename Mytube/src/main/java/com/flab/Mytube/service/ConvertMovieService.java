@@ -6,7 +6,7 @@ import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.error.exceptions.NoDataSubmitException;
 import com.flab.Mytube.mappers.MovieMapper;
 import com.flab.Mytube.utils.MoviePath;
-import com.flab.Mytube.utils.Movies;
+import com.flab.Mytube.utils.MovieFile;
 import com.flab.Mytube.utils.Validations;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class ConvertMovieService {
   private final MovieMapper movieMapper;
   private final FFmpeg fFmpeg;
   private final FFprobe fFprobe;
-  private final Movies movie = new Movies();
+  private final MovieFile movieFile;
   private final MoviePath moviePath;
 
   //동영상 업로드
@@ -69,7 +69,7 @@ public class ConvertMovieService {
 
 //  ts 파일로 분할 및 분해 설정
     String source = fileName + ".m3m8";
-    FFmpegBuilder builder = movie.segmentationTs(source, path, output, tsName);
+    FFmpegBuilder builder = movieFile.segmentationTs(source, path, output, tsName);
 
     // builder 실행
     run(builder);

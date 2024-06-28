@@ -1,7 +1,5 @@
 package com.flab.Mytube.utils;
 
-import com.flab.Mytube.dto.movie.request.FileUploadRequest;
-import com.flab.Mytube.error.exceptions.DuplicatedPathException;
 import lombok.NoArgsConstructor;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import org.springframework.stereotype.Component;
@@ -19,7 +17,7 @@ import java.util.stream.Stream;
 
 @NoArgsConstructor
 @Component
-public class Movies {
+public class MovieFile {
   public FFmpegBuilder segmentationTs(String masterPath, String path, File output, String tsName) {
     // ts 파일로 분할 및 분해 설정
     FFmpegBuilder builder = new FFmpegBuilder()

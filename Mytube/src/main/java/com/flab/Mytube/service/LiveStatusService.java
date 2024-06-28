@@ -3,7 +3,7 @@ package com.flab.Mytube.service;
 import com.flab.Mytube.constants.Status;
 import com.flab.Mytube.error.exceptions.AlreadyEndedLiveException;
 import com.flab.Mytube.error.exceptions.ResourceNotFoundException;
-import com.flab.Mytube.utils.Movies;
+import com.flab.Mytube.utils.MovieFile;
 import com.flab.Mytube.dto.movie.request.WatchLiveRequest;
 import com.flab.Mytube.dto.streaming.LiveStatus;
 import com.flab.Mytube.utils.Validations;
@@ -21,7 +21,7 @@ public class LiveStatusService {
 
   @Resource(name = "statusTemplate")
   private HashOperations<String, String, LiveStatus> hashOperations;
-  static Movies movie = new Movies();
+  static MovieFile movie = new MovieFile();
 
   private boolean contains(String key, long id) {
     if (hashOperations.hasKey(key, String.valueOf(id))) {
