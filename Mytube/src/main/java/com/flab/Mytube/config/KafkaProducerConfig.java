@@ -18,7 +18,7 @@ public class KafkaProducerConfig {
   @Value("${spring.kafka.bootstrap-servers}")
   private String bootstrapServers;
 
-  @Bean
+  @Bean(name = "KafkaTemplate")
   public KafkaTemplate<String, String> stringKafkaTemplate() {
     return new KafkaTemplate<>(stringProducerFactory());
   }

@@ -20,18 +20,18 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class Consumer {
 
-  @KafkaListener(topics = "thing1", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
-  public CompletableFuture<String> listen(String data) {
-    CompletableFuture<String> future = new CompletableFuture<>();
-    future.complete("done");
-    return future;
-  }
+//  @KafkaListener(topics = "thing1", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
+//  public CompletableFuture<String> listen(String data) {
+//    CompletableFuture<String> future = new CompletableFuture<>();
+//    future.complete("done");
+//    return future;
+//  }
 
   private final FFmpeg fFmpeg;
   private final FFprobe fFprobe;
   private final Movies movie = new Movies();
 
-  @KafkaListener(topics = "video-topic", groupId = "myGroup")
+  @KafkaListener(topics = "videoEncoding", groupId = "myGroup")
   public void listenGroupFoo(String message) {
     log.info("Received Message in group myGroup: " + message);
     // Kafka에서 받은 메시지를 사용하여 비디오 인코딩

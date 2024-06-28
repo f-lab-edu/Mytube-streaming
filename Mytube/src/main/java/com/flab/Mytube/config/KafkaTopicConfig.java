@@ -27,19 +27,19 @@ public class KafkaTopicConfig {
     return new KafkaAdmin(configs);
   }
 
-  @Bean
-  public NewTopic topic1() {
-    return TopicBuilder.name("thing1")
-        .partitions(10)
-        .replicas(1) // 복제 팩터를 1로 설정
-        .compact()
-        .build();
-  }
+//  @Bean
+//  public NewTopic topic1() {
+//    return TopicBuilder.name("thing1")
+//        .partitions(10)
+//        .replicas(1) // 복제 팩터를 1로 설정
+//        .compact()
+//        .build();
+//  }
 
   @Bean
   public NewTopic videoEncoding() {
     return TopicBuilder.name("videoEncoding")
-        .partitions(10)
+        .partitions(1)
         .replicas(1) // 복제 팩터를 1로 설정
         .compact()
         .build();

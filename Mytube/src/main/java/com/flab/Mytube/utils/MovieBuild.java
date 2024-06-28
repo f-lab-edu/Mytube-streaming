@@ -11,10 +11,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MovieBuild {
 
-  public FFmpegBuilder segmentationTs(String masterPath, String path, File output, String tsName) {
+  public static FFmpegBuilder segmentationTs(String masterPath, String path, File output, String tsName) {
     // ts 파일로 분할 및 분해 설정
     FFmpegBuilder builder = new FFmpegBuilder()
         .setInput(path) // 입력 소스

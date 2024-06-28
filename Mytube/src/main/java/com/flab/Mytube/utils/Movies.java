@@ -5,6 +5,7 @@ import com.flab.Mytube.error.exceptions.DuplicatedPathException;
 import lombok.NoArgsConstructor;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.io.File;

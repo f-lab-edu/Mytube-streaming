@@ -9,32 +9,54 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MoviePath {
-  @Value("src/main/resources/static/origin")
+
   private static String savedPath;
+  @Value("src/main/resources/static/origin")
+  private void setSavePath(String savedPath){
+    this.savedPath = savedPath;
+  }
 
-  @Value("src/main/resources/static/hls")
   private static String hlsOutputPath;
+  @Value("src/main/resources/static/hls")
+  private void setHlsOutputPath(String hlsOutputPath){
+    this.hlsOutputPath=hlsOutputPath;
+  }
 
-  public static Path originRootPath(FileUploadRequest request){
+
+  public Path originRootPath(FileUploadRequest request) {
     return rootPath(request, savedPath);
   }
 
-  public static Path outputRootPath(FileUploadRequest request){
+  public Path outputRootPath(FileUploadRequest request) {
     return rootPath(request, hlsOutputPath);
   }
 
-  public static String outputRootPath(int channelId, String movieId, String key){
+  public String outputRootPath(int channelId, String movieId, String key) {
     StringBuilder sb = new StringBuilder();
     sb.append(hlsOutputPath).append("/channel-" + channelId).append("/").append(key).append("/")
         .append(movieId);
     return sb.toString();
   }
 
-  public static Path rootPath(FileUploadRequest request, String savedPath) {
+  public Path rootPath(FileUploadRequest request, String savedPath) {
     String fileName = request.getOriginFileName().split("\\.")[0];
     String path = savedPath + "/channel-" + request.getChannelId() + "/" + fileName;
+    Path filepath = validPath(path);
+    return filepath;
+  }
+
+  public Path chunckPath(String originPath) {
+    System.out.println(">>> >> >>>> >> chunkPath : " + originPath);
+    String outPath = originPath.replaceAll(savedPath, hlsOutputPath);
+    return Paths.get(outPath);
+  }
+
+
+  public static Path validPath(String path) {
     Path filepath = null;
     try {
       filepath = Paths.get(path);
