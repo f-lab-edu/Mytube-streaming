@@ -34,7 +34,7 @@ public class ConvertMovieService {
   private final MovieMapper movieMapper;
   private final FFmpeg fFmpeg;
   private final FFprobe fFprobe;
-  private final Movies movie = new Movies();
+//  private final MovieFile movieFile;
   private final MoviePath moviePath;
 
   //동영상 업로드
