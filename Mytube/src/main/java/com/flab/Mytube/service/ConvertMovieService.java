@@ -16,7 +16,6 @@ import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.progress.Progress;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,7 +62,7 @@ public class ConvertMovieService {
   private void movieBuilder(Path filepath, FileUploadRequest request) {
     String path = filepath.toString();
     String outPath = moviePath.outputRootPath(request).toString();// 저장 위치 생성
-    File output = movie.resultFile(outPath);
+    File output = moviePath.resultFile(outPath);
 
     String fileName = request.getOriginFileName().split("\\.")[0];
     String tsName = fileName;

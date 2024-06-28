@@ -20,32 +20,6 @@ import java.util.stream.Stream;
 @NoArgsConstructor
 @Component
 public class Movies {
-
-  public Path rootPath(FileUploadRequest request, String savedPath) {
-    String fileName = request.getOriginFileName().split("\\.")[0];
-
-    // savedPath: ./origin/channel-{id}/{subject} : 원본 저장 위치
-    String path = savedPath + "/channel-" + request.getChannelId() + "/" + fileName;
-    Path filepath = null;
-    try {
-      filepath = Paths.get(path);
-      Files.createDirectories(filepath); // 디렉토리 생성
-    } catch (FileAlreadyExistsException e) {
-      throw new DuplicatedPathException("이미 업로드한 동영상 입니다.");
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return filepath;
-  }
-
-  public File resultFile(String path) {
-    File output = new File(path);
-    if (!output.exists()) {
-      output.mkdirs();
-    }
-    return output;
-  }
-
   public FFmpegBuilder segmentationTs(String masterPath, String path, File output, String tsName) {
     // ts 파일로 분할 및 분해 설정
     FFmpegBuilder builder = new FFmpegBuilder()
