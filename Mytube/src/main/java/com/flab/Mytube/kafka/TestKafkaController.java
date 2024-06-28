@@ -13,6 +13,6 @@ public class TestKafkaController {
 
   @GetMapping("")
   public void testapi(){
-    producer.sendMessage(new MyOutputData("hello", "world"));
+    producer.sendPath(new EncodingRequest("hello", "world"));
   }
 }
