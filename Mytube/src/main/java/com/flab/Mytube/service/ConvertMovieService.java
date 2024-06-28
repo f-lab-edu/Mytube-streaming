@@ -35,9 +35,6 @@ public class ConvertMovieService {
   private final FFmpeg fFmpeg;
   private final FFprobe fFprobe;
   private final Movies movie = new Movies();
-
-  @Value("src/main/resources/static/hls")
-  private String hlsOutputPath;
   private final MoviePath moviePath;
 
   //동영상 업로드
@@ -96,7 +93,6 @@ public class ConvertMovieService {
   }
 
   public File getLiveFile(MovieDtailRequest request) {
-    int channelId = request.getChannel();
     String movieId = request.getMovieId();
     // movie 의 id 가 입력된 경우
 
@@ -105,10 +101,8 @@ public class ConvertMovieService {
     }
     // movie 의 .ts 파일 이름이 입력된 경우
     String key = movieId.split("_")[0];
-    StringBuilder sb = new StringBuilder();
-    sb.append(hlsOutputPath).append("/channel-" + channelId).append("/").append(key).append("/")
-        .append(movieId);
-    String filePath = sb.toString();
+
+    String filePath = moviePath.hlsPath(request, key);
     return new File(filePath);
   }
 
