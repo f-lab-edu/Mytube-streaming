@@ -1,12 +1,5 @@
 package com.flab.Mytube.utils;
 
-import com.flab.Mytube.dto.movie.request.FileUploadRequest;
-import com.flab.Mytube.error.exceptions.DuplicatedPathException;
-import lombok.NoArgsConstructor;
-import net.bramp.ffmpeg.builder.FFmpegBuilder;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,54 +10,9 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import net.bramp.ffmpeg.builder.FFmpegBuilder;
 
-@NoArgsConstructor
-@Component
-public class Movies {
-
-  @Value("src/main/resources/static/origin")
-  private String savedPath;
-
-  @Value("src/main/resources/static/hls")
-  private String hlsOutputPath;
-
-  public Path originRootPath(FileUploadRequest request){
-    return rootPath(request, savedPath);
-  }
-
-  public Path outputRootPath(FileUploadRequest request){
-    return rootPath(request, hlsOutputPath);
-  }
-
-  public String outputRootPath(int channelId, String movieId, String key){
-    StringBuilder sb = new StringBuilder();
-    sb.append(hlsOutputPath).append("/channel-" + channelId).append("/").append(key).append("/")
-        .append(movieId);
-    return sb.toString();
-  }
-
-  public Path rootPath(FileUploadRequest request, String savedPath) {
-    String fileName = request.getOriginFileName().split("\\.")[0];
-    String path = savedPath + "/channel-" + request.getChannelId() + "/" + fileName;
-    Path filepath = null;
-    try {
-      filepath = Paths.get(path);
-      Files.createDirectories(filepath); // 디렉토리 생성
-    } catch (FileAlreadyExistsException e) {
-      throw new DuplicatedPathException("이미 업로드한 동영상 입니다.");
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return filepath;
-  }
-
-  public File resultFile(String path) {
-    File output = new File(path);
-    if (!output.exists()) {
-      output.mkdirs();
-    }
-    return output;
-  }
+public class MovieBuild {
 
   public FFmpegBuilder segmentationTs(String masterPath, String path, File output, String tsName) {
     // ts 파일로 분할 및 분해 설정

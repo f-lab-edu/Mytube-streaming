@@ -4,6 +4,7 @@ import com.flab.Mytube.domain.Movie;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.error.exceptions.NoDataSubmitException;
+import com.flab.Mytube.kafka.Producer;
 import com.flab.Mytube.mappers.MovieMapper;
 import com.flab.Mytube.utils.Movies;
 import com.flab.Mytube.utils.Validations;
@@ -15,7 +16,6 @@ import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.progress.Progress;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,15 +35,6 @@ public class ConvertMovieService {
   private final FFprobe fFprobe;
   private final Movies movie = new Movies();
 
-  @Value("src/main/resources/static/origin")
-  private String savedPath;
-
-  @Value("src/main/resources/static/hls")
-  private String hlsOutputPath;
-
-  @Value("src/main/resources/static/mp4")
-  private String mp4OutputPath;
-
   //동영상 업로드
   @Transactional
   public void uploadMovie(FileUploadRequest request) {
@@ -52,7 +43,7 @@ public class ConvertMovieService {
     }
     // 파일 경로 지정
     String fileName = request.getFile().getOriginalFilename();
-    Path filepath = movie.rootPath(request, savedPath);
+    Path filepath = movie.originRootPath(request);
     filepath = filepath.resolve(fileName);
 
     // 파일 작성하기(복사)
@@ -63,13 +54,13 @@ public class ConvertMovieService {
       throw new RuntimeException(e);
     }
 //  filepath 경로에 파일 저장
-    movieBuilder(filepath, request);
+    Producer.sendPath("video-topic", String.valueOf(filepath.getRoot()));
   }
 
 
   private void movieBuilder(Path filepath, FileUploadRequest request) {
     String path = filepath.toString();
-    String outPath = movie.rootPath(request, hlsOutputPath).toString(); // 저장 위치 생성
+    String outPath = movie.outputRootPath(request).toString(); // 저장 위치 생성
     File output = movie.resultFile(outPath);
 
     String fileName = request.getOriginFileName().split("\\.")[0];
@@ -108,11 +99,7 @@ public class ConvertMovieService {
       return getLiveFile(Long.valueOf(movieId));
     }
     // movie 의 .ts 파일 이름이 입력된 경우
-    String key = movieId.split("_")[0];
-    StringBuilder sb = new StringBuilder();
-    sb.append(hlsOutputPath).append("/channel-" + channelId).append("/").append(key).append("/")
-        .append(movieId);
-    String filePath = sb.toString();
+    String filePath = movie.outputRootPath(channelId, movieId, movieId.split("_")[0]);
     return new File(filePath);
   }
 

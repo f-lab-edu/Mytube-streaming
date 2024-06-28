@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class Producer {
 
   @Autowired
-  private KafkaTemplate<String, String> template;
+  private static KafkaTemplate<String, String> template;
 
   public void sendMessage(final MyOutputData data) {
     ProducerRecord<String, String> record = createRecord(data);
@@ -25,6 +25,18 @@ public class Producer {
       }
       else {
         handleFailure(data, record, ex);
+      }
+    });
+  }
+
+  public static void sendPath(final String topic,final String path){
+    CompletableFuture<SendResult<String, String>> future = template.send(topic, path);
+    future.whenComplete((result, ex) -> {
+      if (ex == null) {
+        handleSuccess(path);
+      }
+      else {
+        handleFailure(path, new ProducerRecord<>(topic, path), ex);
       }
     });
   }
@@ -44,5 +56,15 @@ public class Producer {
 
   public void handleSuccess(MyOutputData data) {
     System.out.println(">> >>>> >>> success: " + data.toString());
+  }
+  private static void handleFailure(String data, ProducerRecord<String, String> record,
+      Throwable ex) {
+    System.out.println(">> >>>> >>> fail: " + data);
+    System.out.println(">> >>>> >>> record: " + record.toString());
+    System.out.println(ex);
+  }
+
+  public static void handleSuccess(String data) {
+    System.out.println(">> >>>> >>> success: " + data);
   }
 }
