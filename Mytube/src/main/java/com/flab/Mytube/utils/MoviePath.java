@@ -26,6 +26,11 @@ public class MoviePath {
   public Path outputRootPath(FileUploadRequest request) {
     return rootPath(request, hlsOutputPath);
   }
+  public Path outputRootPath(long channelId, String fileinfo) {
+    String path = savedPath + "/channel-" + channelId + "/" + fileinfo;
+    Path filepath = validPath(path);
+    return filepath;
+  }
 
   private Path rootPath(FileUploadRequest request, String savedPath) {
     String fileName = request.getOriginFileName().split("\\.")[0];

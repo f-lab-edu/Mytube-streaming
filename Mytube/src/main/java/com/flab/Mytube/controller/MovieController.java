@@ -4,9 +4,13 @@ import com.flab.Mytube.domain.Movie;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.error.exceptions.ResourceNotFoundException;
+import com.flab.Mytube.kafka.EncodingRequest;
+import com.flab.Mytube.kafka.Producer;
 import com.flab.Mytube.service.ConvertMovieService;
+import java.nio.file.Path;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +27,8 @@ import java.io.FileNotFoundException;
 public class MovieController {
 
   private final ConvertMovieService convertMovieService;
+  @Autowired
+  Producer producer;
 
   // 동영상 업로드 요청
   @PostMapping("")
@@ -32,7 +38,11 @@ public class MovieController {
         .file(file)
         .channelId(channelId)
         .build();
-    convertMovieService.uploadMovie(request);
+
+
+//    convertMovieService.uploadMovie(request);
+    String originPath = request.originPath().toString();
+    producer.sendPath(new EncodingRequest("videoPath", originPath));
   }
 
   // 스트리밍 시작을 위한 동영상 정보(m3m8, ts file) 요청

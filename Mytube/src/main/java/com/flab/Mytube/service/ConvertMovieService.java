@@ -39,8 +39,6 @@ public class ConvertMovieService {
   private final FFprobe fFprobe;
   private final MovieFile movieFile;
   private final MoviePath moviePath;
-  @Autowired
-  Producer producer;
 
   //동영상 업로드
   @Transactional
@@ -53,16 +51,16 @@ public class ConvertMovieService {
     Path originPath = moviePath.originRootPath(request);
     originPath = originPath.resolve(fileName);
 
-//    // 파일 작성하기(복사)
-//    try (OutputStream os = Files.newOutputStream(originPath)) {
-//      byte[] bytes = request.getFile().getBytes();
-//      Files.write(originPath, bytes);
-//    } catch (IOException e) {
-//      throw new RuntimeException(e);
-//    }
+    // 파일 작성하기(복사)
+    try (OutputStream os = Files.newOutputStream(originPath)) {
+      byte[] bytes = request.getFile().getBytes();
+      Files.write(originPath, bytes);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
 ////  filepath 경로에 파일 저장
 //    movieBuilder(originPath, request);
-    producer.sendPath(new EncodingRequest("videoPath", originPath.toString()));
+//    producer.sendPath(new EncodingRequest("videoPath", originPath.toString()));
   }
 
 
@@ -100,8 +98,8 @@ public class ConvertMovieService {
 
 
   @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
-  public void testKafka(){
-    System.out.println("hello?");
+  public void testKafka(EncodingRequest data) {
+    System.out.println(">> >>> >>> >>>> hello?");
   }
 
   public File getLiveFile(MovieDtailRequest request) {

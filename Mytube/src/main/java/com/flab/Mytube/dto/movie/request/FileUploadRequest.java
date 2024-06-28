@@ -1,7 +1,10 @@
 package com.flab.Mytube.dto.movie.request;
 
 import com.flab.Mytube.error.exceptions.InvalidFileExtension;
+import com.flab.Mytube.utils.MoviePath;
 import io.netty.util.internal.StringUtil;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
@@ -17,11 +20,21 @@ public class FileUploadRequest {
   private String subject;
   private String url;
 
+//  private MoviePath moviePath;
   @Builder
   public FileUploadRequest(MultipartFile file, long channelId) {
     this.file = file;
     this.channelId = channelId;
     this.subject = setSubject(file);
+  }
+
+  public Path originPath(){
+    String fileName = this.subject;
+    String rawPath = "src/main/resources/static/origin/channel-" + channelId + "/" + file.getOriginalFilename();
+    Path originPath = Paths.get(rawPath);
+//    Path originPath = moviePath.outputRootPath(this.channelId, file.getOriginalFilename());
+    originPath = originPath.resolve(fileName);
+    return originPath;
   }
 
   public String setSubject(MultipartFile file) {
