@@ -8,7 +8,9 @@ import com.flab.Mytube.kafka.Producer;
 import com.flab.Mytube.mappers.MovieMapper;
 import com.flab.Mytube.utils.Movies;
 import com.flab.Mytube.utils.Validations;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.FFmpeg;
@@ -16,6 +18,9 @@ import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.progress.Progress;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.KafkaListeners;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,7 +59,35 @@ public class ConvertMovieService {
       throw new RuntimeException(e);
     }
 //  filepath 경로에 파일 저장
-    Producer.sendPath("video-topic", String.valueOf(filepath.getRoot()));
+//    Producer.sendPath("video-topic", String.valueOf(filepath.getRoot()));
+    movieBuilder(filepath, request);
+    Producer.sendMessage(filepath.toString());
+  }
+
+  public void addPath(FileUploadRequest request, String path, String source) {
+    request.addPath(path, source);
+    movieMapper.save(request);
+  }
+
+  @KafkaListener(topics = "videoEncoding", groupId = "myGroup")
+  private void movieBuilder(String filePathStr) {
+    CompletableFuture<String> future = new CompletableFuture<>();
+
+    Path filePath = Paths.get(filePathStr);
+    String path = filePath.toString();
+    String outPath = filePath.getParent().resolve("hls").toString(); // 저장 위치 생성
+    File output = movie.resultFile(outPath);
+
+    String fileName = filePath.getFileName().toString().split("\\.")[0];
+    String tsName = fileName;
+
+    // ts 파일로 분할 및 분해 설정
+    String source = fileName + ".m3u8";
+    FFmpegBuilder builder = movie.segmentationTs(source, path, output, tsName);
+
+    // builder 실행
+    run(builder);
+    future.complete("done");
   }
 
 
@@ -111,7 +144,7 @@ public class ConvertMovieService {
     return new File(filePath);
   }
 
-  public void delete(long movieId){
+  public void delete(long movieId) {
     movieMapper.delete(movieId);
   }
 

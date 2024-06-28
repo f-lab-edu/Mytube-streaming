@@ -37,21 +37,12 @@ public class KafkaTopicConfig {
   }
 
   @Bean
-  public NewTopic topic2() {
-    return TopicBuilder.name("thing2")
+  public NewTopic videoEncoding() {
+    return TopicBuilder.name("videoEncoding")
         .partitions(10)
-        .replicas(1)
-        .config(TopicConfig.COMPRESSION_TYPE_CONFIG, "zstd")
+        .replicas(1) // 복제 팩터를 1로 설정
+        .compact()
         .build();
   }
 
-  @Bean
-  public NewTopic topic3() {
-    return TopicBuilder.name("thing3")
-        .assignReplicas(0, List.of(0, 1))
-        .assignReplicas(1, List.of(1, 2))
-        .assignReplicas(2, List.of(2, 0))
-        .config(TopicConfig.COMPRESSION_TYPE_CONFIG, "zstd")
-        .build();
-  }
 }

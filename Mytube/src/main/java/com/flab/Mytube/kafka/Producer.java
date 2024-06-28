@@ -15,7 +15,22 @@ public class Producer {
   @Autowired
   private static KafkaTemplate<String, String> template;
 
-  public void sendMessage(final MyOutputData data) {
+//  public static CompletableFuture<SendResult<String, String>> sendMessage(String rootpath){
+//    ProducerRecord<String, String> record = new ProducerRecord<>("videoEncoding", rootpath);
+//    CompletableFuture<SendResult<String, String>> future = template.send(record);
+//    future.whenComplete((result, ex)->{
+//      if(ex == null){
+//        System.out.println("성공적으로 동영상을 업로드했습니다.");
+//      }
+//      else{
+//        System.err.println("동영상 업로드 중 문제가 발생했습니다.");
+//        ex.printStackTrace();
+//      }
+//    });
+//    return future;
+//  }
+
+  public static void sendMessage(final String data) {
     ProducerRecord<String, String> record = createRecord(data);
     CompletableFuture<SendResult<String, String>> future = template.send(record);
 
@@ -42,19 +57,19 @@ public class Producer {
   }
 
 
-  private ProducerRecord<String, String> createRecord(MyOutputData data) {
-    ProducerRecord<String, String> result = new ProducerRecord(data.name, data.school);
+  private static ProducerRecord<String, String> createRecord(String data) {
+    ProducerRecord<String, String> result = new ProducerRecord("videoEncoding", data);
     return result;
   }
 
-  private void handleFailure(MyOutputData data, ProducerRecord<String, String> record,
+  private static void handleFailure(MyOutputData data, ProducerRecord<String, String> record,
       Throwable ex) {
     System.out.println(">> >>>> >>> fail: " + data.toString());
     System.out.println(">> >>>> >>> record: " + record.toString());
     System.out.println(ex);
   }
 
-  public void handleSuccess(MyOutputData data) {
+  public static void handleSuccess(MyOutputData data) {
     System.out.println(">> >>>> >>> success: " + data.toString());
   }
   private static void handleFailure(String data, ProducerRecord<String, String> record,
