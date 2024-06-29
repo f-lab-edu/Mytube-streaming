@@ -62,7 +62,11 @@ public class ConvertMovieService {
 //    }
 ////  filepath 경로에 파일 저장
 //    movieBuilder(originPath, request);
-    producer.sendPath(new EncodingRequest("videoPath", originPath.toString()));
+    EncodingRequest data = EncodingRequest.builder()
+        .topic("videoPath")
+        .key(fileName.split("\\.")[0])
+        .path(originPath.toString()).build();
+    producer.sendPath(data);
   }
 
 

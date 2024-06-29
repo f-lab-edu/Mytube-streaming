@@ -13,6 +13,10 @@ public class TestKafkaController {
 
   @GetMapping("")
   public void testapi(){
-    producer.sendPath(new EncodingRequest("hello", "world"));
+    EncodingRequest request = EncodingRequest.builder()
+        .key("hello")
+        .topic("world")
+        .path("is here").build();
+    producer.sendPath(request);
   }
 }
