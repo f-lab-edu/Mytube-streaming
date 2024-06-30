@@ -19,23 +19,23 @@ public class MytubeApplication {
 		SpringApplication.run(MytubeApplication.class, args);
 	}
 
-	@KafkaListener(id = "graal", topics = "graal")
-	public void listen(String in) {
-		System.out.println("++++++Received:" + in);
-	}
-
-	@Bean
-	public NewTopic topic() {
-		return TopicBuilder.name("graal").partitions(1).replicas(1).build();
-	}
-
-	@Bean
-	public ApplicationRunner runner(KafkaTemplate<String, String> template) {
-		return args -> {
-			template.send("graal", "foo");
-			System.out.println("++++++Sent:foo");
-			Thread.sleep(5000);
-		};
-	}
+//	@KafkaListener(id = "graal", topics = "graal")
+//	public void listen(String in) {
+//		System.out.println("++++++Received:" + in);
+//	}
+//
+//	@Bean
+//	public NewTopic topic() {
+//		return TopicBuilder.name("graal").partitions(1).replicas(1).build();
+//	}
+//
+//	@Bean
+//	public ApplicationRunner runner(KafkaTemplate<String, String> template) {
+//		return args -> {
+//			template.send("graal", "foo");
+//			System.out.println("++++++Sent:foo");
+//			Thread.sleep(5000);
+//		};
+//	}
 
 }
