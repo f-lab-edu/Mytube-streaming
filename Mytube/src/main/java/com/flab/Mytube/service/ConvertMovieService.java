@@ -21,6 +21,7 @@ import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.progress.Progress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,8 +41,10 @@ public class ConvertMovieService {
   private final FFprobe fFprobe;
 //  private final MovieFile movieFile;
   private final MoviePath moviePath;
-  @Autowired
-  Producer producer;
+
+  private final Producer<EncodingRequest> producer;
+//  @Autowired
+//  Producer producer;
 
   //동영상 업로드
   @Transactional
@@ -67,9 +70,17 @@ public class ConvertMovieService {
         .topic("videoPath")
         .key(fileName.split("\\.")[0])
         .path(originPath.toString()).build();
-    producer.sendPath(data);
+
+    log.info(" >>> "+data.toString());
+    producer.send(data.getTopic(), fileName.split("\\.")[0], data);
   }
 
+
+  @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
+  public void testKafka(@Payload String data){
+    System.out.println(data);
+    System.out.println("hello?");
+  }
 
   private void movieBuilder(Path filepath, FileUploadRequest request) {
     String outPath = Movies.hlsPath(request).toString(); // 저장 위치 생성
@@ -105,11 +116,6 @@ public class ConvertMovieService {
         .run();
   }
 
-
-  @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
-  public void testKafka(){
-    System.out.println("hello?");
-  }
 
   public File getLiveFile(MovieDtailRequest request) {
     String movieId = request.getMovieId();

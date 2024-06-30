@@ -14,9 +14,9 @@ public class TestKafkaController {
   @GetMapping("")
   public void testapi(){
     EncodingRequest request = EncodingRequest.builder()
-        .key("hello")
+//        .key("hello")
         .topic("world")
         .path("is here").build();
-    producer.sendPath(request);
+//    producer.send(request);
   }
 }

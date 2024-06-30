@@ -13,10 +13,10 @@ public class Consumer {
 
 
 
-  @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
-  public CompletableFuture<String> listen(String path) {
-    CompletableFuture<String> future = new CompletableFuture<>();
-    future.complete("done");
-    return future;
-  }
+//  @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
+//  public CompletableFuture<String> listen(String path) {
+//    CompletableFuture<String> future = new CompletableFuture<>();
+//    future.complete("done");
+//    return future;
+//  }
 }
