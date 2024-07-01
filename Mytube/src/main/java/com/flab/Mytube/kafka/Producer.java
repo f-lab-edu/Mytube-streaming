@@ -19,6 +19,7 @@ public class Producer<EncodingRequest> {
 
   public void send(String topicName, String key, EncodingRequest data){
     template.send(topicName, key, data);
+    template.flush();
   }
 
 //  public void sendPath(final EncodingRequest data) {

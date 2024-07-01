@@ -48,10 +48,9 @@ public class MoviePath {
     return sb.toString();
   }
 
-  public Path chunckPath(String originPath) {
-    System.out.println(">>> >> >>>> >> chunkPath : " + originPath);
-    String outPath = originPath.replaceAll(savedPath, hlsOutputPath);
-    return Paths.get(outPath);
+  public File chunckPath(String originPath) {
+    String outPath = originPath.replace(savedPath, hlsOutputPath).replace(".mp4", ".m3u8");
+    return makeDir(outPath);
   }
 
 
@@ -68,7 +67,7 @@ public class MoviePath {
     return filepath;
   }
 
-  public static File resultFile(String path) {
+  public static File makeDir(String path) {
     File output = new File(path);
     if (!output.exists()) {
       output.mkdirs();

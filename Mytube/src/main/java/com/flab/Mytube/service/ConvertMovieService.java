@@ -1,6 +1,7 @@
 package com.flab.Mytube.service;
 
 import com.flab.Mytube.domain.Movie;
+import com.flab.Mytube.dto.movie.request.ChuncksBuildRequest;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.dto.movie.request.SegmentationRequest;
@@ -20,9 +21,7 @@ import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.progress.Progress;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +42,7 @@ public class ConvertMovieService {
 //  private final MovieFile movieFile;
   private final MoviePath moviePath;
 
-  private final Producer<EncodingRequest> producer;
+  private final Producer producer;
 //  @Autowired
 //  Producer producer;
 
@@ -58,13 +57,13 @@ public class ConvertMovieService {
     Path originPath = moviePath.originRootPath(request);
     originPath = originPath.resolve(fileName);
 
-//    // 파일 작성하기(복사)
-//    try (OutputStream os = Files.newOutputStream(originPath)) {
-//      byte[] bytes = request.getFile().getBytes();
-//      Files.write(originPath, bytes);
-//    } catch (IOException e) {
-//      throw new RuntimeException(e);
-//    }
+    // 파일 작성하기(복사)
+    try (OutputStream os = Files.newOutputStream(originPath)) {
+      byte[] bytes = request.getFile().getBytes();
+      Files.write(originPath, bytes);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
 ////  filepath 경로에 파일 저장
 //    movieBuilder(originPath, request);
     EncodingRequest data = EncodingRequest.builder()
@@ -77,13 +76,25 @@ public class ConvertMovieService {
 
 
   @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
-  public void testKafka(ConsumerRecord<String, EncodingRequest> data){
-    EncodingRequest request = data.value();
+  public void segment(ConsumerRecord<String, Object> data) {
+    EncodingRequest request = (EncodingRequest) data.value();
     System.out.println(request.getTopic());
+
     log.info(String.format("EncodingRequest created -> %s", data));
 
+    String originPath = request.getPath();
+    File chunckPath = moviePath.chunckPath(originPath);
+    String fileName = chunckPath.getName().split("\\.")[0];
+
+    ChuncksBuildRequest chunkBuilder = ChuncksBuildRequest.builder()
+        .fileName(fileName)
+        .chunkFile(chunckPath)
+        .mp4Path(originPath)
+        .build();
+//    FFmpegBuilder builder = Movies.segmentationTs(chunkBuilder);
 
     System.out.println("hello?");
+//    run(builder);
   }
 
   private void movieBuilder(Path filepath, FileUploadRequest request) {
