@@ -18,6 +18,7 @@ import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.progress.Progress;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -69,15 +70,18 @@ public class ConvertMovieService {
         .topic("videoPath")
         .key(fileName.split("\\.")[0])
         .path(originPath.toString()).build();
-
-    log.info(" >>> "+data.toString());
-    producer.send(data.getTopic(), fileName.split("\\.")[0], data);
+    String key = fileName.split("\\.")[0];
+    producer.send(data.getTopic(), key, data);
   }
 
 
   @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
-  public void testKafka(@Payload String data){
-    System.out.println(data);
+  public void testKafka(ConsumerRecord<String, EncodingRequest> data){
+    EncodingRequest request = data.value();
+    System.out.println(request.getTopic());
+    log.info(String.format("EncodingRequest created -> %s", data));
+
+
     System.out.println("hello?");
   }
 

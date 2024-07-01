@@ -2,6 +2,7 @@ package com.flab.Mytube.config;
 
 import com.flab.Mytube.kafka.EncodingRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,7 @@ import org.springframework.kafka.support.converter.RecordMessageConverter;
 import org.springframework.kafka.support.converter.StringJsonMessageConverter;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
 @Configuration
 public class KafkaConsumerConfig {
@@ -29,19 +31,22 @@ public class KafkaConsumerConfig {
 
   public ConsumerFactory<String, EncodingRequest> kafkaConsumerFactory() {
     Map<String, Object> config = new HashMap<>();
+//    JsonDeserializer<EncodingRequest> EncodingDeserializer = new JsonDeserializer<>(
+//        EncodingRequest.class);
+
     config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
     config.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
     config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
     config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-//    config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_DOC, )
-    config.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, ErrorHandlingDeserializer.class);
+    config.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS,
+        ErrorHandlingDeserializer.class.getName());
     config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
     config.put(JsonDeserializer.VALUE_DEFAULT_TYPE, "com.flab.Mytube.kafka.EncodingRequest");
 
     return new DefaultKafkaConsumerFactory<>(config);
   }
 
-  @Bean(name = "consumerFactory")
+  @Bean
   public ConcurrentKafkaListenerContainerFactory<String, EncodingRequest> kafkaListenerContainerFactory() {
     ConcurrentKafkaListenerContainerFactory<String, EncodingRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
     factory.setConsumerFactory(kafkaConsumerFactory());
