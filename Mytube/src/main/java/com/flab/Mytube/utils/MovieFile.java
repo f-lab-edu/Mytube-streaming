@@ -1,6 +1,8 @@
 package com.flab.Mytube.utils;
 
+import com.flab.Mytube.dto.movie.request.ChuncksBuildRequest;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import org.springframework.stereotype.Component;
 
@@ -17,19 +19,24 @@ import java.util.stream.Stream;
 
 @NoArgsConstructor
 @Component
+@Slf4j
 public class MovieFile {
-  public FFmpegBuilder segmentationTs(String masterPath, String path, File output, String tsName) {
+  public FFmpegBuilder segmentationTs(ChuncksBuildRequest request) {
     // ts 파일로 분할 및 분해 설정
+    log.info(" >>> >>> >> request.getMp4() >>> "+request.getMp4Path());
+    log.info(" >>> >>> >> request.chunksPath() >>> "+request.chunckPath());
+    log.info(" >>> >>> >> request.getFileName() >>> "+request.getFileName());
     FFmpegBuilder builder = new FFmpegBuilder()
-        .setInput(path) // 입력 소스
+        .setInput(request.getMp4Path()) // 입력 소스
         .overrideOutputFiles(true)
-        .addOutput(output.getAbsolutePath() + "/" + masterPath) // 저장경로
+        .addOutput(request.chunckPath() + "/" + request.getFileName() + ".m3u8") // 저장경로
         .setFormat("hls")
         .addExtraArgs("-hls_time", "10") // 10초
         .addExtraArgs("-hls_list_size", "0")
         .addExtraArgs("-hls_segment_filename",
-            output.getAbsolutePath() + "/" + tsName + "_%08d.ts") // 청크 파일 이름
+            request.chunckPath() + "/" + request.getFileName() + "_%08d.ts") // 청크 파일 이름
         .done();
+
     return builder;
   }
 

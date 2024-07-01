@@ -1,6 +1,7 @@
 package com.flab.Mytube.service;
 
 import com.flab.Mytube.domain.Movie;
+import com.flab.Mytube.dto.movie.request.ChuncksBuildRequest;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.error.exceptions.NoDataSubmitException;
@@ -19,9 +20,7 @@ import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.progress.Progress;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +41,7 @@ public class ConvertMovieService {
   private final MovieFile movieFile;
   private final MoviePath moviePath;
 
-  private final Producer<EncodingRequest> producer;
+  private final Producer producer;
 //  @Autowired
 //  Producer producer;
 
@@ -79,36 +78,24 @@ public class ConvertMovieService {
   public void segment(ConsumerRecord<String, Object> data) {
     EncodingRequest request = (EncodingRequest) data.value();
     System.out.println(request.getTopic());
+
     log.info(String.format("EncodingRequest created -> %s", data));
+
     String originPath = request.getPath();
     File chunckPath = moviePath.chunckPath(originPath);
-    String fileName = chunckPath.getName();
-    String tsName = fileName.replace("\\.m3m8", "ts");
+    String fileName = chunckPath.getName().split("\\.")[0];
 
-    FFmpegBuilder builder = movieFile.segmentationTs(fileName, originPath, chunckPath,
-        tsName);
+    ChuncksBuildRequest chunkBuilder = ChuncksBuildRequest.builder()
+        .fileName(fileName)
+        .chunkFile(chunckPath)
+        .mp4Path(originPath)
+        .build();
+    FFmpegBuilder builder = movieFile.segmentationTs(chunkBuilder);
 
     System.out.println("hello?");
     run(builder);
   }
 
-  private void movieBuilder(Path filepath, FileUploadRequest request) {
-    String path = filepath.toString();
-    String outPath = moviePath.outputRootPath(request).toString();// 저장 위치 생성
-    File output = moviePath.resultFile(outPath);
-
-    String fileName = request.getOriginFileName().split("\\.")[0];
-    String tsName = fileName;
-
-//  ts 파일로 분할 및 분해 설정
-    String source = fileName + ".m3m8";
-    FFmpegBuilder builder = movieFile.segmentationTs(source, path, output, tsName);
-
-    // builder 실행
-    run(builder);
-    request.addPath(output.getPath(), source);
-    movieMapper.save(request);
-  }
 
 
   private void run(FFmpegBuilder builder) {

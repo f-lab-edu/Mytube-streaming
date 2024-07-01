@@ -1,6 +1,5 @@
 package com.flab.Mytube.kafka;
 
-import com.google.common.util.concurrent.ListenableFuture;
 import java.nio.file.Paths;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +17,8 @@ public class Producer<EncodingRequest> {
   @Autowired
   private KafkaTemplate<String, EncodingRequest> template;
 
-  public void send(String topic, String key, EncodingRequest data) {
-    template.send(topic, key, data);
+  public void send(String topicName, String key, EncodingRequest data){
+    template.send(topicName, key, data);
     template.flush();
   }
 
