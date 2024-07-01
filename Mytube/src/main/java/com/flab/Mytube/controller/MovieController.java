@@ -1,46 +1,69 @@
 package com.flab.Mytube.controller;
 
-import com.flab.Mytube.movie.request.InsertMovieRequest;
-import com.flab.Mytube.movie.request.InsertPostRequest;
-import com.flab.Mytube.movie.request.JoinChatRequest;
-import com.flab.Mytube.service.MovieService;
-import com.flab.Mytube.service.StreamingService;
+import com.flab.Mytube.domain.Movie;
+import com.flab.Mytube.dto.movie.request.FileUploadRequest;
+import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
+import com.flab.Mytube.error.exceptions.ResourceNotFoundException;
+import com.flab.Mytube.service.ConvertMovieService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.math.BigInteger;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/movies")
 public class MovieController {
-    private final MovieService movieService;
-    private final StreamingService streamingService;
 
-    @PostMapping("")
-    public BigInteger reserve(@RequestBody InsertPostRequest.Param param){
-        // 관련 dto 생성하여 매개변수로 전달
-        // live 예약하기
-        return streamingService.reserveMovie(param).getID();
+  private final ConvertMovieService convertMovieService;
+
+  // 동영상 업로드 요청
+  @PostMapping("")
+  public void upload(@RequestParam("movie") MultipartFile file,
+      @RequestParam("channelId") long channelId) {
+    FileUploadRequest request = FileUploadRequest.builder()
+        .file(file)
+        .channelId(channelId)
+        .build();
+    convertMovieService.uploadMovie(request);
+  }
+
+  // 스트리밍 시작을 위한 동영상 정보(m3m8, ts file) 요청 // TODO: kafka 연동 이후 sideEffect 확인하기
+  @GetMapping("/{movieId}/channels/{channelId}")
+  public ResponseEntity<InputStreamResource> getMovie(
+      @PathVariable("channelId") int channelId,
+      @PathVariable("movieId") String movieId
+  ) {
+    MovieDtailRequest movie = MovieDtailRequest.builder()
+        .movieId(movieId)
+        .channel(channelId)
+        .build();
+    File liveSource = convertMovieService.getLiveFile(movie);
+
+    try {
+      InputStreamResource resource = new InputStreamResource(new FileInputStream(liveSource));
+      return ResponseEntity.ok()
+          .contentType(MediaType.parseMediaType("application/x-mpegURL"))
+          .body(resource);
+    } catch (FileNotFoundException e) {
+      throw new ResourceNotFoundException("데이터를 불러오지 못했습니다.");
     }
-    @PostMapping("/upload")
-    public long upload(@RequestBody InsertMovieRequest param){
-        // 동영상 업로드
-        return movieService.insertMovie(param).getID();
-    }
+  }
 
-    @PostMapping("/{movie_id}/chat")
-    public BigInteger joinChat(@RequestBody JoinChatRequest param, @PathVariable("movie_id") BigInteger movie_id){
-        //라이브 채팅 참여
-        return streamingService.joinChat(param, movie_id).getID();
-    }
+  @PatchMapping("/{movieId}")
+  public void deleteMovie(@PathVariable("movieId") long movieId) {
+    convertMovieService.delete(movieId);
+  }
 
-    @PostMapping("/{movie_id}/store")
-    public void storeMovie(){
-        //라이브 저장하기
-    }
-
-
-
-
+  @GetMapping("/channels/{channelId}")
+  public List<Movie> MovieList(@PathVariable("channelId") long channelId) {
+    return convertMovieService.getLiveLists(channelId);
+  }
 }
