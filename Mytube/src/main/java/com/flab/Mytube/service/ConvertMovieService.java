@@ -57,13 +57,13 @@ public class ConvertMovieService {
     Path originPath = moviePath.originRootPath(request);
     originPath = originPath.resolve(fileName);
 
-//    // 파일 작성하기(복사)
-//    try (OutputStream os = Files.newOutputStream(originPath)) {
-//      byte[] bytes = request.getFile().getBytes();
-//      Files.write(originPath, bytes);
-//    } catch (IOException e) {
-//      throw new RuntimeException(e);
-//    }
+    // 파일 작성하기(복사)
+    try (OutputStream os = Files.newOutputStream(originPath)) {
+      byte[] bytes = request.getFile().getBytes();
+      Files.write(originPath, bytes);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
 ////  filepath 경로에 파일 저장
 //    movieBuilder(originPath, request);
     EncodingRequest data = EncodingRequest.builder()
@@ -76,13 +76,20 @@ public class ConvertMovieService {
 
 
   @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
-  public void testKafka(ConsumerRecord<String, EncodingRequest> data){
-    EncodingRequest request = data.value();
+  public void segment(ConsumerRecord<String, Object> data) {
+    EncodingRequest request = (EncodingRequest) data.value();
     System.out.println(request.getTopic());
     log.info(String.format("EncodingRequest created -> %s", data));
+    String originPath = request.getPath();
+    File chunckPath = moviePath.chunckPath(originPath);
+    String fileName = chunckPath.getName();
+    String tsName = fileName.replace("\\.m3m8", "ts");
 
+    FFmpegBuilder builder = movieFile.segmentationTs(fileName, originPath, chunckPath,
+        tsName);
 
     System.out.println("hello?");
+    run(builder);
   }
 
   private void movieBuilder(Path filepath, FileUploadRequest request) {
@@ -140,7 +147,7 @@ public class ConvertMovieService {
     return new File(filePath);
   }
 
-  public void delete(long movieId){
+  public void delete(long movieId) {
     movieMapper.delete(movieId);
   }
 

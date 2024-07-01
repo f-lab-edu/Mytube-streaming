@@ -48,10 +48,10 @@ public class MoviePath {
     return sb.toString();
   }
 
-  public Path chunckPath(String originPath) {
+  public File chunckPath(String originPath) {
     System.out.println(">>> >> >>>> >> chunkPath : " + originPath);
     String outPath = originPath.replaceAll(savedPath, hlsOutputPath);
-    return Paths.get(outPath);
+    return resultFile(outPath);
   }
 
 
