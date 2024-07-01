@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flab.Mytube.mappers.LiveStreamingMapper">
+  <resultMap id="LiveStreaming" type="com.flab.Mytube.domain.LiveStreaming">
+    <id column="id" property="id"/>
+    <result column="userId" property="channelId"/>
+    <result column="movieId" property="movieId"/>
+    <result column="title" property="title"/>
+    <result column="contents" property="contents"/>
+    <result column="userCount" property="userCount"/>
+    <result column="thumbsUp" property="thumbsUp"/>
+    <result column="reservedAt" property="reservedAt"/>
+    <result column="createdAt" property="createdAt"/>
+    <result column="updatedAt" property="updatedAt"/>
+    <result column="deletedAt" property="deletedAt"/>
+  </resultMap>
+
+  <insert id="save" useGeneratedKeys="true" keyProperty="id"
+    parameterType="com.flab.Mytube.domain.LiveStreaming">
+    insert into liveStreaming (userId, movieId, title, contents, reservedAt)
+    values (#{request.channelId},#{request.movieId}, #{request.title}, #{request.contents}, #{request.reservedAt})
+  </insert>
+
+  <update id="delete" parameterType="long" keyProperty="steramingId">
+    update liveStreaming
+    set deletedAt = SYSDATE(), updatedAt = SYSDATE()
+    where id = #{steramingId}
+  </update>
+
+  <select id="findByLiveId" parameterType="long" resultMap="LiveStreaming">
+    select * from liveStreaming where id = #{liveId}
+  </select>
+
+  <select id="findByChannelId" parameterType="long" resultMap="LiveStreaming">
+    select * from liveStreaming
+    WHERE userId = #{channelId} and deletedAt is NULL;
+  </select>
+
+
+</mapper>
