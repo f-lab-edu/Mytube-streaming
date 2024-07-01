@@ -5,8 +5,8 @@ import com.flab.Mytube.dto.movie.request.ChuncksBuildRequest;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.error.exceptions.NoDataSubmitException;
-import com.flab.Mytube.kafka.EncodingRequest;
-import com.flab.Mytube.kafka.Producer;
+import com.flab.Mytube.dto.movie.request.EncodingRequest;
+import com.flab.Mytube.utils.KafkaProducer;
 import com.flab.Mytube.mappers.MovieMapper;
 import com.flab.Mytube.utils.MoviePath;
 import com.flab.Mytube.utils.MovieFile;
@@ -41,7 +41,7 @@ public class ConvertMovieService {
   private final MovieFile movieFile;
   private final MoviePath moviePath;
 
-  private final Producer producer;
+  private final KafkaProducer kafkaProducer;
 //  @Autowired
 //  Producer producer;
 
@@ -64,22 +64,18 @@ public class ConvertMovieService {
       throw new RuntimeException(e);
     }
 ////  filepath 경로에 파일 저장
-//    movieBuilder(originPath, request);
     EncodingRequest data = EncodingRequest.builder()
         .topic("videoPath")
         .key(fileName.split("\\.")[0])
         .path(originPath.toString()).build();
     String key = fileName.split("\\.")[0];
-    producer.send(data.getTopic(), key, data);
+    kafkaProducer.send(data.getTopic(), key, data);
   }
 
 
   @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
   public void segment(ConsumerRecord<String, Object> data) {
     EncodingRequest request = (EncodingRequest) data.value();
-    System.out.println(request.getTopic());
-
-    log.info(String.format("EncodingRequest created -> %s", data));
 
     String originPath = request.getPath();
     File chunckPath = moviePath.chunckPath(originPath);
@@ -92,7 +88,6 @@ public class ConvertMovieService {
         .build();
     FFmpegBuilder builder = movieFile.segmentationTs(chunkBuilder);
 
-    System.out.println("hello?");
     run(builder);
   }
 

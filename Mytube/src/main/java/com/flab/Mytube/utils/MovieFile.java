@@ -2,7 +2,6 @@ package com.flab.Mytube.utils;
 
 import com.flab.Mytube.dto.movie.request.ChuncksBuildRequest;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import org.springframework.stereotype.Component;
 
@@ -19,13 +18,11 @@ import java.util.stream.Stream;
 
 @NoArgsConstructor
 @Component
-@Slf4j
 public class MovieFile {
+
   public FFmpegBuilder segmentationTs(ChuncksBuildRequest request) {
     // ts 파일로 분할 및 분해 설정
-    log.info(" >>> >>> >> request.getMp4() >>> "+request.getMp4Path());
-    log.info(" >>> >>> >> request.chunksPath() >>> "+request.chunckPath());
-    log.info(" >>> >>> >> request.getFileName() >>> "+request.getFileName());
+
     FFmpegBuilder builder = new FFmpegBuilder()
         .setInput(request.getMp4Path()) // 입력 소스
         .overrideOutputFiles(true)

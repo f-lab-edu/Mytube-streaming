@@ -1,4 +1,4 @@
-package com.flab.Mytube.kafka;
+package com.flab.Mytube.dto.movie.request;
 
 import java.io.Serializable;
 import lombok.AllArgsConstructor;

@@ -14,17 +14,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class MoviePath {
 
-  private static String savedPath= "src/main/resources/static/origin";
+  private static String savedPath = "src/main/resources/static/origin";
 
   private static String hlsOutputPath = "src/main/resources/static/hls";
 
 
   public Path originRootPath(FileUploadRequest request) {
     return rootPath(request, savedPath);
-  }
-
-  public Path outputRootPath(FileUploadRequest request) {
-    return rootPath(request, hlsOutputPath);
   }
 
   private Path rootPath(FileUploadRequest request, String savedPath) {
@@ -34,16 +30,10 @@ public class MoviePath {
     return filepath;
   }
 
-  public String hlsPath(int channelId, String movieId, String key) {
+  public String hlsPath(MovieDtailRequest request, String name) {
     StringBuilder sb = new StringBuilder();
-    sb.append(hlsOutputPath).append("/channel-" + channelId).append("/").append(key).append("/")
-        .append(movieId);
-    return sb.toString();
-  }
-
-  public String hlsPath(MovieDtailRequest request, String name){
-    StringBuilder sb = new StringBuilder();
-    sb.append(hlsOutputPath).append("/channel-" + request.getChannel()).append("/").append(name).append("/")
+    sb.append(hlsOutputPath).append("/channel-" + request.getChannel()).append("/").append(name)
+        .append("/")
         .append(request.getMovieId());
     return sb.toString();
   }
