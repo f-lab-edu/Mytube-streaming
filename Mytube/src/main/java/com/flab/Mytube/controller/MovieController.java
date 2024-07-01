@@ -35,7 +35,7 @@ public class MovieController {
     convertMovieService.uploadMovie(request);
   }
 
-  // 스트리밍 시작을 위한 동영상 정보(m3m8, ts file) 요청
+  // 스트리밍 시작을 위한 동영상 정보(m3m8, ts file) 요청 // TODO: kafka 연동 이후 sideEffect 확인하기
   @GetMapping("/{movieId}/channels/{channelId}")
   public ResponseEntity<InputStreamResource> getMovie(
       @PathVariable("channelId") int channelId,
