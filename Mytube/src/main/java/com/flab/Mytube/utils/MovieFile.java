@@ -29,7 +29,7 @@ public class MovieFile {
     FFmpegBuilder builder = new FFmpegBuilder()
         .setInput(request.getMp4Path()) // 입력 소스
         .overrideOutputFiles(true)
-        .addOutput(request.chunckPath() + "/" + request.getFileName() + ".m3u8") // 저장경로
+        .addOutput(request.chunckPath()+"/" + request.getFileName()+".m3m8") // 저장경로
         .setFormat("hls")
         .addExtraArgs("-hls_time", "10") // 10초
         .addExtraArgs("-hls_list_size", "0")
