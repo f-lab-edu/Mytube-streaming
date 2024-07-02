@@ -54,8 +54,8 @@ public class MoviePath {
   }
 
   public String chunkPathStr(String originPath){
-    String output = originPath.replace(savedPath, hlsOutputPath);
-    return output;
+    String outPath = originPath.replace(savedPath, hlsOutputPath).replace(".mp4", ".m3u8");
+    return outPath;
   }
 
 

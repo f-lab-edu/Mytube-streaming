@@ -71,13 +71,14 @@ public class ConvertMovieService {
         .path(originPath.toString()).build();
     String key = fileName.split("\\.")[0];
     producer.send(data.getTopic(), key, data);
+    request.addPath(moviePath.chunkPathStr(originPath.toString()));
+    movieMapper.save(request);
   }
 
 
   @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
   public void segment(ConsumerRecord<String, Object> data) {
     EncodingRequest request = (EncodingRequest) data.value();
-    System.out.println(request.getTopic());
 
     log.info(String.format("EncodingRequest created -> %s", data));
 
@@ -115,6 +116,7 @@ public class ConvertMovieService {
   public File getLiveFile(MovieDtailRequest request) {
     String movieId = request.getMovieId();
     // movie 의 id 가 입력된 경우
+    log.info("request movieId >>> "+movieId);
 
     if (Validations.isNumeric(movieId)) {
       return getLiveFile(Long.valueOf(movieId));
@@ -130,6 +132,7 @@ public class ConvertMovieService {
   public File getLiveFile(Long fileId) {
     Movie movie = movieMapper.findByMovieId(fileId);
     String filePath = movie.getUrl();
+    log.info("get Live File filePath >>> "+filePath);
 
     return new File(filePath);
   }
