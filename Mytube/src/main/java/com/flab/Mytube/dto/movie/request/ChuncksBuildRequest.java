@@ -6,8 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@Slf4j
 @Getter
 @Builder
 @AllArgsConstructor
@@ -22,7 +24,10 @@ public class ChuncksBuildRequest {
   private MoviePath moviePath;
 
   public String chunckPath() {
-    String chunckPath = chunkFile.getPath();
+//    File file=new File(chunkFile);
+
+    String chunckPath = chunkFile.getParent();
+    log.info(" >>> >>> >>> request chunckpath >>> "+chunckPath);
     return chunckPath;
   }
 }

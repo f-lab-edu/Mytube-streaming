@@ -32,6 +32,7 @@ public class KafkaTopicConfig {
     return TopicBuilder.name("videoPath")
         .partitions(10)
         .replicas(1) // 복제 팩터를 1로 설정
+        .config(TopicConfig.RETENTION_MS_CONFIG, "5000")
         .compact()
         .build();
   }
