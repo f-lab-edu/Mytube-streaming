@@ -28,6 +28,10 @@ public class ChuncksBuildRequest {
 
     String chunckPath = chunkFile.getParent();
     log.info(" >>> >>> >>> request chunckpath >>> "+chunckPath);
+    File file = new File(chunckPath);
+    if(!file.exists()){
+      file.mkdirs();
+    }
     return chunckPath;
   }
 }

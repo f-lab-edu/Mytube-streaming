@@ -30,7 +30,7 @@ public class KafkaTopicConfig {
   @Bean
   public NewTopic topic1() {
     return TopicBuilder.name("videoPath")
-        .partitions(10)
+        .partitions(5)
         .replicas(1) // 복제 팩터를 1로 설정
         .config(TopicConfig.RETENTION_MS_CONFIG, "5000")
         .compact()

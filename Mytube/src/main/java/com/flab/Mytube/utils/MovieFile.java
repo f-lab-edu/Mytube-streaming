@@ -21,31 +21,56 @@ import java.util.stream.Stream;
 @Component
 @Slf4j
 public class MovieFile {
+
+//  private final MoviePath moviePath;
+
   public FFmpegBuilder segmentationTs(ChuncksBuildRequest request) {
+    StringBuilder sb = new StringBuilder();
     // ts 파일로 분할 및 분해 설정
-    log.info(" >>> >>> >> request.getMp4() >>> "+request.getMp4Path());
-    log.info(" >>> >>> >> request.chunksPath() >>> "+request.chunckPath());
-    log.info(" >>> >>> >> request.getFileName() >>> "+request.getFileName());
+    log.info(" >>> >>> >> request.getMp4() >>> " + request.getMp4Path());
+    log.info(" >>> >>> >> request.chunksPath() >>> " + request.chunckPath());
+    log.info(" >>> >>> >> request.getFileName() >>> " + request.getFileName());
+    String outputPath = request.chunckPath()+"/";
+    createDirectoryIfNotExists(outputPath);
+    String outputFilePath = outputPath + request.getFileName() + ".m3u8";
+
+//    String outputPath = MoviePath.chunkPathStr(request.getMp4Path());
+
     FFmpegBuilder builder = new FFmpegBuilder()
         .setInput(request.getMp4Path()) // 입력 소스
         .overrideOutputFiles(true)
-        .addOutput(request.chunckPath()+"/" + request.getFileName()+".m3m8") // 저장경로
+        .addOutput(outputFilePath) // 저장경로
         .setFormat("hls")
         .addExtraArgs("-hls_time", "10") // 10초
         .addExtraArgs("-hls_list_size", "0")
         .addExtraArgs("-hls_segment_filename",
-            request.chunckPath() + "/" + request.getFileName() + "_%08d.ts") // 청크 파일 이름
+            outputPath + request.getFileName() + "_%08d.ts") // 청크 파일 이름
         .done();
 
     return builder;
+  }
+
+  private void createDirectoryIfNotExists(String directoryPath) {
+    Path directory = Paths.get(directoryPath);
+    try {
+      if (!Files.exists(directory)) {
+        Files.createDirectories(directory);
+        log.info("디렉토리가 생성되었습니다: " + directoryPath);
+      } else {
+        log.info("디렉토리가 이미 존재합니다: " + directoryPath);
+      }
+    } catch (IOException e) {
+      log.error("디렉토리를 생성하는 데 실패했습니다: " + e.getMessage(), e);
+    }
   }
 
   public File getFfmpegBuilder(String masterPath, int startIndex) {
     List<String> lines;
     StringBuilder sb = new StringBuilder();
     String base = masterPath.split("\\.")[0];
-    sb.append(base).append(startIndex).append("_created.m3u8");
+    sb.append(base).append(startIndex).append(".m3u8");
     String createdFilePath = sb.toString();
+    log.info("Builder >>> " + createdFilePath);
 
     Path directory = Paths.get(base);
     try {
