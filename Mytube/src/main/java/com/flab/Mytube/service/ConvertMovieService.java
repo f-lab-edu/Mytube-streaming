@@ -70,9 +70,11 @@ public class ConvertMovieService {
         .topic("videoPath")
         .key(fileName.split("\\.")[0])
         .path(originPath.toString()).build();
+
+    log.info("producer >>> >>> origin Path >>> "+originPath);
     String key = fileName.split("\\.")[0];
     producer.send(data.getTopic(), key, data);
-    request.addPath(moviePath.chunkPathStr(originPath.toString()));
+    request.addPath(MoviePath.chunkPathStr(originPath.toString()));
     movieMapper.save(request);
   }
 
