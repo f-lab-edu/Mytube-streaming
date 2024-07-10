@@ -37,10 +37,8 @@ public class MovieController {
 
   // 스트리밍 시작을 위한 동영상 정보(m3m8, ts file) 요청
   @GetMapping("/{movieId}/channels/{channelId}")
-  public ResponseEntity<InputStreamResource> getMovie(
-      @PathVariable("channelId") int channelId,
-      @PathVariable("movieId") String movieId
-  ) {
+  public ResponseEntity<InputStreamResource> getMovie(@PathVariable("channelId") int channelId,
+      @PathVariable("movieId") String movieId) {
     MovieDtailRequest movie = MovieDtailRequest.builder()
         .movieId(movieId)
         .channel(channelId)

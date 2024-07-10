@@ -3,11 +3,13 @@ package com.flab.Mytube.service;
 import com.flab.Mytube.domain.Movie;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
+import com.flab.Mytube.dto.movie.request.SegmentationRequest;
 import com.flab.Mytube.error.exceptions.NoDataSubmitException;
 import com.flab.Mytube.mappers.MovieMapper;
 import com.flab.Mytube.utils.Movies;
 import com.flab.Mytube.utils.Validations;
 import java.util.List;
+import javax.swing.text.Segment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.FFmpeg;
@@ -33,16 +35,6 @@ public class ConvertMovieService {
   private final MovieMapper movieMapper;
   private final FFmpeg fFmpeg;
   private final FFprobe fFprobe;
-  private final Movies movie = new Movies();
-
-  @Value("src/main/resources/static/origin")
-  private String savedPath;
-
-  @Value("src/main/resources/static/hls")
-  private String hlsOutputPath;
-
-  @Value("src/main/resources/static/mp4")
-  private String mp4OutputPath;
 
   //동영상 업로드
   @Transactional
@@ -52,7 +44,7 @@ public class ConvertMovieService {
     }
     // 파일 경로 지정
     String fileName = request.getFile().getOriginalFilename();
-    Path filepath = movie.rootPath(request, savedPath);
+    Path filepath = Movies.originPath(request);
     filepath = filepath.resolve(fileName);
 
     // 파일 작성하기(복사)
@@ -68,20 +60,22 @@ public class ConvertMovieService {
 
 
   private void movieBuilder(Path filepath, FileUploadRequest request) {
-    String path = filepath.toString();
-    String outPath = movie.rootPath(request, hlsOutputPath).toString(); // 저장 위치 생성
-    File output = movie.resultFile(outPath);
-
+    String outPath = Movies.hlsPath(request).toString(); // 저장 위치 생성
+    File output = Movies.resultFile(outPath);
     String fileName = request.getOriginFileName().split("\\.")[0];
-    String tsName = fileName;
+
+    SegmentationRequest segmentContent = SegmentationRequest.builder()
+        .name(fileName)
+        .originPath(filepath.toString())
+        .m3u8Name(fileName + ".m3u8")
+        .output(outPath).build();
 
 //  ts 파일로 분할 및 분해 설정
-    String source = fileName + ".m3m8";
-    FFmpegBuilder builder = movie.segmentationTs(source, path, output, tsName);
+    FFmpegBuilder builder = Movies.segmentationTs(segmentContent);
 
     // builder 실행
     run(builder);
-    request.addPath(output.getPath(), source);
+    request.addPath(output.getPath(), segmentContent.getM3u8Name());
     movieMapper.save(request);
   }
 
@@ -100,7 +94,6 @@ public class ConvertMovieService {
   }
 
   public File getLiveFile(MovieDtailRequest request) {
-    int channelId = request.getChannel();
     String movieId = request.getMovieId();
     // movie 의 id 가 입력된 경우
 
@@ -108,12 +101,7 @@ public class ConvertMovieService {
       return getLiveFile(Long.valueOf(movieId));
     }
     // movie 의 .ts 파일 이름이 입력된 경우
-    String key = movieId.split("_")[0];
-    StringBuilder sb = new StringBuilder();
-    sb.append(hlsOutputPath).append("/channel-" + channelId).append("/").append(key).append("/")
-        .append(movieId);
-    String filePath = sb.toString();
-    return new File(filePath);
+    return Movies.findHlsPathByChannelId(request);
   }
 
   // id 를 통해 .m3m8 파일이 저장된 url 가져올 수 있도록
@@ -124,7 +112,7 @@ public class ConvertMovieService {
     return new File(filePath);
   }
 
-  public void delete(long movieId){
+  public void delete(long movieId) {
     movieMapper.delete(movieId);
   }
 

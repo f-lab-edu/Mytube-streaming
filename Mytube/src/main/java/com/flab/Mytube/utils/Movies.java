@@ -1,9 +1,14 @@
 package com.flab.Mytube.utils;
 
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
+import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
+import com.flab.Mytube.dto.movie.request.SegmentationRequest;
 import com.flab.Mytube.error.exceptions.DuplicatedPathException;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -17,11 +22,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@NoArgsConstructor
+@Slf4j
+@RequiredArgsConstructor
 @Component
 public class Movies {
 
-  public Path rootPath(FileUploadRequest request, String savedPath) {
+  // Movies 파일에서는 null 로 인식된g
+  @Value("src/main/resources/static/origin")
+  private String savedPath;
+
+  @Value("src/main/resources/static/hls")
+  private String hlsOutputPath;
+
+  public static Path rootPath(FileUploadRequest request, String savedPath) {
     String fileName = request.getOriginFileName().split("\\.")[0];
 
     // savedPath: ./origin/channel-{id}/{subject} : 원본 저장 위치
@@ -38,7 +51,16 @@ public class Movies {
     return filepath;
   }
 
-  public File resultFile(String path) {
+  public static Path originPath(FileUploadRequest request) {
+    Path result = rootPath(request, "src/main/resources/static/origin");
+    return result;
+  }
+
+  public static Path hlsPath(FileUploadRequest request) {
+    return rootPath(request, "src/main/resources/static/hls");
+  }
+
+  public static File resultFile(String path) {
     File output = new File(path);
     if (!output.exists()) {
       output.mkdirs();
@@ -46,17 +68,45 @@ public class Movies {
     return output;
   }
 
-  public FFmpegBuilder segmentationTs(String masterPath, String path, File output, String tsName) {
-    // ts 파일로 분할 및 분해 설정
+  public static File findHlsPathByChannelId(MovieDtailRequest request) {
+    int channelId = request.getChannel();
+    String movieId = request.getMovieId();
+    String key = movieId.split("_")[0];
+    StringBuilder sb = new StringBuilder();
+    sb.append("src/main/resources/static/hls").append("/channel-" + channelId).append("/")
+        .append(key).append("/")
+        .append(movieId); // TODO
+    String filePath = sb.toString();
+    return new File(filePath);
+  }
+
+  public static FFmpegBuilder segmentationTs(SegmentationRequest request) {
+    File output = resultFile(request.getOutput());
     FFmpegBuilder builder = new FFmpegBuilder()
-        .setInput(path) // 입력 소스
+        .setInput(request.getOriginPath()) // 입력 소스
         .overrideOutputFiles(true)
-        .addOutput(output.getAbsolutePath() + "/" + masterPath) // 저장경로
+        .addOutput(request.getOutput() + "/" + request.getM3u8Name()) // 저장경로
         .setFormat("hls")
         .addExtraArgs("-hls_time", "10") // 10초
         .addExtraArgs("-hls_list_size", "0")
         .addExtraArgs("-hls_segment_filename",
-            output.getAbsolutePath() + "/" + tsName + "_%08d.ts") // 청크 파일 이름
+            output.getAbsolutePath() + "/" + request.getName() + "_%08d.ts") // 청크 파일 이름
+        .done();
+    return builder;
+  }
+
+  public FFmpegBuilder segmentationTs(String m3u8FileName, String path, File output,
+      String fileName) {
+    // ts 파일로 분할 및 분해 설정
+    FFmpegBuilder builder = new FFmpegBuilder()
+        .setInput(path) // 입력 소스
+        .overrideOutputFiles(true)
+        .addOutput(output.getAbsolutePath() + "/" + m3u8FileName) // 저장경로
+        .setFormat("hls")
+        .addExtraArgs("-hls_time", "10") // 10초
+        .addExtraArgs("-hls_list_size", "0")
+        .addExtraArgs("-hls_segment_filename",
+            output.getAbsolutePath() + "/" + fileName + "_%08d.ts") // 청크 파일 이름
         .done();
     return builder;
   }
