@@ -6,6 +6,7 @@ import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.dto.movie.request.SegmentationRequest;
 import com.flab.Mytube.error.exceptions.NoDataSubmitException;
 import com.flab.Mytube.mappers.MovieMapper;
+import com.flab.Mytube.utils.MoviePath;
 import com.flab.Mytube.utils.Movies;
 import com.flab.Mytube.utils.Validations;
 import java.util.List;
@@ -36,6 +37,10 @@ public class ConvertMovieService {
   private final FFmpeg fFmpeg;
   private final FFprobe fFprobe;
 
+  @Value("src/main/resources/static/hls")
+  private String hlsOutputPath;
+  private final MoviePath moviePath;
+
   //동영상 업로드
   @Transactional
   public void uploadMovie(FileUploadRequest request) {
@@ -44,24 +49,35 @@ public class ConvertMovieService {
     }
     // 파일 경로 지정
     String fileName = request.getFile().getOriginalFilename();
-    Path filepath = Movies.originPath(request);
-    filepath = filepath.resolve(fileName);
+//<<<<<<< HEAD
+//    Path filepath = Movies.originPath(request);
+//    filepath = filepath.resolve(fileName);
+//=======
+    Path originPath = moviePath.originRootPath(request);
+    originPath = originPath.resolve(fileName);
 
     // 파일 작성하기(복사)
-    try (OutputStream os = Files.newOutputStream(filepath)) {
+    try (OutputStream os = Files.newOutputStream(originPath)) {
       byte[] bytes = request.getFile().getBytes();
-      Files.write(filepath, bytes);
+      Files.write(originPath, bytes);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
 //  filepath 경로에 파일 저장
-    movieBuilder(filepath, request);
+    movieBuilder(originPath, request);
   }
 
 
   private void movieBuilder(Path filepath, FileUploadRequest request) {
+//<<<<<<< HEAD
     String outPath = Movies.hlsPath(request).toString(); // 저장 위치 생성
     File output = Movies.resultFile(outPath);
+//=======
+//    String path = filepath.toString();
+//    String outPath = moviePath.outputRootPath(request).toString();// 저장 위치 생성
+//    File output = movie.resultFile(outPath);
+//
+//>>>>>>> 4b26233 (refactor: moviePath 내부에 경로 상수 추가)
     String fileName = request.getOriginFileName().split("\\.")[0];
 
     SegmentationRequest segmentContent = SegmentationRequest.builder()
