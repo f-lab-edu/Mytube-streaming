@@ -1,6 +1,7 @@
 package com.flab.Mytube.utils;
 
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
+import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.error.exceptions.DuplicatedPathException;
 import java.io.File;
 import java.io.IOException;
@@ -33,10 +34,17 @@ public class MoviePath {
     return filepath;
   }
 
-  public String outputRootPath(int channelId, String movieId, String key) {
+  public String hlsPath(int channelId, String movieId, String key) {
     StringBuilder sb = new StringBuilder();
     sb.append(hlsOutputPath).append("/channel-" + channelId).append("/").append(key).append("/")
         .append(movieId);
+    return sb.toString();
+  }
+
+  public String hlsPath(MovieDtailRequest request, String name){
+    StringBuilder sb = new StringBuilder();
+    sb.append(hlsOutputPath).append("/channel-" + request.getChannel()).append("/").append(name).append("/")
+        .append(request.getMovieId());
     return sb.toString();
   }
 

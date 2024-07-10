@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @Component
 public class Movies {
-
   // Movies 파일에서는 null 로 인식된g
   @Value("src/main/resources/static/origin")
   private String savedPath;

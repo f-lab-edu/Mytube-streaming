@@ -10,7 +10,6 @@ import com.flab.Mytube.utils.MoviePath;
 import com.flab.Mytube.utils.Movies;
 import com.flab.Mytube.utils.Validations;
 import java.util.List;
-import javax.swing.text.Segment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.FFmpeg;
@@ -18,7 +17,6 @@ import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.progress.Progress;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,9 +34,7 @@ public class ConvertMovieService {
   private final MovieMapper movieMapper;
   private final FFmpeg fFmpeg;
   private final FFprobe fFprobe;
-
-  @Value("src/main/resources/static/hls")
-  private String hlsOutputPath;
+  private final Movies movie = new Movies();
   private final MoviePath moviePath;
 
   //동영상 업로드
@@ -49,10 +45,6 @@ public class ConvertMovieService {
     }
     // 파일 경로 지정
     String fileName = request.getFile().getOriginalFilename();
-//<<<<<<< HEAD
-//    Path filepath = Movies.originPath(request);
-//    filepath = filepath.resolve(fileName);
-//=======
     Path originPath = moviePath.originRootPath(request);
     originPath = originPath.resolve(fileName);
 
@@ -69,15 +61,8 @@ public class ConvertMovieService {
 
 
   private void movieBuilder(Path filepath, FileUploadRequest request) {
-//<<<<<<< HEAD
     String outPath = Movies.hlsPath(request).toString(); // 저장 위치 생성
     File output = Movies.resultFile(outPath);
-//=======
-//    String path = filepath.toString();
-//    String outPath = moviePath.outputRootPath(request).toString();// 저장 위치 생성
-//    File output = movie.resultFile(outPath);
-//
-//>>>>>>> 4b26233 (refactor: moviePath 내부에 경로 상수 추가)
     String fileName = request.getOriginFileName().split("\\.")[0];
 
     SegmentationRequest segmentContent = SegmentationRequest.builder()
