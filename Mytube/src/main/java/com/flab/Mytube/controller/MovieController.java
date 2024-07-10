@@ -36,14 +36,14 @@ public class MovieController {
   }
 
   // 스트리밍 시작을 위한 동영상 정보(m3m8, ts file) 요청
-  @GetMapping("/{movieId}/channels/{channelId}")
+  @GetMapping("/{channelId}/channels/{movieId}")
   public ResponseEntity<InputStreamResource> getMovie(@PathVariable("channelId") int channelId,
       @PathVariable("movieId") String movieId) {
     MovieDtailRequest movie = MovieDtailRequest.builder()
         .movieId(movieId)
         .channel(channelId)
         .build();
-    File liveSource = convertMovieService.getLiveFile(movie);
+    File liveSource = convertMovieService.movieFilePath(movie);
 
     try {
       InputStreamResource resource = new InputStreamResource(new FileInputStream(liveSource));

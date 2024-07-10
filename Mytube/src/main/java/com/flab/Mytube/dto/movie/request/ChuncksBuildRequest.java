@@ -21,8 +21,4 @@ public class ChuncksBuildRequest {
   String originPath;
   String m3u8Name;
   File m3u8Path;
-
-  private static String savedPath = "src/main/resources/static/origin";
-  private static String hlsOutputPath = "src/main/resources/static/hls";
-
 }

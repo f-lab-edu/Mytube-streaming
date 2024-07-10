@@ -58,6 +58,8 @@ public class Movies {
     return rootPath(request, "src/main/resources/static/hls");
   }
 
+
+//  'src/main/resources/static/hls/channel-2/test20sec/test20sec.m3u8'
   public static File findHlsPathByChannelId(MovieDtailRequest request) {
     int channelId = request.getChannel();
     String movieId = request.getMovieId();
@@ -68,6 +70,7 @@ public class Movies {
         .append(key).append("/")
         .append(movieId); // TODO
     String filePath = sb.toString();
+    log.info(">>> >>>> >>> "+filePath);
     return new File(filePath);
   }
 

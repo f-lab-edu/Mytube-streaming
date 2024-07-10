@@ -4,7 +4,6 @@ import com.flab.Mytube.domain.Movie;
 import com.flab.Mytube.dto.movie.request.ChuncksBuildRequest;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
-import com.flab.Mytube.dto.movie.request.SegmentationRequest;
 import com.flab.Mytube.error.exceptions.NoDataSubmitException;
 import com.flab.Mytube.kafka.EncodingRequest;
 import com.flab.Mytube.kafka.Producer;
@@ -79,9 +78,6 @@ public class ConvertMovieService {
   @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
   public void segment(ConsumerRecord<String, Object> data) {
     EncodingRequest request = (EncodingRequest) data.value();
-
-    log.info(String.format("EncodingRequest created -> %s", data));
-
     String originPath = request.getPath();
     File chunckPath = moviePath.chunckPath(originPath);
     String fileName = chunckPath.getName().split("\\.")[0];
@@ -106,7 +102,6 @@ public class ConvertMovieService {
 
     executor
         .createJob(builder, progress -> {
-          log.info("progress ==> {}", progress);
           if (progress.status.equals(Progress.Status.END)) {
             log.info("============================= JOB FINISHED =============================");
           }
@@ -115,20 +110,24 @@ public class ConvertMovieService {
   }
 
 
-  public File getLiveFile(MovieDtailRequest request) {
+  public File movieFilePath(MovieDtailRequest request) {
     String movieId = request.getMovieId();
     // movie 의 id 가 입력된 경우
+    log.info("before, is Numeric function");
     if (Validations.isNumeric(movieId)) {
-      return getLiveFile(Long.valueOf(movieId));
+      log.info("in, is Numeric function");
+      return movieFilePath(Long.valueOf(movieId));
     }
+    log.info("movieFilePath: .ts");
     // movie 의 .ts 파일 이름이 입력된 경우
     return Movies.findHlsPathByChannelId(request);
   }
 
   // id 를 통해 .m3m8 파일이 저장된 url 가져올 수 있도록
-  public File getLiveFile(Long fileId) {
-    Movie movie = movieMapper.findByMovieId(fileId);
+  public File movieFilePath(Long movieId) {
+    Movie movie = movieMapper.findByMovieId(movieId);
     String filePath = movie.getUrl();
+    log.info(">>> >>> >>> "+filePath);
 
     return new File(filePath);
   }

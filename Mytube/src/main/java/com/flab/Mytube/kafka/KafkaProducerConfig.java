@@ -1,4 +1,4 @@
-package com.flab.Mytube.config;
+package com.flab.Mytube.kafka;
 
 import com.flab.Mytube.kafka.EncodingRequest;
 import org.apache.kafka.clients.producer.ProducerConfig;

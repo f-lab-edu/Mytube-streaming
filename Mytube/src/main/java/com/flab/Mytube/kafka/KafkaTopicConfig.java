@@ -1,4 +1,4 @@
-package com.flab.Mytube.config;
+package com.flab.Mytube.kafka;
 
 import java.util.HashMap;
 import java.util.List;
