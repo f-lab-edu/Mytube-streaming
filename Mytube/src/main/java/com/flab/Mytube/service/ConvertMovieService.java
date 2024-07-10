@@ -21,6 +21,7 @@ import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.progress.Progress;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,12 +40,10 @@ public class ConvertMovieService {
   private final MovieMapper movieMapper;
   private final FFmpeg fFmpeg;
   private final FFprobe fFprobe;
-//  private final MovieFile movieFile;
   private final MoviePath moviePath;
 
-  private final Producer producer;
-//  @Autowired
-//  Producer producer;
+  @Autowired
+  Producer producer;
 
   //동영상 업로드
   @Transactional
@@ -65,13 +64,11 @@ public class ConvertMovieService {
       throw new RuntimeException(e);
     }
 ////  filepath 경로에 파일 저장
-//    movieBuilder(originPath, request);
     EncodingRequest data = EncodingRequest.builder()
         .topic("videoPath")
         .key(fileName.split("\\.")[0])
         .path(originPath.toString()).build();
 
-    log.info("producer >>> >>> origin Path >>> "+originPath);
     String key = fileName.split("\\.")[0];
     producer.send(data.getTopic(), key, data);
     request.addPath(MoviePath.chunkPathStr(originPath.toString()));
@@ -87,7 +84,6 @@ public class ConvertMovieService {
 
     String originPath = request.getPath();
     File chunckPath = moviePath.chunckPath(originPath);
-    log.info(chunckPath.toString());
     String fileName = chunckPath.getName().split("\\.")[0];
 
     ChuncksBuildRequest chunkBuilder = ChuncksBuildRequest.builder()
@@ -98,30 +94,12 @@ public class ConvertMovieService {
         .build();
     FFmpegBuilder builder = Movies.segmentationTs(chunkBuilder);
 
-    System.out.println("hello?");
-    run(builder);
+    try {
+      run(builder);
+    } catch (IllegalArgumentException e) {
+      log.info("영상 변환 중 에러가 발생했습니다. 다시 시도해주세요.");
+    }
   }
-
-//  private void movieBuilder(Path filepath, FileUploadRequest request) {
-//    String outPath = Movies.hlsPath(request).toString(); // 저장 위치 생성
-//    File output = Movies.resultFile(outPath);
-//    String fileName = request.getOriginFileName().split("\\.")[0];
-//
-//    SegmentationRequest segmentContent = SegmentationRequest.builder()
-//        .name(fileName)
-//        .originPath(filepath.toString())
-//        .m3u8Name(fileName + ".m3u8")
-//        .output(outPath).build();
-//
-////  ts 파일로 분할 및 분해 설정
-//    FFmpegBuilder builder = Movies.segmentationTs(segmentContent);
-//
-//    // builder 실행
-//    run(builder);
-//    request.addPath(output.getPath());
-//    movieMapper.save(request);
-//  }
-
 
   private void run(FFmpegBuilder builder) {
     FFmpegExecutor executor = new FFmpegExecutor(fFmpeg, fFprobe);
@@ -140,8 +118,6 @@ public class ConvertMovieService {
   public File getLiveFile(MovieDtailRequest request) {
     String movieId = request.getMovieId();
     // movie 의 id 가 입력된 경우
-    log.info("request movieId >>> "+movieId);
-
     if (Validations.isNumeric(movieId)) {
       return getLiveFile(Long.valueOf(movieId));
     }
@@ -153,7 +129,6 @@ public class ConvertMovieService {
   public File getLiveFile(Long fileId) {
     Movie movie = movieMapper.findByMovieId(fileId);
     String filePath = movie.getUrl();
-    log.info("get Live File filePath >>> "+filePath);
 
     return new File(filePath);
   }

@@ -31,8 +31,6 @@ public class KafkaConsumerConfig {
 
   public ConsumerFactory<String, EncodingRequest> kafkaConsumerFactory() {
     Map<String, Object> config = new HashMap<>();
-//    JsonDeserializer<EncodingRequest> EncodingDeserializer = new JsonDeserializer<>(
-//        EncodingRequest.class);
 
     config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
     config.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);

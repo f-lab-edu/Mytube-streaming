@@ -58,17 +58,6 @@ public class Movies {
     return rootPath(request, "src/main/resources/static/hls");
   }
 
-  public static File resultFile(String path) {
-    File output = new File(path);
-    if (!output.exists()) {
-      output.mkdirs();
-      log.info(" >>> >>> >>> movies.resultFile >>> "+output.getParent());
-      log.info(output.getParentFile().toString());
-      log.info(output.getPath());
-    }
-    return output;
-  }
-
   public static File findHlsPathByChannelId(MovieDtailRequest request) {
     int channelId = request.getChannel();
     String movieId = request.getMovieId();
@@ -83,7 +72,6 @@ public class Movies {
   }
 
   public static FFmpegBuilder segmentationTs(ChuncksBuildRequest request) {
-//    File output = resultFile(request.m3u8Path());// MoviePath.chunckPath()ㄹㅏㅇ 역할 겹침
     File output = request.getM3u8Path();
     FFmpegBuilder builder = new FFmpegBuilder()
         .setInput(request.getOriginPath()) // 입력 소스

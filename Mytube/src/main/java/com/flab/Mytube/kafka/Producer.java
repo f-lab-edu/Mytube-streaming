@@ -22,27 +22,6 @@ public class Producer<EncodingRequest> {
     template.flush();
   }
 
-//  public void sendPath(final EncodingRequest data) {
-//    String key = Paths.get(data.path).getFileName().toString().split("\\.")[0];
-//    ProducerRecord<String, Object> record = createRecord(key, data);
-//    CompletableFuture<SendResult<String, Object>> future = template.send(key, record);
-//
-//    future.whenComplete((result, ex) -> {
-//      if (ex == null) {
-//        handleSuccess(data);
-//      }
-//      else {
-//        handleFailure(data, record, ex);
-//      }
-//    });
-//  }
-//
-//
-//  private ProducerRecord<String, Object> createRecord(String key, EncodingRequest data) {
-//    ProducerRecord<String, Object> result = new ProducerRecord(data.topic, key, data.path);
-//    return result;
-//  }
-
   private void handleFailure(EncodingRequest data, ProducerRecord<String, String> record,
       Throwable ex) {
     System.out.println(">> >>>> >>> fail: " + data.toString());

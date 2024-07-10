@@ -18,6 +18,4 @@ public class SegmentationRequest {
   String m3u8Name;
   String output;
 
-//  File output = new File(path);
-
 }

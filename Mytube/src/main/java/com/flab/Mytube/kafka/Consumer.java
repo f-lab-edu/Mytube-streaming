@@ -11,12 +11,4 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class Consumer {
 
-
-
-//  @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
-//  public CompletableFuture<String> listen(String path) {
-//    CompletableFuture<String> future = new CompletableFuture<>();
-//    future.complete("done");
-//    return future;
-//  }
 }
