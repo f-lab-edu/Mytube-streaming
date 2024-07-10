@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @Component
 public class Movies {
+
   // Movies 파일에서는 null 로 인식된g
   @Value("src/main/resources/static/origin")
   private static String savedPath;
@@ -59,7 +60,7 @@ public class Movies {
   }
 
 
-//  'src/main/resources/static/hls/channel-2/test20sec/test20sec.m3u8'
+  //  'src/main/resources/static/hls/channel-2/test20sec/test20sec.m3u8'
   public static File findHlsPathByChannelId(MovieDtailRequest request) {
     int channelId = request.getChannel();
     String movieId = request.getMovieId();
@@ -68,9 +69,8 @@ public class Movies {
     sb.append("src/main/resources/static/hls")
         .append("/channel-" + channelId).append("/")
         .append(key).append("/")
-        .append(movieId); // TODO
+        .append(movieId); // TODO: api 주소가 괜찮을지 더 나은 방식은 없는지 고민해보기
     String filePath = sb.toString();
-    log.info(">>> >>>> >>> "+filePath);
     return new File(filePath);
   }
 
@@ -79,7 +79,7 @@ public class Movies {
     FFmpegBuilder builder = new FFmpegBuilder()
         .setInput(request.getOriginPath()) // 입력 소스
         .overrideOutputFiles(true)
-        .addOutput(request.getM3u8Path().toString() +"/" + request.getM3u8Name()) // 저장경로
+        .addOutput(request.getM3u8Path().toString() + "/" + request.getM3u8Name()) // 저장경로
         .setFormat("hls")
         .addExtraArgs("-hls_time", "10") // 10초
         .addExtraArgs("-hls_list_size", "0")

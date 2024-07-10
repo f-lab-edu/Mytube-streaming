@@ -113,12 +113,9 @@ public class ConvertMovieService {
   public File movieFilePath(MovieDtailRequest request) {
     String movieId = request.getMovieId();
     // movie 의 id 가 입력된 경우
-    log.info("before, is Numeric function");
     if (Validations.isNumeric(movieId)) {
-      log.info("in, is Numeric function");
       return movieFilePath(Long.valueOf(movieId));
     }
-    log.info("movieFilePath: .ts");
     // movie 의 .ts 파일 이름이 입력된 경우
     return Movies.findHlsPathByChannelId(request);
   }
@@ -127,7 +124,6 @@ public class ConvertMovieService {
   public File movieFilePath(Long movieId) {
     Movie movie = movieMapper.findByMovieId(movieId);
     String filePath = movie.getUrl();
-    log.info(">>> >>> >>> "+filePath);
 
     return new File(filePath);
   }
