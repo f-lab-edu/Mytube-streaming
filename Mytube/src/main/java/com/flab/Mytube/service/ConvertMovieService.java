@@ -87,38 +87,40 @@ public class ConvertMovieService {
 
     String originPath = request.getPath();
     File chunckPath = moviePath.chunckPath(originPath);
+    log.info(chunckPath.toString());
     String fileName = chunckPath.getName().split("\\.")[0];
 
     ChuncksBuildRequest chunkBuilder = ChuncksBuildRequest.builder()
-        .fileName(fileName)
-        .chunkFile(chunckPath)
-        .mp4Path(originPath)
+        .name(fileName)
+        .originPath(originPath)
+        .m3u8Name(fileName + ".m3u8")
+        .m3u8Path(chunckPath)
         .build();
-//    FFmpegBuilder builder = Movies.segmentationTs(chunkBuilder);
+    FFmpegBuilder builder = Movies.segmentationTs(chunkBuilder);
 
     System.out.println("hello?");
-//    run(builder);
-  }
-
-  private void movieBuilder(Path filepath, FileUploadRequest request) {
-    String outPath = Movies.hlsPath(request).toString(); // 저장 위치 생성
-    File output = Movies.resultFile(outPath);
-    String fileName = request.getOriginFileName().split("\\.")[0];
-
-    SegmentationRequest segmentContent = SegmentationRequest.builder()
-        .name(fileName)
-        .originPath(filepath.toString())
-        .m3u8Name(fileName + ".m3u8")
-        .output(outPath).build();
-
-//  ts 파일로 분할 및 분해 설정
-    FFmpegBuilder builder = Movies.segmentationTs(segmentContent);
-
-    // builder 실행
     run(builder);
-    request.addPath(output.getPath(), segmentContent.getM3u8Name());
-    movieMapper.save(request);
   }
+
+//  private void movieBuilder(Path filepath, FileUploadRequest request) {
+//    String outPath = Movies.hlsPath(request).toString(); // 저장 위치 생성
+//    File output = Movies.resultFile(outPath);
+//    String fileName = request.getOriginFileName().split("\\.")[0];
+//
+//    SegmentationRequest segmentContent = SegmentationRequest.builder()
+//        .name(fileName)
+//        .originPath(filepath.toString())
+//        .m3u8Name(fileName + ".m3u8")
+//        .output(outPath).build();
+//
+////  ts 파일로 분할 및 분해 설정
+//    FFmpegBuilder builder = Movies.segmentationTs(segmentContent);
+//
+//    // builder 실행
+//    run(builder);
+//    request.addPath(output.getPath());
+//    movieMapper.save(request);
+//  }
 
 
   private void run(FFmpegBuilder builder) {

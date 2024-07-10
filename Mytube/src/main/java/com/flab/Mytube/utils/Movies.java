@@ -1,8 +1,8 @@
 package com.flab.Mytube.utils;
 
+import com.flab.Mytube.dto.movie.request.ChuncksBuildRequest;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
-import com.flab.Mytube.dto.movie.request.SegmentationRequest;
 import com.flab.Mytube.error.exceptions.DuplicatedPathException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +27,10 @@ import java.util.stream.Stream;
 public class Movies {
   // Movies 파일에서는 null 로 인식된g
   @Value("src/main/resources/static/origin")
-  private String savedPath;
+  private static String savedPath;
 
   @Value("src/main/resources/static/hls")
-  private String hlsOutputPath;
+  private static String hlsOutputPath;
 
   public static Path rootPath(FileUploadRequest request, String savedPath) {
     String fileName = request.getOriginFileName().split("\\.")[0];
@@ -62,6 +62,9 @@ public class Movies {
     File output = new File(path);
     if (!output.exists()) {
       output.mkdirs();
+      log.info(" >>> >>> >>> movies.resultFile >>> "+output.getParent());
+      log.info(output.getParentFile().toString());
+      log.info(output.getPath());
     }
     return output;
   }
@@ -79,12 +82,13 @@ public class Movies {
     return new File(filePath);
   }
 
-  public static FFmpegBuilder segmentationTs(SegmentationRequest request) {
-    File output = resultFile(request.getOutput());
+  public static FFmpegBuilder segmentationTs(ChuncksBuildRequest request) {
+//    File output = resultFile(request.m3u8Path());// MoviePath.chunckPath()ㄹㅏㅇ 역할 겹침
+    File output = request.getM3u8Path();
     FFmpegBuilder builder = new FFmpegBuilder()
         .setInput(request.getOriginPath()) // 입력 소스
         .overrideOutputFiles(true)
-        .addOutput(request.getOutput() + "/" + request.getM3u8Name()) // 저장경로
+        .addOutput(request.getM3u8Path().toString() +"/" + request.getM3u8Name()) // 저장경로
         .setFormat("hls")
         .addExtraArgs("-hls_time", "10") // 10초
         .addExtraArgs("-hls_list_size", "0")

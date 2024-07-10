@@ -24,31 +24,31 @@ public class MovieFile {
 
 //  private final MoviePath moviePath;
 
-  public FFmpegBuilder segmentationTs(ChuncksBuildRequest request) {
-    StringBuilder sb = new StringBuilder();
-    // ts 파일로 분할 및 분해 설정
-    log.info(" >>> >>> >> request.getMp4() >>> " + request.getMp4Path());
-    log.info(" >>> >>> >> request.chunksPath() >>> " + request.chunckPath());
-    log.info(" >>> >>> >> request.getFileName() >>> " + request.getFileName());
-    String outputPath = request.chunckPath()+"/";
-    createDirectoryIfNotExists(outputPath);
-    String outputFilePath = outputPath + request.getFileName() + ".m3u8";
-
-//    String outputPath = MoviePath.chunkPathStr(request.getMp4Path());
-
-    FFmpegBuilder builder = new FFmpegBuilder()
-        .setInput(request.getMp4Path()) // 입력 소스
-        .overrideOutputFiles(true)
-        .addOutput(outputFilePath) // 저장경로
-        .setFormat("hls")
-        .addExtraArgs("-hls_time", "10") // 10초
-        .addExtraArgs("-hls_list_size", "0")
-        .addExtraArgs("-hls_segment_filename",
-            outputPath + request.getFileName() + "_%08d.ts") // 청크 파일 이름
-        .done();
-
-    return builder;
-  }
+//  public FFmpegBuilder segmentationTs(ChuncksBuildRequest request) {
+//    StringBuilder sb = new StringBuilder();
+//    // ts 파일로 분할 및 분해 설정
+//    log.info(" >>> >>> >> request.getMp4() >>> " + request.getMp4Path());
+//    log.info(" >>> >>> >> request.chunksPath() >>> " + request.chunckPath());
+//    log.info(" >>> >>> >> request.getFileName() >>> " + request.getFileName());
+//    String outputPath = request.chunckPath()+"/";
+//    createDirectoryIfNotExists(outputPath);
+//    String outputFilePath = outputPath + request.getFileName() + ".m3u8";
+//
+////    String outputPath = MoviePath.chunkPathStr(request.getMp4Path());
+//
+//    FFmpegBuilder builder = new FFmpegBuilder()
+//        .setInput(request.getMp4Path()) // 입력 소스
+//        .overrideOutputFiles(true)
+//        .addOutput(outputFilePath) // 저장경로
+//        .setFormat("hls")
+//        .addExtraArgs("-hls_time", "10") // 10초
+//        .addExtraArgs("-hls_list_size", "0")
+//        .addExtraArgs("-hls_segment_filename",
+//            outputPath + request.getFileName() + "_%08d.ts") // 청크 파일 이름
+//        .done();
+//
+//    return builder;
+//  }
 
   private void createDirectoryIfNotExists(String directoryPath) {
     Path directory = Paths.get(directoryPath);

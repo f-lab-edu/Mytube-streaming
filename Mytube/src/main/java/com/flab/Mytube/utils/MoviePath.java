@@ -50,7 +50,8 @@ public class MoviePath {
 
   public File chunckPath(String originPath) {
     String outPath = originPath.replace(savedPath, hlsOutputPath).replace(".mp4", ".m3u8");
-    return makeDir(outPath);
+    String m3u8Dir = new File(outPath).getParent();
+    return makeDir(m3u8Dir);
   }
 
   public static String chunkPathStr(String originPath){
