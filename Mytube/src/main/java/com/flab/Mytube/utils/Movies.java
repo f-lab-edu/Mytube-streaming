@@ -73,7 +73,8 @@ public class Movies {
     String movieId = request.getMovieId();
     String key = movieId.split("_")[0];
     StringBuilder sb = new StringBuilder();
-    sb.append("src/main/resources/static/hls").append("/channel-" + channelId).append("/")
+    sb.append("src/main/resources/static/hls")
+        .append("/channel-" + channelId).append("/")
         .append(key).append("/")
         .append(movieId); // TODO
     String filePath = sb.toString();
