@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class ChannelService {
@@ -49,8 +50,8 @@ public class ChannelService {
   public List<LiveStreaming> getLiveList(long userId) {
     List<LiveStreaming> lists = liveMapper.findByChannelId(userId);
 
-    if(lists.size()==0){
-      throw new ResourceNotFoundException(userId+"님이 진행했던 Live 를 찾을 수 없습니다.");
+    if (lists.size() == 0) {
+      throw new ResourceNotFoundException(userId + "님이 진행했던 Live 를 찾을 수 없습니다.");
     }
     return lists;
   }

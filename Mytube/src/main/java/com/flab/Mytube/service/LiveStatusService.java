@@ -1,12 +1,9 @@
 package com.flab.Mytube.service;
 
-import com.flab.Mytube.constants.Status;
-import com.flab.Mytube.error.ErrorMessage;
-import com.flab.Mytube.error.exceptions.AlreadyEndedLiveException;
 import com.flab.Mytube.error.exceptions.ResourceNotFoundException;
-import com.flab.Mytube.utils.MovieFile;
 import com.flab.Mytube.dto.movie.request.WatchLiveRequest;
 import com.flab.Mytube.dto.streaming.LiveStatus;
+import com.flab.Mytube.utils.Movies;
 import com.flab.Mytube.utils.Validations;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +18,8 @@ import java.time.LocalTime;
 @Service
 public class LiveStatusService {
 
-
   @Resource(name = "statusTemplate")
   private HashOperations<String, String, LiveStatus> hashOperations;
-  static MovieFile movie = new MovieFile();
 
   private boolean contains(String key, long id) {
     if (hashOperations.hasKey(key, String.valueOf(id))) {
@@ -100,7 +95,7 @@ public class LiveStatusService {
     //  liveId 로 id 가 건너올 경우 -> return m3u8;
     if (Validations.isNumeric(request.getChannelId()) == true) {
       // stored 에서 이어보게 될 구간 확인
-      return movie.getFfmpegBuilder(stored.getM3u8Url(), stored.getTsIndex());
+      return Movies.getFfmpegBuilder(stored.getM3u8Url(), stored.getTsIndex());
     }
     return new File(stored.getBasePath(request.getChannelId()));
   }

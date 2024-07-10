@@ -75,8 +75,10 @@ public class LiveController {
     }
     return null;
   }
+
   @PatchMapping("/{channelId}/lives/{liveId}")// 권한이 있는 사용자가 요청을 했는지 확인, 검증
-  public void deleteLive(@PathVariable("channelId") long channelId, @PathVariable("liveId") long liveId) {
+  public void deleteLive(@PathVariable("channelId") long channelId,
+      @PathVariable("liveId") long liveId) {
     liveService.delete(liveId);
   }
 

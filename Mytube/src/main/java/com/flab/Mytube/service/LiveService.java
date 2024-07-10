@@ -7,9 +7,11 @@ import com.flab.Mytube.dto.movie.response.StartingShowResponse;
 import com.flab.Mytube.mappers.LiveStreamingMapper;
 import com.flab.Mytube.mappers.MovieMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LiveService {
@@ -39,10 +41,10 @@ public class LiveService {
 
   // TODO: 라이브 종료
   public void endLive(long id) {
-    System.out.println(id + " 번 라이브가 종료되었습니다.");
+    log.info(id + " 번 라이브가 종료되었습니다.");
   }
 
-  public void delete(long id) {
+  public void delete(long id) { // TODO: 사용자 안내 내용 추가하기
     liveMapper.delete(id);
   }
 

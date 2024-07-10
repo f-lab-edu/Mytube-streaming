@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 @Component
 public class Movies {
 
-  // Movies 파일에서는 null 로 인식된g
+  // Movies 파일에서는 null 로 인식된다... 왜지?
   @Value("src/main/resources/static/origin")
   private static String savedPath;
 
@@ -50,15 +50,6 @@ public class Movies {
     return filepath;
   }
 
-  public static Path originPath(FileUploadRequest request) {
-    Path result = rootPath(request, "src/main/resources/static/origin");
-    return result;
-  }
-
-  public static Path hlsPath(FileUploadRequest request) {
-    return rootPath(request, "src/main/resources/static/hls");
-  }
-
 
   //  'src/main/resources/static/hls/channel-2/test20sec/test20sec.m3u8'
   public static File findHlsPathByChannelId(MovieDtailRequest request) {
@@ -69,7 +60,7 @@ public class Movies {
     sb.append("src/main/resources/static/hls")
         .append("/channel-" + channelId).append("/")
         .append(key).append("/")
-        .append(movieId); // TODO: api 주소가 괜찮을지 더 나은 방식은 없는지 고민해보기
+        .append(movieId); // TODO: 관련 api 주소가 적절한지, 더 나은 방식으로 파라미터를 받을 수 없는지 고민해보기
     String filePath = sb.toString();
     return new File(filePath);
   }
@@ -89,23 +80,8 @@ public class Movies {
     return builder;
   }
 
-  public FFmpegBuilder segmentationTs(String m3u8FileName, String path, File output,
-      String fileName) {
-    // ts 파일로 분할 및 분해 설정
-    FFmpegBuilder builder = new FFmpegBuilder()
-        .setInput(path) // 입력 소스
-        .overrideOutputFiles(true)
-        .addOutput(output.getAbsolutePath() + "/" + m3u8FileName) // 저장경로
-        .setFormat("hls")
-        .addExtraArgs("-hls_time", "10") // 10초
-        .addExtraArgs("-hls_list_size", "0")
-        .addExtraArgs("-hls_segment_filename",
-            output.getAbsolutePath() + "/" + fileName + "_%08d.ts") // 청크 파일 이름
-        .done();
-    return builder;
-  }
-
-  public File getFfmpegBuilder(String masterPath, int startIndex) {
+  //  TODO: 메서드를 분리해서 가독성을 높이자
+  public static File getFfmpegBuilder(String masterPath, int startIndex) {
     List<String> lines;
     StringBuilder sb = new StringBuilder();
     String base = masterPath.split("\\.")[0];
@@ -148,7 +124,7 @@ public class Movies {
     return file;
   }
 
-  public StringBuilder writePlayList(List<String> lines, int startIndex) {
+  public static StringBuilder writePlayList(List<String> lines, int startIndex) {
     StringBuilder playList = new StringBuilder();
     int index = 0;
 

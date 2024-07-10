@@ -1,7 +1,6 @@
 package com.flab.Mytube.utils;
 
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
-import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.error.exceptions.DuplicatedPathException;
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MoviePath {
 
-  private static String savedPath= "src/main/resources/static/origin";
+  private static String savedPath = "src/main/resources/static/origin";
 
   private static String hlsOutputPath = "src/main/resources/static/hls";
 
@@ -34,27 +33,13 @@ public class MoviePath {
     return filepath;
   }
 
-  public String hlsPath(int channelId, String movieId, String key) {
-    StringBuilder sb = new StringBuilder();
-    sb.append(hlsOutputPath).append("/channel-" + channelId).append("/").append(key).append("/")
-        .append(movieId);
-    return sb.toString();
-  }
-
-  public String hlsPath(MovieDtailRequest request, String name){
-    StringBuilder sb = new StringBuilder();
-    sb.append(hlsOutputPath).append("/channel-" + request.getChannel()).append("/").append(name).append("/")
-        .append(request.getMovieId());
-    return sb.toString();
-  }
-
   public File chunckPath(String originPath) {
     String outPath = originPath.replace(savedPath, hlsOutputPath).replace(".mp4", ".m3u8");
     String m3u8Dir = new File(outPath).getParent();
     return makeDir(m3u8Dir);
   }
 
-  public static String chunkPathStr(String originPath){
+  public static String chunkPathStr(String originPath) {
     String outPath = originPath.replace(savedPath, hlsOutputPath).replace(".mp4", ".m3u8");
     return outPath;
   }

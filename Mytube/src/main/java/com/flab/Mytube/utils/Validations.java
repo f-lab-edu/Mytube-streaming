@@ -17,7 +17,7 @@ public class Validations {
     }
   }
 
-  public static boolean notValidLive(LiveStatus stored){
+  public static boolean notValidLive(LiveStatus stored) {
     if (stored == null) {
       throw new ResourceNotFoundException("찾을 수 없는 라이브 입니다.");
     }

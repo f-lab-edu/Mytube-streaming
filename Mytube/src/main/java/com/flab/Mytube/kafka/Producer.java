@@ -1,13 +1,9 @@
 package com.flab.Mytube.kafka;
 
-import java.nio.file.Paths;
-import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,12 +20,13 @@ public class Producer<EncodingRequest> {
 
   private void handleFailure(EncodingRequest data, ProducerRecord<String, String> record,
       Throwable ex) {
-    System.out.println(">> >>>> >>> fail: " + data.toString());
-    System.out.println(">> >>>> >>> record: " + record.toString());
-    System.out.println(ex);
+    System.err.println("요청값을 확인해주세요.");
+    System.err.println(">> >>>> >>> fail: " + data.toString());
+    System.err.println(">> >>>> >>> record: " + record.toString());
+    System.err.println(ex);
   }
 
   public void handleSuccess(EncodingRequest data) {
-    System.out.println(">> >>>> >>> success: " + data.toString());
+    System.err.println(">> >>>> >>> success: " + data.toString());
   }
 }

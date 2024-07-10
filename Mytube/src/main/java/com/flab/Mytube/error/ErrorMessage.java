@@ -1,7 +1,6 @@
 package com.flab.Mytube.error;
 
 import com.flab.Mytube.utils.HttpRequestUtils;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 @RequiredArgsConstructor
 @Builder
 public class ErrorMessage {
+
   private final String error;
   private final String message;
   private final int code;
