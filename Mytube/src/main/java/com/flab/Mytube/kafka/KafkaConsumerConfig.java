@@ -48,7 +48,7 @@ public class KafkaConsumerConfig {
   public ConcurrentKafkaListenerContainerFactory<String, EncodingRequest> kafkaListenerContainerFactory() {
     ConcurrentKafkaListenerContainerFactory<String, EncodingRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
     factory.setConsumerFactory(kafkaConsumerFactory());
-    factory.getContainerProperties().setAckMode(AckMode.MANUAL);
+    factory.getContainerProperties().setAckMode(AckMode.RECORD);
     factory.setRecordMessageConverter(new StringJsonMessageConverter());
 
     return factory;
