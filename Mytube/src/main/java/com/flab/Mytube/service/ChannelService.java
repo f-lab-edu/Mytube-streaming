@@ -5,6 +5,7 @@ import com.flab.Mytube.domain.Movie;
 import com.flab.Mytube.error.exceptions.ResourceNotFoundException;
 import com.flab.Mytube.mappers.LiveStreamingMapper;
 import com.flab.Mytube.mappers.MovieMapper;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
+@Builder
 @RequiredArgsConstructor
 public class ChannelService {
 
