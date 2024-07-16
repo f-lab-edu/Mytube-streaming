@@ -17,19 +17,19 @@ import java.time.LocalDateTime;
 public class LiveStreamingDTO extends TimeDTO {
 
   private long id;
-  private long channelId; // 라이브 방송 호스트 id
-  private long movieId; //방송하는 영상 Id
-  private String title; //방송 제목
+  private long channelId;
+  private long movieId;
+  private String title;
 
-  private String contents; // 방송 내용
-  private int userCount; // 시청자 수
-  private int thumbsUp; // 좋아요 받은 수
+  private String contents;
+  private int userCount;
+  private int thumbsUp;
 
   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
   @JsonSerialize(using = LocalDateSerializer.class)
   @JsonDeserialize(using = LocalDateDeserializer.class)
-  private LocalDateTime reservedTime; //방송 예약 시간
+  private LocalDateTime reservedTime;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private LocalDateTime updatedAt; // 방송 수정 시간(방제, 컨텐츠 등 ...), TODO: 반영하도록
+  private LocalDateTime updatedAt; // TODO : 관련 코드 설계
 }

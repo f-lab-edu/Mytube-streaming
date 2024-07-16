@@ -27,6 +27,7 @@ public class ChannelController {
   //현재 채널 지난 라이브 다시보기
   @GetMapping("/lives/{liveId}/replay")
   public Movie replayLive(@PathVariable("liveId") long liveId) {
+    // TODO: null 이 들어올 때
     return service.replay(liveId);
   }
 }

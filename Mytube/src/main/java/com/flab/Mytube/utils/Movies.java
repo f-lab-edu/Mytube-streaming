@@ -80,14 +80,19 @@ public class Movies {
     return builder;
   }
 
+
+  public static String getM3u8Path(String base, int startIndex) {
+    StringBuilder sb = new StringBuilder();
+    sb.append(base).append(startIndex).append("_created.m3u8");
+    String createdFilePath = sb.toString();
+    return createdFilePath;
+  }
+
   //  TODO: 메서드를 분리해서 가독성을 높이자
   public static File getFfmpegBuilder(String masterPath, int startIndex) {
     List<String> lines;
-    StringBuilder sb = new StringBuilder();
     String base = masterPath.split("\\.")[0];
-    sb.append(base).append(startIndex).append("_created.m3u8");
-    String createdFilePath = sb.toString();
-
+    String createdFilePath = getM3u8Path(base, startIndex);
     Path directory = Paths.get(base);
     try {
       Files.createDirectories(directory);

@@ -24,11 +24,11 @@
 
   <select id="findByMovieId" resultMap="Movie" parameterType="long">
     select * from Movie
-    where id = #{movieId};
+    where id = #{movieId} and deletedAt is NULL;
   </select>
 
   <select id="findByChannelId" parameterType="long" resultMap="Movie">
     select * from Movie
-    where userId = #{channelId};
+    where userId = #{channelId} and deletedAt is NULL;
   </select>
 </mapper>

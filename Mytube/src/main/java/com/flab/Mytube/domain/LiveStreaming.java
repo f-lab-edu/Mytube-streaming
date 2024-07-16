@@ -20,13 +20,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class LiveStreaming extends TimeDTO {
 
   private long id;
-  private long channelId; // 라이브 방송 호스트 id
-  private long movieId; //방송하는 영상 Id
-  private String title; //방송 제목
+  private long channelId;
+  private long movieId;
+  private String title;
 
-  private String contents; // 방송 내용
-  private int userCount; // 시청자 수
-  private int thumbsUp; // 좋아요 받은 수
+  private String contents;
+  private int userCount;
+  private int thumbsUp;
 
   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
   @JsonSerialize(using = LocalDateSerializer.class)
@@ -35,5 +35,5 @@ public class LiveStreaming extends TimeDTO {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private LocalDateTime updatedAt;
-  // 방송 수정 시간(방제, 컨텐츠 등 ...), TODO: 방송 시간에 맞게 시작하도록
+  // TODO: 방송 시간에 맞게 시작하도록
 }
