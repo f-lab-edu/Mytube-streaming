@@ -29,7 +29,7 @@
   </update>
 
   <select id="findByLiveId" parameterType="long" resultMap="LiveStreaming">
-    select * from liveStreaming where id = #{liveId}
+    select * from liveStreaming where id = #{liveId} and deletedAt is NULL;
   </select>
 
   <select id="findByChannelId" parameterType="long" resultMap="LiveStreaming">
