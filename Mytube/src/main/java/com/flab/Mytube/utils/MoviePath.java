@@ -49,7 +49,7 @@ public class MoviePath {
     Path filepath = null;
     try {
       filepath = Paths.get(path);
-      Files.createDirectories(filepath); // 디렉토리 생성
+      Files.createDirectories(filepath);
     } catch (FileAlreadyExistsException e) {
       throw new DuplicatedPathException("이미 업로드한 동영상 입니다.");
     } catch (IOException e) {

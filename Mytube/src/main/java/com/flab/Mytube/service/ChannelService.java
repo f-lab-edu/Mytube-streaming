@@ -34,7 +34,6 @@ public class ChannelService {
   }
 
 
-  // 지난 라이브 조회
 //  TODO: 라이브 조회할 때 chanelId 인증
   public Movie replay(long liveId) {
     LiveStreaming live = liveMapper.findByLiveId(liveId);
@@ -48,7 +47,6 @@ public class ChannelService {
     return movieMapper.findByMovieId(movieId);
   }
 
-  //    현재 채널 라이브 및 동영상 목록 조회
   public List<LiveStreaming> getLiveList(long userId) {
     List<LiveStreaming> lists = liveMapper.findByChannelId(userId);
 

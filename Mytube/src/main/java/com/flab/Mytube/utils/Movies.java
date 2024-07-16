@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 @Component
 public class Movies {
 
-  // Movies 파일에서는 null 로 인식된다... 왜지?
+  // TODO: Movies 파일에서는 null 로 인식된다...
   @Value("src/main/resources/static/origin")
   private static String savedPath;
 
@@ -35,13 +35,11 @@ public class Movies {
 
   public static Path rootPath(FileUploadRequest request, String savedPath) {
     String fileName = request.getOriginFileName().split("\\.")[0];
-
-    // savedPath: ./origin/channel-{id}/{subject} : 원본 저장 위치
     String path = savedPath + "/channel-" + request.getChannelId() + "/" + fileName;
     Path filepath = null;
     try {
       filepath = Paths.get(path);
-      Files.createDirectories(filepath); // 디렉토리 생성
+      Files.createDirectories(filepath);
     } catch (FileAlreadyExistsException e) {
       throw new DuplicatedPathException("이미 업로드한 동영상 입니다.");
     } catch (IOException e) {
@@ -50,8 +48,6 @@ public class Movies {
     return filepath;
   }
 
-
-  //  'src/main/resources/static/hls/channel-2/test20sec/test20sec.m3u8'
   public static File findHlsPathByChannelId(MovieDtailRequest request) {
     int channelId = request.getChannel();
     String movieId = request.getMovieId();
@@ -68,14 +64,14 @@ public class Movies {
   public static FFmpegBuilder segmentationTs(ChuncksBuildRequest request) {
     File output = request.getM3u8Path();
     FFmpegBuilder builder = new FFmpegBuilder()
-        .setInput(request.getOriginPath()) // 입력 소스
+        .setInput(request.getOriginPath())
         .overrideOutputFiles(true)
-        .addOutput(request.getM3u8Path().toString() + "/" + request.getM3u8Name()) // 저장경로
+        .addOutput(request.getM3u8Path().toString() + "/" + request.getM3u8Name())
         .setFormat("hls")
-        .addExtraArgs("-hls_time", "10") // 10초
+        .addExtraArgs("-hls_time", "10")
         .addExtraArgs("-hls_list_size", "0")
         .addExtraArgs("-hls_segment_filename",
-            output.getAbsolutePath() + "/" + request.getName() + "_%08d.ts") // 청크 파일 이름
+            output.getAbsolutePath() + "/" + request.getName() + "_%08d.ts")
         .done();
     return builder;
   }

@@ -23,6 +23,6 @@ public class MytubeApplicationTests {
 
   @Configuration
   static class TestConfiguration {
-    // 테스트에 필요한 추가 구성 요소를 여기에 정의할 수 있습니다.
+
   }
 }

@@ -31,7 +31,7 @@ public class LiveStreaming extends TimeDTO {
   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
   @JsonSerialize(using = LocalDateSerializer.class)
   @JsonDeserialize(using = LocalDateDeserializer.class)
-  private LocalDate reservedAt; //방송 예약 시간
+  private LocalDate reservedAt;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private LocalDateTime updatedAt;

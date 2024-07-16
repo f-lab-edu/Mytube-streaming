@@ -28,7 +28,6 @@ public class LiveStatusService {
     return false;
   }
 
-  // 라이브 시작
   public void startLive(long liveId, String url) {
     String key = String.valueOf(liveId);
     if (contains(key, liveId)) {
@@ -39,7 +38,6 @@ public class LiveStatusService {
     hashOperations.put(key, String.valueOf(liveId), status);
   }
 
-  // 라이브 재시작
   public void restartLive(long liveId) {
     String key = String.valueOf(liveId);
     if (contains(key, liveId)) {
@@ -51,7 +49,6 @@ public class LiveStatusService {
     throw new ResourceNotFoundException("요청한 라이브 정보가 존재하지 않습니다.");
   }
 
-  // 라이브 일시 정지
   public void stopLive(long liveId) {
     String key = String.valueOf(liveId);
     if (contains(key, liveId)) {
@@ -63,7 +60,6 @@ public class LiveStatusService {
     throw new ResourceNotFoundException("요청한 라이브 정보가 존재하지 않습니다.");
   }
 
-  // 라이브 종료
   public void endLive(long liveId) {
     String key = String.valueOf(liveId);
     if (contains(key, liveId)) {
@@ -75,7 +71,6 @@ public class LiveStatusService {
     throw new ResourceNotFoundException("요청한 라이브 정보가 존재하지 않습니다.");
   }
 
-  // 라이브 중간에 참여 요청 : 레디스에서 진행도 데이터 불러오기
   public File joinLive(WatchLiveRequest request) {
     int id = request.getLiveId();
     String key = String.valueOf(id);
@@ -92,15 +87,12 @@ public class LiveStatusService {
       System.err.println("요청 내용을 확인해주세요.");
     }
 
-    //  liveId 로 id 가 건너올 경우 -> return m3u8;
     if (Validations.isNumeric(request.getChannelId()) == true) {
-      // stored 에서 이어보게 될 구간 확인
       return Movies.getFfmpegBuilder(stored.getM3u8Url(), stored.getTsIndex());
     }
     return new File(stored.getBasePath(request.getChannelId()));
   }
 
-  // 라이브 상태 업데이트
   public void currentLive(long liveId, LocalTime time) {
     String key = String.valueOf(liveId);
     if (contains(key, liveId) == false) {

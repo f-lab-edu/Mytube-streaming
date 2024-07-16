@@ -44,25 +44,23 @@ public class ConvertMovieService {
   @Autowired
   Producer producer;
 
-  //동영상 업로드
   @Transactional
   public void uploadMovie(FileUploadRequest request) {
     if (request.isEmptyFile()) {
       throw new NoDataSubmitException("파일을 제출하지 않았습니다.");
     }
-    // 파일 경로 지정
+
     String fileName = request.getFile().getOriginalFilename();
     Path originPath = moviePath.originRootPath(request);
     originPath = originPath.resolve(fileName);
 
-    // 파일 작성하기(복사)
     try (OutputStream os = Files.newOutputStream(originPath)) {
       byte[] bytes = request.getFile().getBytes();
       Files.write(originPath, bytes);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-////  filepath 경로에 파일 저장
+
     EncodingRequest data = EncodingRequest.builder()
         .topic("videoPath")
         .key(fileName.split("\\.")[0])
@@ -112,15 +110,15 @@ public class ConvertMovieService {
 
   public File movieFilePath(MovieDtailRequest request) {
     String movieId = request.getMovieId();
-    // movie 의 id 가 입력된 경우
+
     if (Validations.isNumeric(movieId)) {
       return movieFilePath(Long.valueOf(movieId));
     }
-    // movie 의 .ts 파일 이름이 입력된 경우
+
     return Movies.findHlsPathByChannelId(request);
   }
 
-  // id 를 통해 .m3m8 파일이 저장된 url 가져올 수 있도록
+
   public File movieFilePath(Long movieId) {
     Movie movie = movieMapper.findByMovieId(movieId);
     String filePath = movie.getUrl();

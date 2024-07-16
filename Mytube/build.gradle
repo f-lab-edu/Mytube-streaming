@@ -37,7 +37,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
-    implementation 'net.bramp.ffmpeg:ffmpeg:0.7.0'//9
+    implementation 'net.bramp.ffmpeg:ffmpeg:0.7.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.4'
     implementation 'org.springframework.kafka:spring-kafka'

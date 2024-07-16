@@ -30,7 +30,7 @@ public class LiveStatus implements Serializable {
   @Id
   private long liveId;
   private Status status;
-  private String m3u8Url; // m3u8 파일의 URL
+  private String m3u8Url;
   private long channelId;
 
   @JsonSerialize(using = LocalTimeSerializer.class)
@@ -54,7 +54,6 @@ public class LiveStatus implements Serializable {
 
   // TODO: 범위 밖의 데이터 index 를 반환하는 경우(error)
   public int getTsIndex() {
-    // m3u8 파일을 파싱하여 ts 세그먼트 URL을 가져오는 로직을 구현
     int seconds =
         currentTime.getHour() * 60 * 60 + currentTime.getMinute() * 60 + currentTime.getSecond();
     int startIndex = seconds / 10;

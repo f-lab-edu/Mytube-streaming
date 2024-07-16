@@ -24,7 +24,6 @@ public class MovieController {
 
   private final ConvertMovieService convertMovieService;
 
-  // 동영상 업로드 요청
   @PostMapping("")
   public void upload(@RequestParam("movie") MultipartFile file,
       @RequestParam("channelId") long channelId) {
@@ -35,7 +34,6 @@ public class MovieController {
     convertMovieService.uploadMovie(request);
   }
 
-  // 스트리밍 시작을 위한 동영상 정보(m3m8, ts file) 요청
   @GetMapping("/{channelId}/channels/{movieId}")
   public ResponseEntity<InputStreamResource> getMovie(@PathVariable("channelId") int channelId,
       @PathVariable("movieId") String movieId) {

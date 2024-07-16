@@ -18,13 +18,11 @@ public class ChannelController {
 
   private final ChannelService service;
 
-  //    현재 채널 라이브 및 동영상 목록 조회
   @GetMapping("/{channelId}")
   public List<LiveStreaming> getLiveList(@PathVariable("channelId") long channelId) {
     return service.getLiveList(channelId);
   }
 
-  //현재 채널 지난 라이브 다시보기
   @GetMapping("/lives/{liveId}/replay")
   public Movie replayLive(@PathVariable("liveId") long liveId) {
     // TODO: null 이 들어올 때

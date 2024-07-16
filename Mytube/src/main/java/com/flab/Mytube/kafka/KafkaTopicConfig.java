@@ -1,7 +1,6 @@
 package com.flab.Mytube.kafka;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -13,7 +12,6 @@ import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.KafkaAdmin;
 
 
-// automatically add topics to the broker.
 @Configuration
 public class KafkaTopicConfig {
 
@@ -31,7 +29,7 @@ public class KafkaTopicConfig {
   public NewTopic topic1() {
     return TopicBuilder.name("videoPath")
         .partitions(5)
-        .replicas(1) // 복제 팩터를 1로 설정
+        .replicas(1)
         .config(TopicConfig.RETENTION_MS_CONFIG, "5000")
         .compact()
         .build();
