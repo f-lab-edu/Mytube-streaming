@@ -100,12 +100,7 @@ public class ConvertMovieService {
   private void run(FFmpegBuilder builder) throws Exception {
     FFmpegExecutor executor = new FFmpegExecutor(fFmpeg, fFprobe);
 
-    executor.createJob(builder, progress -> {
-          if (progress.status.equals(Progress.Status.END)) {
-            log.info("============================= JOB FINISHED =============================");
-          }
-        })
-        .run();
+    executor.createJob(builder).run();
   }
 
 
