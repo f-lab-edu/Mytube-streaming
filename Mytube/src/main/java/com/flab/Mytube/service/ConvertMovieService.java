@@ -90,6 +90,8 @@ public class ConvertMovieService {
 
     try {
       run(builder);
+    } catch(IllegalArgumentException e){
+      log.info("N/A error ocuuer");
     } catch (Exception e) {
       log.info("영상 변환 중 에러가 발생했습니다. 다시 시도해주세요.");
     }
@@ -98,8 +100,7 @@ public class ConvertMovieService {
   private void run(FFmpegBuilder builder) throws Exception {
     FFmpegExecutor executor = new FFmpegExecutor(fFmpeg, fFprobe);
 
-    executor
-        .createJob(builder, progress -> {
+    executor.createJob(builder, progress -> {
           if (progress.status.equals(Progress.Status.END)) {
             log.info("============================= JOB FINISHED =============================");
           }

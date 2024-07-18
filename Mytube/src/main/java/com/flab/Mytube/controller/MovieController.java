@@ -25,7 +25,7 @@ public class MovieController {
   private final ConvertMovieService convertMovieService;
 
   @PostMapping("")
-  public void upload(@RequestParam("movie") MultipartFile file,
+  public void upload(@RequestParam(value="movie") MultipartFile file,
       @RequestParam("channelId") long channelId) {
     FileUploadRequest request = FileUploadRequest.builder()
         .file(file)
