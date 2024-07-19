@@ -34,25 +34,6 @@ public class MovieController {
     convertMovieService.uploadMovie(request);
   }
 
-  @GetMapping("/{channelId}/channels/{movieId}")
-  public ResponseEntity<InputStreamResource> getMovie(@PathVariable("channelId") int channelId,
-      @PathVariable("movieId") String movieId) {
-    MovieDtailRequest movie = MovieDtailRequest.builder()
-        .movieId(movieId)
-        .channel(channelId)
-        .build();
-    File liveSource = convertMovieService.movieFilePath(movie);
-
-    try {
-      InputStreamResource resource = new InputStreamResource(new FileInputStream(liveSource));
-      return ResponseEntity.ok()
-          .contentType(MediaType.parseMediaType("application/x-mpegURL"))
-          .body(resource);
-    } catch (FileNotFoundException e) {
-      throw new ResourceNotFoundException("데이터를 불러오지 못했습니다.");
-    }
-  }
-
   @PatchMapping("/{movieId}")
   public void deleteMovie(@PathVariable("movieId") long movieId) {
     convertMovieService.delete(movieId);
