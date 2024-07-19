@@ -59,7 +59,7 @@ public class ChannelController {
     }
   }
 
-  @GetMapping("/{channelId}")
+  @GetMapping("/{channelId}/movies")
   public List<Movie> MovieList(@PathVariable("channelId") long channelId) {
     return movieService.getLiveLists(channelId);
   }
