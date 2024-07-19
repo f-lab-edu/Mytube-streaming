@@ -118,6 +118,8 @@ public class ConvertMovieService {
   public File movieFilePath(Long movieId) {
     Movie movie = movieMapper.findByMovieId(movieId);
     String filePath = movie.getUrl();
+    log.info(movieId.toString());
+    log.info(filePath);
 
     return new File(filePath);
   }
@@ -128,5 +130,9 @@ public class ConvertMovieService {
 
   public List<Movie> getLiveLists(long channelId) {
     return movieMapper.findByChannelId(channelId);
+  }
+
+  public Movie findByMovieId(long movieId){
+    return movieMapper.findByMovieId(movieId);
   }
 }
