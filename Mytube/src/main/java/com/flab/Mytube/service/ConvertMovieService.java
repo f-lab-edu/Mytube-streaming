@@ -90,7 +90,7 @@ public class ConvertMovieService {
 
     try {
       run(builder);
-    } catch(IllegalArgumentException e){
+    } catch (IllegalArgumentException e) {
       log.info("N/A error ocuuer");
     } catch (Exception e) {
       log.info("영상 변환 중 에러가 발생했습니다. 다시 시도해주세요.");
@@ -130,9 +130,5 @@ public class ConvertMovieService {
 
   public List<Movie> getLiveLists(long channelId) {
     return movieMapper.findByChannelId(channelId);
-  }
-
-  public Movie findByMovieId(long movieId){
-    return movieMapper.findByMovieId(movieId);
   }
 }

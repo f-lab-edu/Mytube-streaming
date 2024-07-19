@@ -19,12 +19,12 @@ public class LiveService {
   private final LiveStreamingMapper liveMapper;
   private final MovieMapper movieMapper;
 
-  @Transactional // 방송 예약하기
+  @Transactional
   public void saveReservation(LiveStreaming liveStreaming) {
     liveMapper.save(liveStreaming);
   }
 
-  @Transactional // 라이브 시작
+  @Transactional
   public StartingShowResponse startShow(long liveId) {
     LiveStreaming result = liveMapper.findByLiveId(liveId);
     long movieId = result.getMovieId();
