@@ -58,4 +58,9 @@ public class ChannelController {
       throw new ResourceNotFoundException("데이터를 불러오지 못했습니다.");
     }
   }
+
+  @GetMapping("/{channelId}")
+  public List<Movie> MovieList(@PathVariable("channelId") long channelId) {
+    return movieService.getLiveLists(channelId);
+  }
 }

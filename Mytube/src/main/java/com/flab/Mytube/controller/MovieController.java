@@ -29,9 +29,4 @@ public class MovieController {
   public void deleteMovie(@PathVariable("movieId") long movieId) {
     convertMovieService.delete(movieId);
   }
-
-  @GetMapping("/channels/{channelId}")
-  public List<Movie> MovieList(@PathVariable("channelId") long channelId) {
-    return convertMovieService.getLiveLists(channelId);
-  }
 }
