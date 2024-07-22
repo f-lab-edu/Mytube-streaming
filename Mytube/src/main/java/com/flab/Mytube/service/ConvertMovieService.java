@@ -67,13 +67,14 @@ public class ConvertMovieService {
         .path(originPath.toString()).build();
 
     String key = fileName.split("\\.")[0];
+//    producer.send(data);
     producer.send(data.getTopic(), key, data);
-    request.addPath(MoviePath.chunkPathStr(originPath.toString()));
-    movieMapper.save(request);
+//    request.addPath(MoviePath.chunkPathStr(originPath.toString()));
+//    movieMapper.save(request);
   }
 
 
-  @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
+//  @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
   public void segment(ConsumerRecord<String, Object> data) {
     EncodingRequest request = (EncodingRequest) data.value();
     String originPath = request.getPath();

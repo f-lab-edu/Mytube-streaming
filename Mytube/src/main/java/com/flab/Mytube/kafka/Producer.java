@@ -1,11 +1,14 @@
 package com.flab.Mytube.kafka;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class Producer<EncodingRequest> {
@@ -16,6 +19,10 @@ public class Producer<EncodingRequest> {
   public void send(String topicName, String key, EncodingRequest data){
     template.send(topicName, key, data);
     template.flush();
+  }
+  public void send(EncodingRequest data){
+    log.info("sending message='{}' to topic='{}'", data, "videoPath");
+    template.send("videoPath", data);
   }
 
   private void handleFailure(EncodingRequest data, ProducerRecord<String, String> record,
