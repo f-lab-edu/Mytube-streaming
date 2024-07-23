@@ -48,7 +48,7 @@ public class KafkaConsumerConfig {
     factory.setConsumerFactory(kafkaConsumerFactory());
     factory.getContainerProperties().setAckMode(AckMode.MANUAL);
     factory.getContainerProperties().setCommitRetries(3);
-
+    factory.setBatchListener(true);
     factory.setRecordMessageConverter(new StringJsonMessageConverter());
 
     factory.getContainerProperties();
