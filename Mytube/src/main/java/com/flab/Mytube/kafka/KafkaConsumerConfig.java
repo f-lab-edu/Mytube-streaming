@@ -1,9 +1,6 @@
 package com.flab.Mytube.kafka;
 
-import com.flab.Mytube.kafka.EncodingRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,11 +12,9 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.kafka.listener.ContainerProperties.AckMode;
-import org.springframework.kafka.support.converter.RecordMessageConverter;
 import org.springframework.kafka.support.converter.StringJsonMessageConverter;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.springframework.kafka.support.serializer.JsonSerializer;
 
 @Configuration
 public class KafkaConsumerConfig {
@@ -47,19 +42,16 @@ public class KafkaConsumerConfig {
     return new DefaultKafkaConsumerFactory<>(config);
   }
 
-  @Bean(name = "kafkaListenerContainerFactory")
+  @Bean()
   public ConcurrentKafkaListenerContainerFactory<String, EncodingRequest> kafkaListenerContainerFactory() {
     ConcurrentKafkaListenerContainerFactory<String, EncodingRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
     factory.setConsumerFactory(kafkaConsumerFactory());
-    factory.setBatchListener(true);
-    factory.setAckDiscarded(true);
-
     factory.getContainerProperties().setAckMode(AckMode.MANUAL);
     factory.getContainerProperties().setCommitRetries(3);
 
     factory.setRecordMessageConverter(new StringJsonMessageConverter());
 
-    factory.getContainerProperties().setMessageListener(new CustomAcknowledgingMessageListener());
+    factory.getContainerProperties();
     return factory;
   }
 }
