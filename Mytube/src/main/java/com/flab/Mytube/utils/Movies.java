@@ -1,0 +1,150 @@
+package com.flab.Mytube.utils;
+
+import com.flab.Mytube.dto.movie.request.ChuncksBuildRequest;
+import com.flab.Mytube.dto.movie.request.FileUploadRequest;
+import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
+import com.flab.Mytube.error.exceptions.DuplicatedPathException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.bramp.ffmpeg.builder.FFmpegBuilder;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+@Slf4j
+@RequiredArgsConstructor
+@Component
+public class Movies {
+
+  // TODO: Movies 파일에서는 null 로 인식된다...
+  @Value("src/main/resources/static/origin")
+  private static String savedPath;
+
+  @Value("src/main/resources/static/hls")
+  private static String hlsOutputPath;
+
+  public static Path rootPath(FileUploadRequest request, String savedPath) {
+    String fileName = request.getOriginFileName().split("\\.")[0];
+    String path = savedPath + "/channel-" + request.getChannelId() + "/" + fileName;
+    Path filepath = null;
+    try {
+      filepath = Paths.get(path);
+      Files.createDirectories(filepath);
+    } catch (FileAlreadyExistsException e) {
+      throw new DuplicatedPathException("이미 업로드한 동영상 입니다.");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return filepath;
+  }
+
+  public static File findHlsPathByChannelId(MovieDtailRequest request) {
+    int channelId = request.getChannel();
+    String movieId = request.getMovieId();
+    String key = movieId.split("_")[0];
+    StringBuilder sb = new StringBuilder();
+    sb.append("src/main/resources/static/hls")
+        .append("/channel-" + channelId).append("/")
+        .append(key).append("/")
+        .append(movieId); // TODO: 관련 api 주소가 적절한지, 더 나은 방식으로 파라미터를 받을 수 없는지 고민해보기
+    String filePath = sb.toString();
+    return new File(filePath);
+  }
+
+  public static FFmpegBuilder segmentationTs(ChuncksBuildRequest request) {
+    File output = request.getM3u8Path();
+    FFmpegBuilder builder = new FFmpegBuilder()
+        .setInput(request.getOriginPath())
+        .overrideOutputFiles(true)
+        .addOutput(request.getM3u8Path().toString() + "/" + request.getM3u8Name())
+        .setFormat("hls")
+        .addExtraArgs("-hls_time", "10")
+        .addExtraArgs("-hls_list_size", "0")
+        .addExtraArgs("-hls_segment_filename",
+            output.getAbsolutePath() + "/" + request.getName() + "_%08d.ts")
+        .done();
+    return builder;
+  }
+
+
+  public static String getM3u8Path(String base, int startIndex) {
+    StringBuilder sb = new StringBuilder();
+    sb.append(base).append(startIndex).append("_created.m3u8");
+    String createdFilePath = sb.toString();
+    return createdFilePath;
+  }
+
+  //  TODO: 메서드를 분리해서 가독성을 높이자
+  public static File getFfmpegBuilder(String masterPath, int startIndex) {
+    List<String> lines;
+    String base = masterPath.split("\\.")[0];
+    String createdFilePath = getM3u8Path(base, startIndex);
+    Path directory = Paths.get(base);
+    try {
+      Files.createDirectories(directory);
+    } catch (FileAlreadyExistsException e) {
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    File file = new File(createdFilePath);
+    try {
+      if (!file.exists() && !file.createNewFile()) {
+        return file;
+      }
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    try (
+        Stream<String> stream = Files.lines(Paths.get(masterPath))) {
+      lines = stream.collect(Collectors.toList());
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
+
+    StringBuilder playList = writePlayList(lines, startIndex);
+    try (
+        FileWriter writer = new FileWriter(file)) {
+      writer.write(playList.toString());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return file;
+  }
+
+  public static StringBuilder writePlayList(List<String> lines, int startIndex) {
+    StringBuilder playList = new StringBuilder();
+    int index = 0;
+
+    for (String line : lines) {
+      if (line.startsWith("#EXTINF")) {
+        if (index >= startIndex) {
+          playList.append(line).append("\n");
+        }
+        index++;
+        continue;
+      }
+      if (line.startsWith("#")) {
+        playList.append(line).append("\n");
+        continue;
+      }
+      if (index > startIndex) {
+        playList.append(line).append("\n");
+      }
+    }
+    return playList;
+  }
+}

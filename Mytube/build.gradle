@@ -1,49 +1,68 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.2.5'
-	id 'io.spring.dependency-management' version '1.1.4'
+    id 'java'
+    id 'org.springframework.boot' version '3.2.5'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'com.f-lab'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '17'
+    sourceCompatibility = '17'
 }
 
 configurations {
-	developmentOnly
-	runtimeClasspath {
-		extendsFrom developmentOnly
-	}
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	testImplementation 'junit:junit:4.13.1'
+	testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.2.4'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'mysql:mysql-connector-java:8.0.28'
 
-	compileOnly 'org.springframework.boot:spring-boot-devtools'
-	compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'net.bramp.ffmpeg:ffmpeg:0.8.0'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.4'
+    implementation 'org.springframework.kafka:spring-kafka'
 
-	annotationProcessor 'org.projectlombok:lombok'
 
-	implementation 'org.mybatis:mybatis:3.5.7'
-	implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '3.0.3'
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '6.1.0.jre7'
+    implementation 'org.slf4j:jcl-over-slf4j'
+    implementation 'ch.qos.logback:logback-classic'
+
+    compileOnly 'org.springframework.boot:spring-boot-devtools'
+    compileOnly 'org.projectlombok:lombok'
+
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'org.mybatis:mybatis:3.5.7'
+    implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '3.0.3'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '6.1.0.jre7'
+
+    implementation 'org.springframework.boot:spring-boot-starter-validation:3.2.1'
+
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
