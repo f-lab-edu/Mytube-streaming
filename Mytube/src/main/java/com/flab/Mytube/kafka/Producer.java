@@ -11,21 +11,21 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class Producer<EncodingRequest> {
+public class Producer {
 
   @Autowired
-  private KafkaTemplate<String, EncodingRequest> template;
+  private KafkaTemplate<String, String> template;
 
-  public void send(String topicName, String key, EncodingRequest data){
+  public void send(String topicName, String key, String data){
     template.send(topicName, key, data);
     template.flush();
   }
-  public void send(EncodingRequest data){
+  public void send(String data){
     log.info("sending message='{}' to topic='{}'", data, "videoPath");
     template.send("videoPath", data);
   }
 
-  private void handleFailure(EncodingRequest data, ProducerRecord<String, String> record,
+  private void handleFailure(String data, ProducerRecord<String, String> record,
       Throwable ex) {
     System.err.println("요청값을 확인해주세요.");
     System.err.println(">> >>>> >>> fail: " + data.toString());
@@ -33,7 +33,7 @@ public class Producer<EncodingRequest> {
     System.err.println(ex);
   }
 
-  public void handleSuccess(EncodingRequest data) {
+  public void handleSuccess(String data) {
     System.err.println(">> >>>> >>> success: " + data.toString());
   }
 }

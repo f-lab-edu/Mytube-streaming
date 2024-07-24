@@ -5,7 +5,6 @@ import com.flab.Mytube.dto.movie.request.ChuncksBuildRequest;
 import com.flab.Mytube.dto.movie.request.FileUploadRequest;
 import com.flab.Mytube.dto.movie.request.MovieDtailRequest;
 import com.flab.Mytube.error.exceptions.NoDataSubmitException;
-import com.flab.Mytube.kafka.EncodingRequest;
 import com.flab.Mytube.kafka.Producer;
 import com.flab.Mytube.mappers.MovieMapper;
 import com.flab.Mytube.utils.MoviePath;
@@ -18,10 +17,8 @@ import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
-import net.bramp.ffmpeg.progress.Progress;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,23 +58,19 @@ public class ConvertMovieService {
       throw new RuntimeException(e);
     }
 
-    EncodingRequest data = EncodingRequest.builder()
-        .topic("videoPath")
-        .key(fileName.split("\\.")[0])
-        .path(originPath.toString()).build();
+    String data = originPath.toString();
 
     String key = fileName.split("\\.")[0];
 //    producer.send(data);
-    producer.send(data.getTopic(), key, data);
+    producer.send("videoPath", key, data);
 //    request.addPath(MoviePath.chunkPathStr(originPath.toString()));
 //    movieMapper.save(request);
   }
 
 
 //  @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
-  public void segment(ConsumerRecord<String, Object> data) {
-    EncodingRequest request = (EncodingRequest) data.value();
-    String originPath = request.getPath();
+  public void segment(ConsumerRecord<String, String> data) {
+    String originPath = data.value();
     File chunckPath = moviePath.chunckPath(originPath);
     String fileName = chunckPath.getName().split("\\.")[0];
 

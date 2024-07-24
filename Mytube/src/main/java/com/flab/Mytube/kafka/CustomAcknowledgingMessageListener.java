@@ -14,7 +14,7 @@ public class CustomAcknowledgingMessageListener{
 
 //  @Override
   @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
-  public void onMessage(EncodingRequest data, Acknowledgment acknowledgment) {
+  public void onMessage(String data, Acknowledgment acknowledgment) {
     try{
       log.info("Cunsumer Data >>> "+ data.toString());
       acknowledgment.acknowledge();
