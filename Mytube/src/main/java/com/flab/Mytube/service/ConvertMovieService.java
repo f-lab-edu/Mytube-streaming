@@ -19,6 +19,7 @@ import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,9 @@ public class ConvertMovieService {
   private final FFmpeg fFmpeg;
   private final FFprobe fFprobe;
   private final MoviePath moviePath;
+
+  @Value("${kafka.encoding.topic}")
+  String TOPIC ;
 
   @Autowired
   Producer producer;
@@ -62,7 +66,7 @@ public class ConvertMovieService {
 
     String key = fileName.split("\\.")[0];
 //    producer.send(data);
-    producer.send("videoPath", key, data);
+    producer.send(TOPIC, key, data);
 //    request.addPath(MoviePath.chunkPathStr(originPath.toString()));
 //    movieMapper.save(request);
   }
