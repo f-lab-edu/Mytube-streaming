@@ -83,7 +83,7 @@ public class ConvertMovieService {
   public String copyVideo(FileUploadRequest request){
     String fileName = request.createKey();
     Path originPath = moviePath.originRootPath(request);
-    originPath = originPath.resolve(fileName);
+    originPath = originPath.resolve(request.getOriginFileName());
 
     try (OutputStream os = Files.newOutputStream(originPath)) {
       byte[] bytes = request.getFile().getBytes();
