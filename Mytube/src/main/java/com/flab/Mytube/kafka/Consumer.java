@@ -4,7 +4,6 @@ import com.flab.Mytube.dto.movie.request.ChuncksBuildRequest;
 import com.flab.Mytube.utils.MoviePath;
 import com.flab.Mytube.utils.Movies;
 import java.io.File;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.FFmpeg;
@@ -13,14 +12,14 @@ import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.listener.BatchAcknowledgingMessageListener;
+import org.springframework.kafka.listener.MessageListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class Consumer implements BatchAcknowledgingMessageListener<String, String> {
+public class Consumer implements MessageListener<String, String> {
 
   private final FFmpeg fFmpeg;
   private final FFprobe fFprobe;
@@ -28,28 +27,25 @@ public class Consumer implements BatchAcknowledgingMessageListener<String, Strin
 
   @Override
   @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
-  public void onMessage(List<ConsumerRecord<String, String>> datas, Acknowledgment acknowledgment) {
-    for (ConsumerRecord<String, String> data : datas) {
-      String originPath = data.value();
-      File chunckPath = moviePath.chunckPath(originPath);
-      String fileName = chunckPath.getName().split("\\.")[0];
+  public void onMessage(ConsumerRecord<String, String> data) {
+    String originPath = data.value();
+    File chunckPath = moviePath.chunckPath(originPath);
+    String fileName = chunckPath.getName().split("\\.")[0];
 
-      ChuncksBuildRequest chunkBuilder = ChuncksBuildRequest.builder()
-          .name(fileName)
-          .originPath(originPath)
-          .m3u8Name(fileName + ".m3u8")
-          .m3u8Path(chunckPath)
-          .build();
-      FFmpegBuilder builder = Movies.segmentationTs(chunkBuilder);
+    ChuncksBuildRequest chunkBuilder = ChuncksBuildRequest.builder()
+        .name(fileName)
+        .originPath(originPath)
+        .m3u8Name(fileName + ".m3u8")
+        .m3u8Path(chunckPath)
+        .build();
+    FFmpegBuilder builder = Movies.segmentationTs(chunkBuilder);
 
-      try {
-        run(builder);
-        acknowledgment.acknowledge();
-      } catch (IllegalArgumentException e) {
-        log.info("N/A error ocuuer");
-      } catch (Exception e) {
-        log.info("영상 변환 중 에러가 발생했습니다. 다시 시도해주세요.");
-      }
+    try {
+      run(builder);
+    } catch (IllegalArgumentException e) {
+      log.info("N/A error ocuuer");
+    } catch (Exception e) {
+      log.info("영상 변환 중 에러가 발생했습니다. 다시 시도해주세요.");
     }
   }
 

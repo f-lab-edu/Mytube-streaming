@@ -35,7 +35,7 @@ public class KafkaConsumerConfig {
         ErrorHandlingDeserializer.class.getName());
     config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
     config.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "10");
-    config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+    config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
     config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
     return new DefaultKafkaConsumerFactory<>(config);
@@ -45,9 +45,8 @@ public class KafkaConsumerConfig {
   public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
     ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
     factory.setConsumerFactory(kafkaConsumerFactory());
-    factory.getContainerProperties().setAckMode(AckMode.MANUAL);
+    factory.getContainerProperties().setAckMode(AckMode.RECORD);
     factory.getContainerProperties().setCommitRetries(3);
-    factory.setBatchListener(true);
     factory.setRecordMessageConverter(new StringJsonMessageConverter());
 
     factory.getContainerProperties();
