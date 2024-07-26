@@ -10,10 +10,14 @@ import com.flab.Mytube.utils.MoviePath;
 import com.flab.Mytube.utils.Movies;
 import com.flab.Mytube.utils.Validations;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,13 +41,47 @@ public class ConvertMovieService {
   @Autowired
   Producer producer;
 
+  @Autowired
+  private KafkaTemplate<String, String> template;
+
   @Transactional
   public void uploadMovie(FileUploadRequest request) {
     if (request.isEmptyFile()) {
       throw new NoDataSubmitException("파일을 제출하지 않았습니다.");
     }
 
-    String fileName = request.getFile().getOriginalFilename();
+    String data = copyVideo(request);
+    String key = request.createKey();
+    request.addPath(MoviePath.chunkPathStr(data));
+    movieMapper.save(request);
+
+    sendToKafka(data, key);
+
+//    String data = copyVideo(request);
+//    String key = request.createKey();
+//    moviePath.chunckPath(data);
+//    producer.send(TOPIC, key, data);
+//    request.addPath(MoviePath.chunkPathStr(data));
+//    movieMapper.save(request);
+  }
+
+//  @Transactional
+  public void sendToKafka(String data, String key){
+    moviePath.chunckPath(data);
+
+    try{
+      template.send(TOPIC, key, data).get(10, TimeUnit.SECONDS);
+    }
+    catch (ExecutionException e) {
+      log.info("[ERROR] ExecutionException occur");
+    }
+    catch (TimeoutException | InterruptedException e) {
+      log.info("[ERROR] ExeTimeoutException occur ");
+    }
+  }
+
+  public String copyVideo(FileUploadRequest request){
+    String fileName = request.createKey();
     Path originPath = moviePath.originRootPath(request);
     originPath = originPath.resolve(fileName);
 
@@ -53,14 +91,7 @@ public class ConvertMovieService {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-
-    String data = originPath.toString();
-
-    String key = fileName.split("\\.")[0];
-    File chunckPath = moviePath.chunckPath(data);
-    producer.send(TOPIC, key, data);
-//    request.addPath(MoviePath.chunkPathStr(originPath.toString()));
-//    movieMapper.save(request);
+    return originPath.toString();
   }
 
 

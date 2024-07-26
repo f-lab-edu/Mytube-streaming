@@ -38,6 +38,10 @@ public class FileUploadRequest {
   public String getOriginFileName() {
     return file.getOriginalFilename();
   }
+  public String createKey(){
+    String fileName = getOriginFileName();
+    return fileName.split("\\.")[0];
+  }
 
   public void addPath(String path) {
     this.url = path;
