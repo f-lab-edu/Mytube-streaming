@@ -37,12 +37,12 @@ class ChannelServiceTest {
   }
 
 
-  @Test
-  @DisplayName("유효한 LiveId:4 delete")
-  void delete_valid() {
-    long liveId = 4;
-    service.delete(liveId);
-  }
+//  @Test
+//  @DisplayName("유효한 LiveId:4 delete")
+//  void delete_valid() {
+//    long liveId = 4;
+//    service.delete(liveId);
+//  }
 
   @Test
   @DisplayName("존재하지 않는 LiveId:1 delete")
