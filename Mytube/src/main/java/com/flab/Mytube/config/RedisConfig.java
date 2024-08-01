@@ -37,6 +37,7 @@ public class RedisConfig {
     return new LettuceConnectionFactory(new RedisStandaloneConfiguration(host, port), clientConfig);
   }
 
+  @SuppressWarnings("unchecked")
   @Bean
   RedisTemplate<String, Object> statusTemplate(RedisConnectionFactory connectionFactory) {
     RedisTemplate<String, Object> template = new RedisTemplate<>();
