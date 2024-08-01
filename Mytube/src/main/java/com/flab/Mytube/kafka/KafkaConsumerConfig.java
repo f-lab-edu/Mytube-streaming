@@ -45,10 +45,10 @@ public class KafkaConsumerConfig {
   public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
     ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
     factory.setConsumerFactory(kafkaConsumerFactory());
-    factory.getContainerProperties().setAckMode(AckMode.BATCH);
+    factory.getContainerProperties().setAckMode(AckMode.MANUAL);
     factory.setBatchListener(true);
-    factory.getContainerProperties().setCommitRetries(3000);
-//    factory.setRecordMessageConverter(new StringJsonMessageConverter());
+    factory.getContainerProperties().setCommitRetries(3);
+    factory.setRecordMessageConverter(new StringJsonMessageConverter());
 
     factory.getContainerProperties();
     return factory;

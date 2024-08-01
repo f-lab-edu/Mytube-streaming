@@ -13,13 +13,15 @@ import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.listener.BatchAcknowledgingMessageListener;
 import org.springframework.kafka.listener.BatchMessageListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class Consumer implements BatchMessageListener<String, String> {
+public class Consumer implements BatchAcknowledgingMessageListener<String, String> {
 
   private final FFmpeg fFmpeg;
   private final FFprobe fFprobe;
@@ -27,11 +29,8 @@ public class Consumer implements BatchMessageListener<String, String> {
 
   @Override
   @KafkaListener(topics = "videoPath", groupId = "myGroup", containerFactory = "kafkaListenerContainerFactory")
-  public void onMessage(List<ConsumerRecord<String, String>> datas) {
+  public void onMessage(List<ConsumerRecord<String, String>> datas, Acknowledgment acknowledgment) {
     for (ConsumerRecord<String, String> data : datas) {
-      String key = data.key();
-      String value = data.value();
-      log.info("Received message: key={}, value={}", key, value);
       String originPath = data.value();
       File chunckPath = moviePath.chunckPath(originPath);
       String fileName = chunckPath.getName().split("\\.")[0];
@@ -46,6 +45,7 @@ public class Consumer implements BatchMessageListener<String, String> {
 
       try {
         run(builder);
+        acknowledgment.acknowledge();
       } catch (IllegalArgumentException e) {
         log.info("N/A error ocuuer");
       } catch (Exception e) {
