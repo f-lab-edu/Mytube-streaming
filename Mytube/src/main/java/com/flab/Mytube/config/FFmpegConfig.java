@@ -12,10 +12,10 @@ import java.io.IOException;
 @Configuration
 public class FFmpegConfig {
 
-  @Value("/opt/homebrew/Cellar/ffmpeg/7.0.1/bin/ffmpeg")
+  @Value("${ffmpeg.path:/usr/bin/ffmpeg}")
   private String ffmpegPath;
 
-  @Value("/opt/homebrew/Cellar/ffmpeg/7.0.1/bin/ffmpeg")
+  @Value("${ffprobe.path:/usr/bin/ffprobe}")
   private String ffprobePath;
 
   @Bean
