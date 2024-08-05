@@ -43,8 +43,15 @@ services:
     platform: linux/amd64
     build:
       context: .
-    command: ./gradlew bootrun
+#    command: ./gradlew bootrun
     restart: on-failure
+    volumes:
+      - ./:/usr/bin/
+    command: >
+      sh -c "
+      ffmpeg -i /config/input.mkv -c:v libx264 -b:v 4M -vf scale=1280:720 -c:a copy /config/output.mkv && 
+      ./gradlew bootrun
+      "Z
     ports:
       - 8000:8000
     expose:
@@ -54,6 +61,12 @@ services:
       - mytube-redis
       - mytube-kafka
     env_file: .env
+
+#  mytube-ffmpeg:
+#    container_name: mytube-ffmpeg
+#    image: jrottenberg/ffmpeg
+#    volumes:
+#      - .:/usr/bin/ffmpeg
 
   database:
     image: busybox
