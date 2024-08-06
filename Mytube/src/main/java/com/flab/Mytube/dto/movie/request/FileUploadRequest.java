@@ -44,7 +44,6 @@ public class FileUploadRequest {
   }
 
   public void addPath(String path) {
-    System.out.println(" >>> >>> >>> >>> >>>"+path);
     this.url = path+".mp4";
   }
 }
