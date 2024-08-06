@@ -52,7 +52,7 @@ public class ConvertMovieService {
 
     String data = copyVideo(request);
     String key = request.createKey();
-    request.addPath(MoviePath.chunkPathStr(data));
+    request.addPath(moviePath.chunkPathStr(data));
     movieMapper.save(request);
     sendToKafka(data, key);
 
