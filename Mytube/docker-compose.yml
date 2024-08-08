@@ -46,7 +46,7 @@ services:
     #    command: ./gradlew bootrun
     restart: on-failure
     volumes:
-      - ./:/usr/bin/
+      - ./:/application/
     command: ./gradlew bootrun
     ports:
       - 8000:8000
