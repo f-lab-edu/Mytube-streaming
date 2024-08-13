@@ -19,13 +19,19 @@ services:
 
   mytube-kafka:
     container_name: mytube-kafka
-    image: wurstmeister/kafka:2.12-2.5.0
+    image: confluentinc/cp-kafka:latest
     ports:
-      - "9092:9092"
+      - "9091-9093:9091-9093"
     environment:
       KAFKA_ADVERTISED_HOST_NAME: mytube-kafka
       KAFKA_ZOOKEEPER_CONNECT: mytube-zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://mytube-kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_CREATE_TOPICS: "videoPath:5:1" # 토픽 이름:Partition 개수:Replica 개수
+      CONNECT_CONFLUENT_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
