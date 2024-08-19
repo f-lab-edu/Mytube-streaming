@@ -8,10 +8,12 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class MoviePath {
 
   @Value("${ffmpeg.savedPath}")
@@ -51,6 +53,7 @@ public class MoviePath {
     String hlsOutPath = hlsOutputPath;
 
     String outPath = originPath.replace(savePath, hlsOutPath).replace(".mp4", ".m3u8");
+    log.info("[outPath] "+ outPath);
     return outPath;
   }
 

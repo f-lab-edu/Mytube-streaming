@@ -52,8 +52,8 @@ public class LiveController {
 
   @GetMapping("/{liveId}/{channelId}")
   public ResponseEntity<InputStreamResource> getMovie(
-      @PathVariable("channelId") String channelId,
-      @PathVariable("liveId") int liveId
+      @PathVariable("liveId") int liveId,
+      @PathVariable("channelId") String channelId
   ) {
     WatchLiveRequest request = WatchLiveRequest.builder()
         .channelId(channelId)

@@ -3,11 +3,13 @@ package com.flab.Mytube.dto.movie.request;
 import com.flab.Mytube.error.exceptions.InvalidFileExtension;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 
 @Getter
+@Slf4j
 public class FileUploadRequest {
 
   private long id;
@@ -44,6 +46,7 @@ public class FileUploadRequest {
   }
 
   public void addPath(String path) {
-    this.url = path+".mp4";
+    log.info("[DB] path >>>" + path);
+    this.url = path;
   }
 }
