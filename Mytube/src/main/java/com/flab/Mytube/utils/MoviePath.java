@@ -8,22 +8,29 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class MoviePath {
 
-  private static String savedPath = "src/main/resources/static/origin";
+  @Value("${ffmpeg.savedPath}")
+  private String savedPath ;
 
-  private static String hlsOutputPath = "src/main/resources/static/hls";
+  @Value("${ffmpeg.hlsOutputPath}")
+  private String hlsOutputPath ;
 
 
   public Path originRootPath(FileUploadRequest request) {
-    return rootPath(request, savedPath);
+    String path = savedPath;
+    return rootPath(request, path);
   }
 
   public Path outputRootPath(FileUploadRequest request) {
-    return rootPath(request, hlsOutputPath);
+    String path = hlsOutputPath;
+    return rootPath(request, path);
   }
 
   private Path rootPath(FileUploadRequest request, String savedPath) {
@@ -34,13 +41,19 @@ public class MoviePath {
   }
 
   public File chunckPath(String originPath) {
-    String outPath = originPath.replace(savedPath, hlsOutputPath).replace(".mp4", ".m3u8");
+    String savePath = savedPath;
+    String hlsOutPath = hlsOutputPath;
+    String outPath = originPath.replace(savePath, hlsOutPath).replace(".mp4", ".m3u8");
     String m3u8Dir = new File(outPath).getParent();
     return makeDir(m3u8Dir);
   }
 
-  public static String chunkPathStr(String originPath) {
-    String outPath = originPath.replace(savedPath, hlsOutputPath).replace(".mp4", ".m3u8");
+  public String chunkPathStr(String originPath) {
+    String savePath = savedPath;
+    String hlsOutPath = hlsOutputPath;
+
+    String outPath = originPath.replace(savePath, hlsOutPath).replace(".mp4", ".m3u8");
+    log.info("[outPath] "+ outPath);
     return outPath;
   }
 

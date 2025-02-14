@@ -1,6 +1,7 @@
 src/main/resources/static
 application.properties
 dump.rdb
+.env
 
 
 HELP.md

@@ -1,0 +1,75 @@
+version: "3"
+services:
+  mytube-mysql:
+    container_name: mytube-mysql
+    image: mysql
+    restart: always
+    env_file: .env
+    ports:
+      - 3306:3306
+    volumes:
+      - database:/var/lib/mysql
+
+  mytube-zookeeper:
+    container_name: mytube-zookeeper
+    image: wurstmeister/zookeeper
+    platform: linux/amd64
+    ports:
+      - "2181:2181"
+
+  mytube-kafka:
+    container_name: mytube-kafka
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - "9091-9093:9091-9093"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: mytube-kafka
+      KAFKA_ZOOKEEPER_CONNECT: mytube-zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://mytube-kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CREATE_TOPICS: "videoPath:5:1" # 토픽 이름:Partition 개수:Replica 개수
+      CONNECT_CONFLUENT_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - mytube-zookeeper
+
+  mytube-redis:
+    container_name: mytube-redis
+    image: redis
+    ports:
+      - 6379:6379
+    command: redis-server
+
+  mytube-backend:
+    container_name: mytube-backend
+    platform: linux/amd64
+    build:
+      context: .
+    #    command: ./gradlew bootrun
+    restart: on-failure
+    volumes:
+      - ./:/application/
+    command: ./gradlew bootrun
+    ports:
+      - 8000:8000
+    expose:
+      - 8000
+    depends_on:
+      - mytube-mysql
+      - mytube-redis
+      - mytube-kafka
+    environment:
+      - FFMPEG_PATH=/usr/bin/ffmpeg
+      - FFPROBE_PATH=/usr/bin/ffprobe
+
+  database:
+    image: busybox
+    volumes:
+      - /var/lib/mysql
+      - /var/log
+volumes:
+  database:

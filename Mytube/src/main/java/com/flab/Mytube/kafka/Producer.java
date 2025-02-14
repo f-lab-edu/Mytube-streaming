@@ -1,11 +1,13 @@
 package com.flab.Mytube.kafka;
 
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -16,24 +18,7 @@ public class Producer {
   @Autowired
   private KafkaTemplate<String, String> template;
 
-  public void send(String topicName, String key, String data){
-    template.send(topicName, key, data);
-    template.flush();
-  }
-  public void send(String data){
-    log.info("sending message='{}' to topic='{}'", data, "videoPath");
-    template.send("videoPath", data);
-  }
-
-  private void handleFailure(String data, ProducerRecord<String, String> record,
-      Throwable ex) {
-    System.err.println("요청값을 확인해주세요.");
-    System.err.println(">> >>>> >>> fail: " + data.toString());
-    System.err.println(">> >>>> >>> record: " + record.toString());
-    System.err.println(ex);
-  }
-
-  public void handleSuccess(String data) {
-    System.err.println(">> >>>> >>> success: " + data.toString());
+  public CompletableFuture<SendResult<String, String>> send(String topicName, String key, String data){
+    return template.send(topicName, key, data);
   }
 }

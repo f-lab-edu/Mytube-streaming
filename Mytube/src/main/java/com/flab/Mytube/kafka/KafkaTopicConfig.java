@@ -14,6 +14,8 @@ import org.springframework.kafka.core.KafkaAdmin;
 
 @Configuration
 public class KafkaTopicConfig {
+  @Value("${kafka.encoding.topic}")
+  String TOPIC;
 
   @Value("${spring.kafka.bootstrap-servers}")
   private String bootstrapServers;
@@ -27,7 +29,7 @@ public class KafkaTopicConfig {
 
   @Bean
   public NewTopic topic1() {
-    return TopicBuilder.name("videoPath")
+    return TopicBuilder.name(TOPIC)
         .partitions(5)
         .replicas(1)
         .config(TopicConfig.RETENTION_MS_CONFIG, "5000")
